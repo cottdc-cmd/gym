@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotton Family Weekly Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --cream: #FAF7F2;
+    --warm-white: #FFFDF9;
+    --rust: #C4622D;
+    --rust-light: #F0E0D6;
+    --iron: #7B4F3A;
+    --sage: #6B7F6E;
+    --sage-light: #E4EDE5;
+    --debra-pink: #D4607A;
+    --debra-bg: #FFF0F3;
+    --bryan-blue: #2C6B8A;
+    --bryan-bg: #EEF5FA;
+    --workout-purple: #6B4F8A;
+    --workout-bg: #F3F0F8;
+    --workout-border: #D4C8E8;
+    --text: #2A1F1A;
+    --text-mid: #6B5C54;
+    --border: #E8DDD6;
+    --training-bg: #FEF4EF;
+    --rest-bg: #F0F4F0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--text);
+    color: var(--cream);
+    padding: 28px 24px 24px;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+
+  header p {
+    font-size: 11px;
+    color: #B0A49C;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Top tabs */
+  .main-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--warm-white);
+  }
+
+  .main-tab {
+    flex: 1;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    user-select: none;
+    letter-spacing: 0.3px;
+  }
+
+  .main-tab.active { color: var(--text); border-bottom-color: var(--text); }
+  .main-tab.active-workout { color: var(--workout-purple); border-bottom-color: var(--workout-purple); }
+  .main-tab.active-tracker { color: var(--debra-pink); border-bottom-color: var(--debra-pink); }
+
+  /* Person toggle */
+  .person-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--cream);
+  }
+
+  .person-tab {
+    flex: 1;
+    padding: 10px 12px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .person-tab.active-debra { color: var(--debra-pink); border-bottom-color: var(--debra-pink); }
+  .person-tab.active-bryan { color: var(--bryan-blue); border-bottom-color: var(--bryan-blue); }
+  .person-tab.active-both { color: var(--text); border-bottom-color: var(--text); }
+
+  /* View panels */
+  .view-panel { display: none; }
+  .view-panel.active { display: block; }
+
+  /* Macro bars */
+  .macros-bar { display: flex; border-bottom: 1px solid var(--border); }
+
+  .macro-block {
+    flex: 1;
+    padding: 12px 14px;
+    border-right: 1px solid var(--border);
+    background: var(--warm-white);
+  }
+  .macro-block:last-child { border-right: none; }
+
+  .macro-block .label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-mid);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .macro-block .value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+  }
+
+  .macro-block.debra .value { color: var(--debra-pink); }
+  .macro-block.bryan .value { color: var(--bryan-blue); }
+
+  .macro-block .sub { font-size: 10px; color: var(--text-mid); }
+
+  .iron-banner {
+    background: var(--iron);
+    color: white;
+    padding: 8px 20px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .iron-banner strong { font-weight: 600; }
+
+  /* Day cards */
+  .week-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+
+  .day-card { border-bottom: 1px solid var(--border); background: var(--warm-white); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .day-header.training { background: var(--training-bg); }
+  .day-header.rest { background: var(--rest-bg); }
+
+  .day-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .day-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .badge.training { background: var(--rust); color: white; }
+  .badge.rest { background: var(--sage); color: white; }
+  .badge.iron { background: var(--iron); color: white; }
+  .badge.home { background: var(--workout-purple); color: white; }
+
+  .chevron { font-size: 12px; color: var(--text-mid); transition: transform 0.2s; margin-left: 4px; }
+
+  .day-body { display: none; padding: 0 16px 20px; }
+  .day-body.open { display: block; }
+
+  /* Workout block inside meal day */
+  .workout-inline {
+    margin-top: 14px;
+    background: var(--workout-bg);
+    border: 1px solid var(--workout-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .workout-inline-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    font-weight: 700;
+    color: var(--workout-purple);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .workout-inline-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--workout-purple);
+    margin-bottom: 8px;
+  }
+
+  .workout-phases { display: flex; flex-direction: column; gap: 8px; }
+
+  .workout-phase { }
+
+  .phase-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--text-mid);
+    margin-bottom: 3px;
+  }
+
+  .phase-items {
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .phase-item { display: flex; gap: 6px; align-items: baseline; }
+  .phase-num { color: var(--workout-purple); font-weight: 700; font-size: 10px; min-width: 14px; }
+  .phase-sets { color: var(--text-mid); font-size: 10px; }
+  .phase-note { font-size: 10px; color: var(--text-mid); font-style: italic; padding-left: 20px; }
+
+  .finisher-note {
+    margin-top: 8px;
+    font-size: 10.5px;
+    color: var(--workout-purple);
+    font-style: italic;
+    border-top: 1px solid var(--workout-border);
+    padding-top: 6px;
+  }
+
+  /* Meal slots */
+  .meal-slot { margin-top: 14px; }
+
+  .slot-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    font-weight: 700;
+    color: var(--text-mid);
+    padding: 6px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+
+  .persons-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .person-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+
+  .person-card.debra { background: var(--debra-bg); border-color: #F0C0CC; }
+  .person-card.bryan { background: var(--bryan-bg); border-color: #C0D8E8; }
+
+  body.view-debra .person-card.bryan-only { display: none; }
+  body.view-debra .persons-row { grid-template-columns: 1fr; }
+  body.view-bryan .person-card.debra-only { display: none; }
+  body.view-bryan .persons-row { grid-template-columns: 1fr; }
+
+  .person-name-tag {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 5px;
+  }
+
+  .person-card.debra .person-name-tag { color: var(--debra-pink); }
+  .person-card.bryan .person-name-tag { color: var(--bryan-blue); }
+
+  .meal-title { font-family: 'DM Serif Display', serif; font-size: 14px; margin-bottom: 3px; line-height: 1.3; }
+  .meal-flavor { font-size: 11px; color: var(--rust); font-style: italic; margin-bottom: 6px; }
+  .meal-items { font-size: 11px; color: var(--text-mid); line-height: 1.8; }
+
+  .iron-tag {
+    display: inline-block; font-size: 9px; background: var(--iron); color: white;
+    padding: 1px 5px; border-radius: 10px; margin-left: 3px; font-weight: 600; vertical-align: middle;
+  }
+
+  .c-tag {
+    display: inline-block; font-size: 9px; background: var(--sage); color: white;
+    padding: 1px 5px; border-radius: 10px; margin-left: 3px; font-weight: 600; vertical-align: middle;
+  }
+
+  .shared-note {
+    margin-top: 8px;
+    background: #FFF8F0;
+    border-left: 3px solid var(--rust);
+    padding: 6px 10px;
+    font-size: 10.5px;
+    color: var(--iron);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .day-tip {
+    margin-top: 12px;
+    background: var(--sage-light);
+    border-left: 3px solid var(--sage);
+    padding: 8px 12px;
+    font-size: 11.5px;
+    color: #3D5240;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Standalone workout view */
+  .workout-view { padding: 16px; }
+
+  .workout-card {
+    background: var(--warm-white);
+    border: 1px solid var(--workout-border);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .workout-card-header {
+    background: var(--workout-purple);
+    color: white;
+    padding: 14px 18px;
+  }
+
+  .workout-day-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    margin-bottom: 2px;
+  }
+
+  .workout-card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .workout-section {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--workout-border);
+  }
+
+  .workout-section:last-child { border-bottom: none; }
+
+  .section-head {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--workout-purple);
+    margin-bottom: 10px;
+  }
+
+  .exercise-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #F0EAF8;
+  }
+
+  .exercise-row:last-child { border-bottom: none; }
+
+  .ex-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--workout-purple);
+    min-width: 18px;
+  }
+
+  .ex-name {
+    font-size: 13px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .ex-sets {
+    font-size: 11px;
+    color: var(--debra-pink);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ex-note {
+    font-size: 10.5px;
+    color: var(--text-mid);
+    font-style: italic;
+    padding-left: 26px;
+    padding-bottom: 4px;
+  }
+
+  .warmup-items { font-size: 12px; color: var(--text-mid); line-height: 2; }
+
+  .finisher-box {
+    background: #F3F0F8;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--workout-purple);
+  }
+
+  .finisher-box strong { font-weight: 700; }
+
+  .jess-note {
+    margin: 0 16px 20px;
+    background: linear-gradient(135deg, #F3F0F8, #FFF0F3);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.7;
+    border: 1px solid var(--workout-border);
+  }
+
+  .jess-note .note-head {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--workout-purple);
+    margin-bottom: 6px;
+  }
+
+  /* Legend */
+  .legend {
+    padding: 14px 20px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    background: var(--cream);
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-mid); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  footer {
+    padding: 18px 24px;
+    font-size: 11px;
+    color: var(--text-mid);
+    border-top: 1px solid var(--border);
+    line-height: 1.8;
+  }
+  /* Body Stats Tracker */
+  .tracker-view { padding: 16px; }
+
+  .baseline-card {
+    background: var(--text);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+
+  .baseline-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #B0A49C;
+    margin-bottom: 4px;
+  }
+
+  .baseline-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+
+  .baseline-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .baseline-stat {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .baseline-stat .stat-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #B0A49C;
+    margin-bottom: 2px;
+  }
+
+  .baseline-stat .stat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--debra-pink);
+  }
+
+  .baseline-stat .stat-sub {
+    font-size: 10px;
+    color: #B0A49C;
+  }
+
+  .segmental-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+
+  .segmental-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .segmental-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .seg-item {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+
+  .seg-item .seg-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-mid);
+    margin-bottom: 2px;
+  }
+
+  .seg-item .seg-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--rust);
+  }
+
+  .seg-item .seg-pct {
+    font-size: 11px;
+    color: var(--text-mid);
+  }
+
+  .log-section {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .log-header {
+    background: var(--debra-pink);
+    color: white;
+    padding: 14px 18px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    font-weight: 400;
+  }
+
+  .log-form {
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .log-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .log-field label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-mid);
+  }
+
+  .log-field input {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    background: var(--cream);
+    color: var(--text);
+    width: 100%;
+  }
+
+  .log-field input:focus {
+    outline: none;
+    border-color: var(--debra-pink);
+  }
+
+  .log-field.full { grid-column: 1 / -1; }
+
+  .log-btn {
+    grid-column: 1 / -1;
+    background: var(--debra-pink);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+
+  .log-btn:active { opacity: 0.85; }
+
+  .entries-list { padding: 0 18px 16px; }
+
+  .entry-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+
+  .entry-date {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+  }
+
+  .entry-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .entry-stat { text-align: center; }
+
+  .entry-stat .e-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--debra-pink);
+    display: block;
+  }
+
+  .entry-stat .e-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-mid);
+  }
+
+  .entry-delta {
+    font-size: 10px;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mid);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .delta-pos { color: var(--sage); font-weight: 600; }
+  .delta-neg { color: var(--rust); font-weight: 600; }
+
+  .empty-state {
+    text-align: center;
+    padding: 24px 20px;
+    color: var(--text-mid);
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  .goals-card {
+    background: var(--sage-light);
+    border: 1px solid #C0D4C2;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+
+  .goals-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--sage);
+    margin-bottom: 10px;
+  }
+
+  .goal-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 4px 0;
+    border-bottom: 1px solid #C0D4C2;
+    color: var(--text);
+  }
+
+  .goal-row:last-child { border-bottom: none; }
+  .goal-row span:last-child { font-weight: 600; color: var(--sage); }
+
+  footer strong { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body class="view-both">
+
+<header>
+  <h1>Cotton Family Weekly Plan</h1>
+  <p>Starting 6/15/2026 · Meals + Home Workouts · Iron-optimized</p>
+</header>
+
+<!-- Main view tabs -->
+<div class="main-tabs">
+  <div class="main-tab active" onclick="setMainView('meals', this)">🍽 Meals</div>
+  <div class="main-tab" onclick="setMainView('workouts', this)">💪 Workouts</div>
+  <div class="main-tab" onclick="setMainView('tracker', this)">📊 Body Stats</div>
+</div>
+
+<!-- MEALS PANEL -->
+<div class="view-panel active" id="panel-meals">
+
+  <div class="person-tabs">
+    <div class="person-tab active-both" onclick="setView('both', this)">👫 Both</div>
+    <div class="person-tab" onclick="setView('debra', this)">💗 Debra</div>
+    <div class="person-tab" onclick="setView('bryan', this)">💙 Bryan</div>
+  </div>
+
+  <div class="macros-bar" id="macrosBar"></div>
+
+  <div class="iron-banner">
+    🩸 <strong>Debra iron strategy:</strong> Spinach every breakfast · Bell peppers for absorption · Red meat 3x/week · Space dairy 1–2 hrs from iron meals
+  </div>
+
+  <div class="week-grid" id="weekGrid"></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--iron)"></div> High iron</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div> Vit C boost</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--workout-purple)"></div> Home workout day</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--debra-pink)"></div> Debra</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--bryan-blue)"></div> Bryan</div>
+  </div>
+
+  <footer>
+    <strong>Cook-once system:</strong> Same protein batch, same pot of rice or potatoes — weigh Bryan's portion first, then Debra's. Sauce separately where needed. Batch cook Sunday for Mon/Tue, Wednesday night for Thu/Fri.<br><br>
+    <strong>Iron absorption:</strong> Heme iron (red meat) absorbs freely. Non-heme iron (spinach, eggs) needs vitamin C alongside. Avoid coffee/tea within 1 hr of meals. Space Greek yogurt snack at least 1 hr from iron-heavy meals.
+  </footer>
+
+</div>
+
+<!-- WORKOUTS PANEL -->
+<div class="view-panel" id="panel-workouts">
+  <div class="workout-view">
+
+    <div class="jess-note">
+      <div class="note-head">💜 From Jess — Your Flexibility Plan</div>
+      Don't view the home workout as the backup plan. View it as <strong>"My flexibility plan."</strong> Some weeks you hit all 4 gym sessions. Some weeks it's 2 gym + 2 home. The win is getting 4 workouts done and showing up for yourself — regardless of where.
+    </div>
+
+    <!-- MONDAY -->
+    <div class="workout-card">
+      <div class="workout-card-header">
+        <div class="workout-day-label">Monday · Home Alternative</div>
+        <div class="workout-card-title">Lower Body Strength</div>
+      </div>
+      <div class="workout-section">
+        <div class="section-head">Warm-Up · 2 Rounds</div>
+        <div class="warmup-items">
+          Glute Bridge × 15<br>
+          Bodyweight Squat × 10<br>
+          Band Lateral Walk × 15/side
+        </div>
+      </div>
+      <div class="workout-section">
+        <div class="section-head">Main Work</div>
+        <div class="exercise-row"><span class="ex-num">1</span><span class="ex-name">Goblet Squat</span><span class="ex-sets">4 × 10–12</span></div>
+        <div class="ex-note">Heaviest Bowflex weight you can control</div>
+        <div class="exercise-row"><span class="ex-num">2</span><span class="ex-name">DB Romanian Deadlift</span><span class="ex-sets">4 × 10</span></div>
+        <div class="ex-note">Slow eccentric — 3 seconds down</div>
+        <div class="exercise-row"><span class="ex-num">3</span><span class="ex-name">Bench Hip Thrust</span><span class="ex-sets">4 × 12</span></div>
+        <div class="ex-note">Dumbbell across hips</div>
+        <div class="exercise-row"><span class="ex-num">4</span><span class="ex-name">DB Step-Up</span><span class="ex-sets">3 × 10/leg</span></div>
+        <div class="ex-note">Knee-friendly, easy to load at home</div>
+        <div class="exercise-row"><span class="ex-num">5</span><span class="ex-name">Banded Hamstring Curl</span><span class="ex-sets">3 × 15</span></div>
+        <div class="ex-note">Anchor band low</div>
+        <div class="exercise-row"><span class="ex-num">6</span><span class="ex-name">Standing Calf Raise</span><span class="ex-sets">3 × 20</span></div>
+        <div class="ex-note">Holding dumbbells</div>
+      </div>
+      <div class="workout-section">
+        <div class="finisher-box">✨ <strong>Optional Finisher:</strong> Walking Pad · 10–15 minutes</div>
+      </div>
+    </div>
+
+    <!-- TUESDAY -->
+    <div class="workout-card">
+      <div class="workout-card-header">
+        <div class="workout-day-label">Tuesday · Home Alternative</div>
+        <div class="workout-card-title">Upper Body Strength</div>
+      </div>
+      <div class="workout-section">
+        <div class="section-head">Warm-Up</div>
+        <div class="warmup-items">
+          Band Pull Apart × 20<br>
+          External Rotation × 15<br>
+          Arm Circles × 20
+        </div>
+      </div>
+      <div class="workout-section">
+        <div class="section-head">Main Work</div>
+        <div class="exercise-row"><span class="ex-num">1</span><span class="ex-name">Chest Supported DB Row</span><span class="ex-sets">4 × 10–12</span></div>
+        <div class="ex-note">Bench at incline</div>
+        <div class="exercise-row"><span class="ex-num">2</span><span class="ex-name">Incline DB Press</span><span class="ex-sets">4 × 10</span></div>
+        <div class="ex-note">Neutral grip — DBs facing each other</div>
+        <div class="exercise-row"><span class="ex-num">3</span><span class="ex-name">One Arm DB Row</span><span class="ex-sets">3 × 12/side</span></div>
+        <div class="exercise-row"><span class="ex-num">4</span><span class="ex-name">Seated DB Shoulder Press</span><span class="ex-sets">3 × 10</span></div>
+        <div class="exercise-row"><span class="ex-num">5</span><span class="ex-name">DB Lateral Raise</span><span class="ex-sets">3 × 15</span></div>
+        <div class="exercise-row"><span class="ex-num">6</span><span class="ex-name">Hammer Curl</span><span class="ex-sets">3 × 12</span></div>
+        <div class="exercise-row"><span class="ex-num">7</span><span class="ex-name">Band Tricep Pressdown</span><span class="ex-sets">3 × 15</span></div>
+      </div>
+    </div>
+
+    <!-- THURSDAY -->
+    <div class="workout-card">
+      <div class="workout-card-header">
+        <div class="workout-day-label">Thursday · Home Alternative</div>
+        <div class="workout-card-title">Lower Body — Glute Focus</div>
+      </div>
+      <div class="workout-section">
+        <div class="section-head">Warm-Up · 2 Rounds</div>
+        <div class="warmup-items">
+          Glute Bridge × 15<br>
+          Band Walks × 20<br>
+          Air Squats × 10
+        </div>
+      </div>
+      <div class="workout-section">
+        <div class="section-head">Main Work</div>
+        <div class="exercise-row"><span class="ex-num">1</span><span class="ex-name">DB Hip Thrust</span><span class="ex-sets">4 × 15</span></div>
+        <div class="exercise-row"><span class="ex-num">2</span><span class="ex-name">DB Romanian Deadlift</span><span class="ex-sets">4 × 12</span></div>
+        <div class="exercise-row"><span class="ex-num">3</span><span class="ex-name">DB Sumo Squat</span><span class="ex-sets">3 × 12</span></div>
+        <div class="exercise-row"><span class="ex-num">4</span><span class="ex-name">DB Step-Up</span><span class="ex-sets">3 × 12/leg</span></div>
+        <div class="exercise-row"><span class="ex-num">5</span><span class="ex-name">Banded Abduction</span><span class="ex-sets">3 × 25</span></div>
+        <div class="exercise-row"><span class="ex-num">6</span><span class="ex-name">Frog Pumps</span><span class="ex-sets">3 × 30</span></div>
+      </div>
+      <div class="workout-section">
+        <div class="finisher-box">🚴 <strong>Optional Conditioning:</strong> Peloton · 15–20 min Zone 2 HR · conversational pace</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BODY STATS TRACKER PANEL -->
+<div class="view-panel" id="panel-tracker">
+  <div class="tracker-view">
+
+    <!-- Baseline -->
+    <div class="baseline-card">
+      <div class="baseline-label">Baseline · InBody 06/10/2026</div>
+      <div class="baseline-title">Debra's Starting Point</div>
+      <div class="baseline-grid">
+        <div class="baseline-stat">
+          <div class="stat-label">Total Weight</div>
+          <div class="stat-val">114.7</div>
+          <div class="stat-sub">lbs</div>
+        </div>
+        <div class="baseline-stat">
+          <div class="stat-label">Body Fat %</div>
+          <div class="stat-val">25.1%</div>
+          <div class="stat-sub">28.7 lbs fat mass</div>
+        </div>
+        <div class="baseline-stat">
+          <div class="stat-label">Skeletal Muscle</div>
+          <div class="stat-val">46.3</div>
+          <div class="stat-sub">lbs</div>
+        </div>
+        <div class="baseline-stat">
+          <div class="stat-label">InBody Score</div>
+          <div class="stat-val">79</div>
+          <div class="stat-sub">Visceral fat: 5</div>
+        </div>
+        <div class="baseline-stat">
+          <div class="stat-label">Dry Lean Mass</div>
+          <div class="stat-val">23.1</div>
+          <div class="stat-sub">lbs</div>
+        </div>
+        <div class="baseline-stat">
+          <div class="stat-label">Hydration</div>
+          <div class="stat-val">54.8%</div>
+          <div class="stat-sub">62.8 lbs body water</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segmental -->
+    <div class="segmental-card">
+      <div class="segmental-title">Segmental Lean Analysis · Baseline</div>
+      <div class="segmental-grid">
+        <div class="seg-item" style="grid-column: 1/-1;">
+          <div class="seg-label">Trunk</div>
+          <div class="seg-val">36.2 lbs</div>
+          <div class="seg-pct">97.2% — strong</div>
+        </div>
+        <div class="seg-item">
+          <div class="seg-label">Left Arm</div>
+          <div class="seg-val">3.8 lbs</div>
+          <div class="seg-pct">93.3% — room to grow</div>
+        </div>
+        <div class="seg-item">
+          <div class="seg-label">Right Arm</div>
+          <div class="seg-val">3.9 lbs</div>
+          <div class="seg-pct">94.4% — room to grow</div>
+        </div>
+        <div class="seg-item">
+          <div class="seg-label">Left Leg</div>
+          <div class="seg-val">12.6 lbs</div>
+          <div class="seg-pct">97.0% — balanced</div>
+        </div>
+        <div class="seg-item">
+          <div class="seg-label">Right Leg</div>
+          <div class="seg-val">12.7 lbs</div>
+          <div class="seg-pct">98.0% — balanced</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goals -->
+    <div class="goals-card">
+      <div class="goals-title">🎯 Recomp Goals</div>
+      <div class="goal-row"><span>Body fat %</span><span>25.1% → ~22%</span></div>
+      <div class="goal-row"><span>Skeletal muscle</span><span>46.3 lbs → maintain/grow</span></div>
+      <div class="goal-row"><span>InBody score</span><span>79 → 85+</span></div>
+      <div class="goal-row"><span>Visceral fat</span><span>5 → maintain under 5</span></div>
+      <div class="goal-row"><span>Hydration</span><span>54.8% → 60%+</span></div>
+      <div class="goal-row"><span>Vegas checkpoint</span><span>July 2 — feel it, not just see it</span></div>
+    </div>
+
+    <!-- Log new entry -->
+    <div class="log-section">
+      <div class="log-header">Log a Weigh-In</div>
+      <div class="log-form" id="logForm">
+        <div class="log-field full">
+          <label>Date</label>
+          <input type="date" id="logDate">
+        </div>
+        <div class="log-field">
+          <label>Weight (lbs)</label>
+          <input type="number" id="logWeight" placeholder="114.7" step="0.1">
+        </div>
+        <div class="log-field">
+          <label>Body Fat %</label>
+          <input type="number" id="logBF" placeholder="25.1" step="0.1">
+        </div>
+        <div class="log-field">
+          <label>Muscle Mass (lbs)</label>
+          <input type="number" id="logMuscle" placeholder="46.3" step="0.1">
+        </div>
+        <div class="log-field">
+          <label>InBody Score</label>
+          <input type="number" id="logScore" placeholder="79">
+        </div>
+        <button class="log-btn" onclick="logEntry()">Save Weigh-In</button>
+      </div>
+      <div class="entries-list" id="entriesList"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const macroSets = {
+  both: [
+    { label: "Debra Training", value: "~1,650", sub: "P130 · C165 · F50", cls: "debra" },
+    { label: "Debra Rest", value: "~1,450", sub: "P135 · C95 · F55", cls: "debra" },
+    { label: "Bryan Training", value: "~2,450", sub: "P210 · C260 · F65", cls: "bryan" },
+    { label: "Bryan Rest", value: "~2,150", sub: "P220 · C135 · F75", cls: "bryan" },
+  ],
+  debra: [
+    { label: "Training Cal", value: "~1,650", sub: "P130 · C165 · F50", cls: "debra" },
+    { label: "Rest Cal", value: "~1,450", sub: "P135 · C95 · F55", cls: "debra" },
+    { label: "Iron Goal", value: "18mg+", sub: "daily target", cls: "debra" },
+  ],
+  bryan: [
+    { label: "Training Cal", value: "~2,450", sub: "P210 · C260 · F65", cls: "bryan" },
+    { label: "Rest Cal", value: "~2,150", sub: "P220 · C135 · F75", cls: "bryan" },
+    { label: "Protein Goal", value: "210g+", sub: "training days", cls: "bryan" },
+  ]
+};
+
+const days = [
+  {
+    name: "Monday", type: "training", ironPriority: "high", homeWorkout: "Lower Body Strength",
+    slots: [
+      { slot: "Breakfast", shared: "Same base — scale portions", debra: { title: "Smoky Egg & Spinach Hash", flavor: "Smoked paprika, cumin, chili flakes, hot sauce", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Smoky Egg & Spinach Hash", flavor: "Same seasoning — bigger everything", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
+      { slot: "Lunch", shared: "Same chicken batch — sauce separately at end", debra: { title: "Lemon-Herb Chicken + Rice", flavor: "Lemon, oregano, garlic — rice in chicken broth", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Spinach + veg 150g", iron: true }, { text: "Lemon finish", vitc: true }] }, bryan: { title: "Spicy Lemon-Herb Chicken + Rice", flavor: "Same chicken — chili flakes + sriracha drizzle on his", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Sriracha + chili flakes" }] } },
+      { slot: "Snack", shared: "Same snack — different portions", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + cinnamon", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }, { text: "⚠️ Space 1+ hr from iron meals" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + cinnamon", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
+      { slot: "Dinner", shared: "Same meal — portion steak and pasta before plating", debra: { title: "Sirloin Steak + Pasta", flavor: "Chimichurri or garlic butter pan sauce", items: [{ text: "Sirloin steak 140g", iron: true }, { text: "Pasta 170g + marinara 125g" }, { text: "Spinach salad 100g", iron: true }, { text: "Lemon vinaigrette", vitc: true }] }, bryan: { title: "Sirloin Steak + Pasta", flavor: "Same chimichurri — bigger plate", items: [{ text: "Sirloin steak 220g", iron: true }, { text: "Pasta 275g + marinara 150g" }, { text: "Salad 150g" }, { text: "Light dressing 20g" }] } }
+    ],
+    tip: "🩸 Highest iron day — steak dinner + spinach salad with lemon. Don't pair dinner with dairy. 💜 Home workout: Lower Body Strength — legs are already warmed up for the week."
+  },
+  {
+    name: "Tuesday", type: "training", ironPriority: "high", homeWorkout: "Upper Body Strength",
+    slots: [
+      { slot: "Breakfast", shared: "Same base — scale portions", debra: { title: "Egg Hash", flavor: "Everything bagel + hot sauce", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Egg Hash", flavor: "Everything bagel + hot sauce", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
+      { slot: "Lunch", shared: "Same ground beef batch — both taco style, his gets extra heat", debra: { title: "Taco-Spiced Ground Beef + Rice", flavor: "Cumin, chili, lime + fresh pico", items: [{ text: "Lean ground beef 93/7 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Spinach + veg 150g", iron: true }, { text: "Lime + pico", vitc: true }] }, bryan: { title: "Spicy Taco Ground Beef + Rice", flavor: "Same batch — jalapeños, hot sauce, extra chili", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Jalapeños + hot sauce + lime", vitc: true }] } },
+      { slot: "Snack", shared: "Same snack", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + vanilla", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + vanilla", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
+      { slot: "Dinner", shared: "Same steak + pasta — portion before plating", debra: { title: "Sirloin Steak + Pasta", flavor: "Garlic butter, parsley, chili flakes", items: [{ text: "Sirloin steak 140g", iron: true }, { text: "Pasta 170g + marinara 125g" }, { text: "Spinach salad 100g", iron: true }, { text: "Lemon vinaigrette", vitc: true }] }, bryan: { title: "Sirloin Steak + Pasta", flavor: "Garlic butter, parsley, chili flakes", items: [{ text: "Sirloin steak 220g", iron: true }, { text: "Pasta 275g + marinara 150g" }, { text: "Salad 150g" }, { text: "Light dressing 20g" }] } }
+    ],
+    tip: "💜 Home workout: Upper Body — shoulders and arms. This is the one that shows up first on your frame. 🩸 Ground beef at lunch keeps iron high between steak dinners."
+  },
+  {
+    name: "Wednesday", type: "rest", ironPriority: "mid",
+    slots: [
+      { slot: "Meal 1", shared: "Scale eggs — share the veggie base", debra: { title: "Spinach Scramble", flavor: "Za'atar + lemon zest + feta crumble", items: [{ text: "2 whole eggs + egg whites 200g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 75g" }] }, bryan: { title: "Egg Scramble", flavor: "Za'atar + lemon zest", items: [{ text: "3 whole eggs + egg whites 300g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 100g" }] } },
+      { slot: "Meal 2", shared: "Bryan uses leftover Tuesday ground beef — different toppings, no extra cook", debra: { title: "Miso-Glazed Salmon + Sweet Potato", flavor: "White miso, honey, soy, sesame — 5 min broil", items: [{ text: "Salmon 140g", iron: true }, { text: "Sweet potato 150g" }, { text: "Mixed veg 150g", vitc: true }, { text: "Olive oil 10g" }] }, bryan: { title: "Spicy Smash Burger Bowl", flavor: "Tuesday's beef reheated — pickled jalapeños, hot sauce, lettuce, tomato", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Sweet potato 250g" }, { text: "Lettuce + tomato 150g", vitc: true }, { text: "Pickled jalapeños + hot sauce" }, { text: "Olive oil 10g" }] } },
+      { slot: "Snack", shared: "Both do yogurt + almonds on rest days", debra: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 170g" }, { text: "Almonds 20g" }] }, bryan: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 250g" }, { text: "Almonds 30g" }] } },
+      { slot: "Meal 3", shared: "Same sheet pan — Greek lemon chicken for everyone including kids", debra: { title: "Greek Lemon Chicken + Roasted Veg", flavor: "Lemon, oregano, garlic, olive oil — sheet pan dinner", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Zucchini + cherry tomatoes 150g", vitc: true }, { text: "Spinach salad 100g", iron: true }, { text: "Feta crumble + lemon", vitc: true }] }, bryan: { title: "Greek Lemon Chicken + Roasted Veg", flavor: "Same — bigger portion", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Zucchini + cherry tomatoes 200g", vitc: true }, { text: "Large salad 150g" }, { text: "Avocado 75g" }, { text: "Olive oil dressing 15g" }] } }
+    ],
+    tip: "Rest day. Greek lemon chicken is hands-off once it's in the oven — kid-friendly, no separate dinner to cook. Sheet pan = one pan, everyone fed."
+  },
+  {
+    name: "Thursday", type: "training", ironPriority: "high", homeWorkout: "Lower Body — Glute Focus",
+    slots: [
+      { slot: "Breakfast", shared: "Same hash — scale everything", debra: { title: "Egg Hash", flavor: "Green harissa, jalapeño, cilantro", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Egg Hash", flavor: "Green harissa, jalapeño, cilantro", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
+      { slot: "Lunch", shared: "Same chicken batch — Debra goes Mediterranean, Bryan gets harissa", debra: { title: "Mediterranean Chicken + Rice", flavor: "Lemon, oregano, garlic — marinate overnight", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Spinach + veg 150g", iron: true }, { text: "Lemon + tomato", vitc: true }] }, bryan: { title: "Harissa Chicken + Rice", flavor: "Same chicken — harissa paste + roasted peppers on his", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Harissa paste + roasted peppers" }] } },
+      { slot: "Snack", shared: "Same snack", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + lemon zest", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + lemon zest", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
+      { slot: "Dinner", shared: "Mediterranean beef kofta — same batch, portion before plating. Kids will eat this.", debra: { title: "Mediterranean Beef Kofta + Tzatziki", flavor: "Cumin, coriander, garlic, parsley — served over spinach + pita", items: [{ text: "Lean ground beef 93/7 140g", iron: true }, { text: "Spinach + cucumber salad 100g", iron: true }, { text: "Tzatziki 30g" }, { text: "Whole grain pita (small) 60g" }, { text: "Lemon squeeze", vitc: true }] }, bryan: { title: "Mediterranean Beef Kofta + Tzatziki", flavor: "Same — bigger portion, add rice", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Jasmine rice 150g" }, { text: "Large salad 150g" }, { text: "Tzatziki 30g" }, { text: "Lemon squeeze", vitc: true }] } }
+    ],
+    tip: "💜 Home workout: Glute Focus — hip thrusts, RDLs, frog pumps. Optional Peloton Zone 2 after. Kofta is ground beef shaped into patties or logs — easy to cook, easy to scale, kids actually eat it."
+  },
+  {
+    name: "Friday", type: "training", ironPriority: "mid",
+    slots: [
+      { slot: "Breakfast", shared: "Italian-style hash — scale and go", debra: { title: "Egg Hash", flavor: "Italian herbs, sun-dried tomato, basil", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Egg Hash", flavor: "Italian herbs, sun-dried tomato, basil", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
+      { slot: "Lunch", shared: "Same teriyaki batch — his gets chili garlic sauce on top", debra: { title: "Teriyaki Chicken + Rice", flavor: "Coconut aminos, ginger, garlic, sesame", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Mixed veg 150g", vitc: true }, { text: "Coconut aminos + sesame oil" }] }, bryan: { title: "Spicy Teriyaki Chicken + Rice", flavor: "Same base — chili garlic sauce + sriracha on top", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Chili garlic sauce + sriracha" }] } },
+      { slot: "Snack", shared: "Same snack", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + crushed coconut", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + crushed coconut", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
+      { slot: "Dinner", shared: "Salmon for both — end of the week, lighter dinner. Kids do well with honey-glazed.", debra: { title: "Honey Garlic Salmon + Asparagus", flavor: "Honey, garlic, lemon — 12 min in the oven", items: [{ text: "Salmon 140g", iron: true }, { text: "Asparagus 150g", iron: true }, { text: "Spinach salad 100g", iron: true }, { text: "Avocado 50g" }, { text: "Lemon finish", vitc: true }] }, bryan: { title: "Honey Garlic Salmon + Asparagus", flavor: "Same — bigger portion", items: [{ text: "Salmon 220g", iron: true }, { text: "Asparagus 200g", iron: true }, { text: "Large salad 150g" }, { text: "Avocado 75g" }, { text: "Olive oil dressing 15g" }] } }
+    ],
+    tip: "End of training week. Salmon Friday is a lighter reset after a heavy steak week — iron stays high, body feels less heavy going into the weekend."
+  },
+  {
+    name: "Saturday", type: "rest", ironPriority: "mid",
+    slots: [
+      { slot: "Meal 1", shared: "Weekend breakfast — scale eggs, share veggie base", debra: { title: "Spinach Egg Scramble", flavor: "Everything bagel + hot sauce", items: [{ text: "2 whole eggs + egg whites 200g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 75g" }] }, bryan: { title: "Egg Scramble", flavor: "Everything bagel + hot sauce", items: [{ text: "3 whole eggs + egg whites 300g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 100g" }] } },
+      { slot: "Meal 2", shared: "Both do chicken + sweet potato — same glaze, different weights", debra: { title: "Honey Sriracha Chicken + Sweet Potato", flavor: "Honey, sriracha, garlic — sheet pan", items: [{ text: "Chicken breast 150g", iron: true }, { text: "Sweet potato 150g" }, { text: "Mixed veg 150g", vitc: true }, { text: "Olive oil 10g" }] }, bryan: { title: "Honey Sriracha Chicken + Sweet Potato", flavor: "Same — bigger everything", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Sweet potato 250g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Olive oil 10g" }] } },
+      { slot: "Snack", shared: "Both do yogurt + almonds", debra: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 170g" }, { text: "Almonds 20g" }] }, bryan: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 250g" }, { text: "Almonds 30g" }] } },
+      { slot: "Meal 3", shared: "Chicken shawarma — one batch, family dinner. Kids love this one.", debra: { title: "Chicken Shawarma Bowl", flavor: "Cumin, paprika, turmeric, garlic, lemon — over greens", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Spinach + cucumber + tomato 150g", iron: true, vitc: true }, { text: "Hummus 40g" }, { text: "Avocado 50g" }, { text: "Lemon + fresh parsley", vitc: true }] }, bryan: { title: "Chicken Shawarma Bowl", flavor: "Same — add rice for his carbs", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 150g" }, { text: "Large salad 150g" }, { text: "Avocado 75g" }, { text: "Olive oil dressing 15g" }] } }
+    ],
+    tip: "Saturday = batch prep day + shawarma night. Cook proteins + hash base for Mon/Tue. Marinate Monday chicken tonight. Shawarma seasoning takes 2 minutes to mix and the whole family eats it."
+  },
+  {
+    name: "Sunday", type: "rest", ironPriority: "mid",
+    slots: [
+      { slot: "Meal 1", shared: "Tuscan-style eggs — same pan, scale portions", debra: { title: "Tuscan Egg Scramble", flavor: "Sundried tomato, basil, light parmesan", items: [{ text: "2 whole eggs + egg whites 200g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 75g" }] }, bryan: { title: "Tuscan Egg Scramble", flavor: "Sundried tomato, basil, light parmesan", items: [{ text: "3 whole eggs + egg whites 300g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 100g" }] } },
+      { slot: "Meal 2", shared: "Greek chicken for both — same marinade, different weights", debra: { title: "Lemon-Oregano Chicken + Sweet Potato", flavor: "Greek marinade — lemon, oregano, garlic", items: [{ text: "Chicken breast 150g", iron: true }, { text: "Sweet potato 150g" }, { text: "Mixed veg 150g" }, { text: "Olive oil 10g" }, { text: "Lemon + oregano", vitc: true }] }, bryan: { title: "Lemon-Oregano Chicken + Sweet Potato", flavor: "Same — bigger everything", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Sweet potato 250g" }, { text: "Mixed veg 200g" }, { text: "Olive oil 10g" }, { text: "Lemon + oregano", vitc: true }] } },
+      { slot: "Snack", shared: "Both do yogurt + almonds", debra: { title: "Greek Yogurt + Almonds", flavor: "Honey + crushed pistachios", items: [{ text: "Greek yogurt 170g" }, { text: "Almonds 20g" }] }, bryan: { title: "Greek Yogurt + Almonds", flavor: "Honey + crushed pistachios", items: [{ text: "Greek yogurt 250g" }, { text: "Almonds 30g" }] } },
+      { slot: "Meal 3", shared: "Mediterranean ground beef stuffed peppers — family dinner, easy Sunday cook", debra: { title: "Mediterranean Stuffed Peppers", flavor: "Beef + tomato + herbs + feta — baked until tender", items: [{ text: "Lean ground beef 93/7 140g", iron: true }, { text: "Bell peppers 2 whole", vitc: true }, { text: "Diced tomatoes + spinach 100g", iron: true, vitc: true }, { text: "Feta crumble 20g" }, { text: "Fresh parsley + lemon", vitc: true }] }, bryan: { title: "Mediterranean Stuffed Peppers", flavor: "Same — bigger filling, add side rice", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Bell peppers 2 whole", vitc: true }, { text: "Diced tomatoes + spinach 100g", iron: true, vitc: true }, { text: "Jasmine rice 150g" }, { text: "Feta crumble 20g" }] } }
+    ],
+    tip: "Sunday reset + stuffed peppers are made in the oven — prep takes 10 minutes, oven does the rest. Marinate Monday chicken, batch the hash base, and you're set for the week."
+  }
+];
+
+let currentView = 'both';
+
+function setMainView(view, el) {
+  document.querySelectorAll('.main-tab').forEach(t => t.className = 'main-tab');
+  if (view === 'workouts') el.className = 'main-tab active-workout';
+  else if (view === 'tracker') el.className = 'main-tab active-tracker';
+  else el.className = 'main-tab active';
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + view).classList.add('active');
+}
+
+function setView(view, el) {
+  currentView = view;
+  document.body.className = `view-${view}`;
+  document.querySelectorAll('.person-tab').forEach(t => t.className = 'person-tab');
+  el.className = `person-tab active-${view}`;
+  renderMacros(view);
+}
+
+function renderMacros(view) {
+  const bar = document.getElementById('macrosBar');
+  bar.innerHTML = '';
+  macroSets[view].forEach(m => {
+    const div = document.createElement('div');
+    div.className = `macro-block ${m.cls}`;
+    div.innerHTML = `<span class="label">${m.label}</span><span class="value">${m.value}</span><span class="sub">${m.sub}</span>`;
+    bar.appendChild(div);
+  });
+}
+
+function buildTag(type) {
+  const span = document.createElement('span');
+  span.className = type === 'iron' ? 'iron-tag' : 'c-tag';
+  span.textContent = type === 'iron' ? '🩸' : '🍋';
+  return span;
+}
+
+function renderPersonCard(data, person) {
+  const div = document.createElement('div');
+  div.className = `person-card ${person} ${person}-only`;
+  const nameTag = document.createElement('div');
+  nameTag.className = 'person-name-tag';
+  nameTag.textContent = person === 'debra' ? '💗 Debra' : '💙 Bryan';
+  const title = document.createElement('div');
+  title.className = 'meal-title';
+  title.textContent = data.title;
+  const flavor = document.createElement('div');
+  flavor.className = 'meal-flavor';
+  flavor.textContent = data.flavor;
+  const items = document.createElement('div');
+  items.className = 'meal-items';
+  data.items.forEach(item => {
+    const line = document.createElement('div');
+    line.textContent = item.text;
+    if (item.iron) line.appendChild(buildTag('iron'));
+    if (item.vitc) line.appendChild(buildTag('vitc'));
+    items.appendChild(line);
+  });
+  div.appendChild(nameTag);
+  div.appendChild(title);
+  div.appendChild(flavor);
+  div.appendChild(items);
+  return div;
+}
+
+function renderDay(day, index) {
+  const card = document.createElement('div');
+  card.className = 'day-card';
+
+  const header = document.createElement('div');
+  header.className = `day-header ${day.type}`;
+
+  const nameSpan = document.createElement('span');
+  nameSpan.className = 'day-name';
+  nameSpan.textContent = day.name;
+
+  const meta = document.createElement('div');
+  meta.className = 'day-meta';
+
+  const badge = document.createElement('span');
+  badge.className = `badge ${day.type}`;
+  badge.textContent = day.type === 'training' ? '🏋️ Training' : '🌿 Rest';
+  meta.appendChild(badge);
+
+  if (day.ironPriority === 'high') {
+    const ironBadge = document.createElement('span');
+    ironBadge.className = 'badge iron';
+    ironBadge.textContent = '🩸 High Iron';
+    meta.appendChild(ironBadge);
+  }
+
+  if (day.homeWorkout) {
+    const hwBadge = document.createElement('span');
+    hwBadge.className = 'badge home';
+    hwBadge.textContent = '💜 Home Option';
+    meta.appendChild(hwBadge);
+  }
+
+  const chevron = document.createElement('span');
+  chevron.className = 'chevron';
+  chevron.textContent = '▼';
+  meta.appendChild(chevron);
+
+  header.appendChild(nameSpan);
+  header.appendChild(meta);
+
+  const body = document.createElement('div');
+  body.className = 'day-body' + (index === 0 ? ' open' : '');
+
+  // Workout inline block
+  if (day.homeWorkout) {
+    const workoutBlock = document.createElement('div');
+    workoutBlock.className = 'workout-inline';
+    workoutBlock.innerHTML = `
+      <div class="workout-inline-label">💜 Home Alternative</div>
+      <div class="workout-inline-title">${day.homeWorkout}</div>
+      <div style="font-size:11px;color:var(--text-mid)">Tap the <strong>Home Workouts</strong> tab above for the full routine with sets + reps.</div>
+    `;
+    body.appendChild(workoutBlock);
+  }
+
+  day.slots.forEach(slot => {
+    const slotDiv = document.createElement('div');
+    slotDiv.className = 'meal-slot';
+    const slotLabel = document.createElement('div');
+    slotLabel.className = 'slot-label';
+    slotLabel.textContent = slot.slot;
+    slotDiv.appendChild(slotLabel);
+    const personsRow = document.createElement('div');
+    personsRow.className = 'persons-row';
+    personsRow.appendChild(renderPersonCard(slot.debra, 'debra'));
+    personsRow.appendChild(renderPersonCard(slot.bryan, 'bryan'));
+    slotDiv.appendChild(personsRow);
+    if (slot.shared) {
+      const note = document.createElement('div');
+      note.className = 'shared-note';
+      note.textContent = '🍳 ' + slot.shared;
+      slotDiv.appendChild(note);
+    }
+    body.appendChild(slotDiv);
+  });
+
+  const tip = document.createElement('div');
+  tip.className = 'day-tip';
+  tip.innerHTML = day.tip;
+  body.appendChild(tip);
+
+  card.appendChild(header);
+  card.appendChild(body);
+
+  header.addEventListener('click', () => {
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.day-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.chevron').forEach(c => c.style.transform = '');
+    if (!isOpen) {
+      body.classList.add('open');
+      chevron.style.transform = 'rotate(180deg)';
+    }
+  });
+
+  if (index === 0) chevron.style.transform = 'rotate(180deg)';
+  return card;
+}
+
+renderMacros('both');
+const grid = document.getElementById('weekGrid');
+days.forEach((day, i) => grid.appendChild(renderDay(day, i)));
+
+// ---- TRACKER ----
+const BASELINE = { weight: 114.7, bf: 25.1, muscle: 46.3, score: 79 };
+let entries = [];
+
+function saveEntries() { /* in-memory only */ }
+
+function logEntry() {
+  const date = document.getElementById('logDate').value;
+  const weight = parseFloat(document.getElementById('logWeight').value);
+  const bf = parseFloat(document.getElementById('logBF').value);
+  const muscle = parseFloat(document.getElementById('logMuscle').value);
+  const score = parseFloat(document.getElementById('logScore').value);
+
+  if (!date || isNaN(weight)) {
+    alert('Please enter at least a date and weight.');
+    return;
+  }
+
+  entries.unshift({ date, weight, bf: isNaN(bf) ? null : bf, muscle: isNaN(muscle) ? null : muscle, score: isNaN(score) ? null : score });
+  saveEntries();
+  renderEntries();
+
+  document.getElementById('logDate').value = '';
+  document.getElementById('logWeight').value = '';
+  document.getElementById('logBF').value = '';
+  document.getElementById('logMuscle').value = '';
+  document.getElementById('logScore').value = '';
+}
+
+function delta(current, baseline, lowerIsBetter) {
+  if (current === null || current === undefined) return '';
+  const diff = (current - baseline).toFixed(1);
+  const better = lowerIsBetter ? diff < 0 : diff > 0;
+  const sign = diff > 0 ? '+' : '';
+  const cls = better ? 'delta-pos' : (diff == 0 ? '' : 'delta-neg');
+  return `<span class="${cls}">${sign}${diff}</span>`;
+}
+
+function renderEntries() {
+  const list = document.getElementById('entriesList');
+  if (!entries.length) {
+    list.innerHTML = '<div class="empty-state">No weigh-ins logged yet. Add your first one above.</div>';
+    return;
+  }
+
+  list.innerHTML = entries.map((e, i) => {
+    const prev = entries[i + 1] || BASELINE;
+    const weightDelta = e.weight && prev.weight ? ((e.weight - prev.weight) > 0 ? `<span class="delta-neg">+${(e.weight - prev.weight).toFixed(1)}</span>` : `<span class="delta-pos">${(e.weight - prev.weight).toFixed(1)}</span>`) : '';
+    const bfDelta = e.bf != null && prev.bf != null ? (e.bf < prev.bf ? `<span class="delta-pos">${(e.bf - prev.bf).toFixed(1)}%</span>` : `<span class="delta-neg">+${(e.bf - prev.bf).toFixed(1)}%</span>`) : '';
+    const muscleDelta = e.muscle != null && prev.muscle != null ? (e.muscle > prev.muscle ? `<span class="delta-pos">+${(e.muscle - prev.muscle).toFixed(1)} lbs</span>` : `<span class="delta-neg">${(e.muscle - prev.muscle).toFixed(1)} lbs</span>`) : '';
+
+    const sinceBaseline = i === entries.length - 1 ? '' : `
+      <div style="font-size:10px;color:var(--text-mid);margin-top:4px;">
+        vs baseline: weight ${delta(e.weight, BASELINE.weight, true)} · bf ${e.bf != null ? delta(e.bf, BASELINE.bf, true) + '%' : '—'} · muscle ${e.muscle != null ? delta(e.muscle, BASELINE.muscle, false) + ' lbs' : '—'}
+      </div>`;
+
+    return `
+      <div class="entry-card">
+        <div class="entry-date">${new Date(e.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</div>
+        <div class="entry-stats">
+          <div class="entry-stat"><span class="e-val">${e.weight}</span><span class="e-label">lbs</span></div>
+          <div class="entry-stat"><span class="e-val">${e.bf != null ? e.bf + '%' : '—'}</span><span class="e-label">body fat</span></div>
+          <div class="entry-stat"><span class="e-val">${e.muscle != null ? e.muscle : '—'}</span><span class="e-label">muscle lbs</span></div>
+        </div>
+        ${e.score != null ? `<div style="font-size:11px;color:var(--text-mid);margin-top:6px;">InBody score: <strong style="color:var(--debra-pink)">${e.score}</strong></div>` : ''}
+        <div class="entry-delta">
+          vs prev: weight ${weightDelta || '—'} · bf ${bfDelta || '—'} · muscle ${muscleDelta || '—'}
+        </div>
+        ${sinceBaseline}
+      </div>`;
+  }).join('');
+}
+
+// Set today's date as default
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('logDate').value = today;
+
+renderEntries();
+</script>
+</body>
+</html>
