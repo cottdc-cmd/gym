@@ -2,975 +2,262 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cotton Family Weekly Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2A1F1A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Debra">
+<title>Debra · Weekly Plan</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%232A1F1A'/%3E%3Ctext x='90' y='120' font-size='90' text-anchor='middle' fill='%23D4607A' font-family='Georgia,serif'%3ED%3C/text%3E%3C/svg%3E">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
-
-  :root {
-    --cream: #FAF7F2;
-    --warm-white: #FFFDF9;
-    --rust: #C4622D;
-    --rust-light: #F0E0D6;
-    --iron: #7B4F3A;
-    --sage: #6B7F6E;
-    --sage-light: #E4EDE5;
-    --debra-pink: #D4607A;
-    --debra-bg: #FFF0F3;
-    --bryan-blue: #2C6B8A;
-    --bryan-bg: #EEF5FA;
-    --workout-purple: #6B4F8A;
-    --workout-bg: #F3F0F8;
-    --workout-border: #D4C8E8;
-    --text: #2A1F1A;
-    --text-mid: #6B5C54;
-    --border: #E8DDD6;
-    --training-bg: #FEF4EF;
-    --rest-bg: #F0F4F0;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  header {
-    background: var(--text);
-    color: var(--cream);
-    padding: 28px 24px 24px;
-  }
-
-  header h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 26px;
-    font-weight: 400;
-    letter-spacing: -0.3px;
-    margin-bottom: 4px;
-  }
-
-  header p {
-    font-size: 11px;
-    color: #B0A49C;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-
-  /* Top tabs */
-  .main-tabs {
-    display: flex;
-    border-bottom: 2px solid var(--border);
-    background: var(--warm-white);
-  }
-
-  .main-tab {
-    flex: 1;
-    padding: 12px 8px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-mid);
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.2s;
-    user-select: none;
-    letter-spacing: 0.3px;
-  }
-
-  .main-tab.active { color: var(--text); border-bottom-color: var(--text); }
-  .main-tab.active-workout { color: var(--workout-purple); border-bottom-color: var(--workout-purple); }
-  .main-tab.active-tracker { color: var(--debra-pink); border-bottom-color: var(--debra-pink); }
-
-  /* Person toggle */
-  .person-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    background: var(--cream);
-  }
-
-  .person-tab {
-    flex: 1;
-    padding: 10px 12px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-mid);
-    border-bottom: 3px solid transparent;
-    margin-bottom: -1px;
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .person-tab.active-debra { color: var(--debra-pink); border-bottom-color: var(--debra-pink); }
-  .person-tab.active-bryan { color: var(--bryan-blue); border-bottom-color: var(--bryan-blue); }
-  .person-tab.active-both { color: var(--text); border-bottom-color: var(--text); }
-
-  /* View panels */
-  .view-panel { display: none; }
-  .view-panel.active { display: block; }
-
-  /* Macro bars */
-  .macros-bar { display: flex; border-bottom: 1px solid var(--border); }
-
-  .macro-block {
-    flex: 1;
-    padding: 12px 14px;
-    border-right: 1px solid var(--border);
-    background: var(--warm-white);
-  }
-  .macro-block:last-child { border-right: none; }
-
-  .macro-block .label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-mid);
-    font-weight: 600;
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .macro-block .value {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-  }
-
-  .macro-block.debra .value { color: var(--debra-pink); }
-  .macro-block.bryan .value { color: var(--bryan-blue); }
-
-  .macro-block .sub { font-size: 10px; color: var(--text-mid); }
-
-  .iron-banner {
-    background: var(--iron);
-    color: white;
-    padding: 8px 20px;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .iron-banner strong { font-weight: 600; }
-
-  /* Day cards */
-  .week-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
-
-  .day-card { border-bottom: 1px solid var(--border); background: var(--warm-white); }
-
-  .day-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 20px 12px;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .day-header.training { background: var(--training-bg); }
-  .day-header.rest { background: var(--rest-bg); }
-
-  .day-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-  .day-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-
-  .badge {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 20px;
-  }
-
-  .badge.training { background: var(--rust); color: white; }
-  .badge.rest { background: var(--sage); color: white; }
-  .badge.iron { background: var(--iron); color: white; }
-  .badge.home { background: var(--workout-purple); color: white; }
-
-  .chevron { font-size: 12px; color: var(--text-mid); transition: transform 0.2s; margin-left: 4px; }
-
-  .day-body { display: none; padding: 0 16px 20px; }
-  .day-body.open { display: block; }
-
-  /* Workout block inside meal day */
-  .workout-inline {
-    margin-top: 14px;
-    background: var(--workout-bg);
-    border: 1px solid var(--workout-border);
-    border-radius: 10px;
-    padding: 14px 16px;
-  }
-
-  .workout-inline-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.9px;
-    font-weight: 700;
-    color: var(--workout-purple);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .workout-inline-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 15px;
-    color: var(--workout-purple);
-    margin-bottom: 8px;
-  }
-
-  .workout-phases { display: flex; flex-direction: column; gap: 8px; }
-
-  .workout-phase { }
-
-  .phase-label {
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    color: var(--text-mid);
-    margin-bottom: 3px;
-  }
-
-  .phase-items {
-    font-size: 11px;
-    color: var(--text);
-    line-height: 1.8;
-  }
-
-  .phase-item { display: flex; gap: 6px; align-items: baseline; }
-  .phase-num { color: var(--workout-purple); font-weight: 700; font-size: 10px; min-width: 14px; }
-  .phase-sets { color: var(--text-mid); font-size: 10px; }
-  .phase-note { font-size: 10px; color: var(--text-mid); font-style: italic; padding-left: 20px; }
-
-  .finisher-note {
-    margin-top: 8px;
-    font-size: 10.5px;
-    color: var(--workout-purple);
-    font-style: italic;
-    border-top: 1px solid var(--workout-border);
-    padding-top: 6px;
-  }
-
-  /* Meal slots */
-  .meal-slot { margin-top: 14px; }
-
-  .slot-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.9px;
-    font-weight: 700;
-    color: var(--text-mid);
-    padding: 6px 0 8px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 10px;
-  }
-
-  .persons-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .person-card {
-    border-radius: 8px;
-    padding: 12px 14px;
-    border: 1px solid var(--border);
-  }
-
-  .person-card.debra { background: var(--debra-bg); border-color: #F0C0CC; }
-  .person-card.bryan { background: var(--bryan-bg); border-color: #C0D8E8; }
-
-  body.view-debra .person-card.bryan-only { display: none; }
-  body.view-debra .persons-row { grid-template-columns: 1fr; }
-  body.view-bryan .person-card.debra-only { display: none; }
-  body.view-bryan .persons-row { grid-template-columns: 1fr; }
-
-  .person-name-tag {
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 5px;
-  }
-
-  .person-card.debra .person-name-tag { color: var(--debra-pink); }
-  .person-card.bryan .person-name-tag { color: var(--bryan-blue); }
-
-  .meal-title { font-family: 'DM Serif Display', serif; font-size: 14px; margin-bottom: 3px; line-height: 1.3; }
-  .meal-flavor { font-size: 11px; color: var(--rust); font-style: italic; margin-bottom: 6px; }
-  .meal-items { font-size: 11px; color: var(--text-mid); line-height: 1.8; }
-
-  .iron-tag {
-    display: inline-block; font-size: 9px; background: var(--iron); color: white;
-    padding: 1px 5px; border-radius: 10px; margin-left: 3px; font-weight: 600; vertical-align: middle;
-  }
-
-  .c-tag {
-    display: inline-block; font-size: 9px; background: var(--sage); color: white;
-    padding: 1px 5px; border-radius: 10px; margin-left: 3px; font-weight: 600; vertical-align: middle;
-  }
-
-  .shared-note {
-    margin-top: 8px;
-    background: #FFF8F0;
-    border-left: 3px solid var(--rust);
-    padding: 6px 10px;
-    font-size: 10.5px;
-    color: var(--iron);
-    border-radius: 0 4px 4px 0;
-  }
-
-  .day-tip {
-    margin-top: 12px;
-    background: var(--sage-light);
-    border-left: 3px solid var(--sage);
-    padding: 8px 12px;
-    font-size: 11.5px;
-    color: #3D5240;
-    border-radius: 0 6px 6px 0;
-  }
-
-  /* Standalone workout view */
-  .workout-view { padding: 16px; }
-
-  .workout-card {
-    background: var(--warm-white);
-    border: 1px solid var(--workout-border);
-    border-radius: 12px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-
-  .workout-card-header {
-    background: var(--workout-purple);
-    color: white;
-    padding: 14px 18px;
-  }
-
-  .workout-day-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.8;
-    margin-bottom: 2px;
-  }
-
-  .workout-card-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 20px;
-    font-weight: 400;
-  }
-
-  .workout-section {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--workout-border);
-  }
-
-  .workout-section:last-child { border-bottom: none; }
-
-  .section-head {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--workout-purple);
-    margin-bottom: 10px;
-  }
-
-  .exercise-row {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    padding: 6px 0;
-    border-bottom: 1px solid #F0EAF8;
-  }
-
-  .exercise-row:last-child { border-bottom: none; }
-
-  .ex-num {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--workout-purple);
-    min-width: 18px;
-  }
-
-  .ex-name {
-    font-size: 13px;
-    font-weight: 500;
-    flex: 1;
-  }
-
-  .ex-sets {
-    font-size: 11px;
-    color: var(--debra-pink);
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .ex-note {
-    font-size: 10.5px;
-    color: var(--text-mid);
-    font-style: italic;
-    padding-left: 26px;
-    padding-bottom: 4px;
-  }
-
-  .warmup-items { font-size: 12px; color: var(--text-mid); line-height: 2; }
-
-  .finisher-box {
-    background: #F3F0F8;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: var(--workout-purple);
-  }
-
-  .finisher-box strong { font-weight: 700; }
-
-  .jess-note {
-    margin: 0 16px 20px;
-    background: linear-gradient(135deg, #F3F0F8, #FFF0F3);
-    border-radius: 10px;
-    padding: 14px 16px;
-    font-size: 12px;
-    color: var(--text);
-    line-height: 1.7;
-    border: 1px solid var(--workout-border);
-  }
-
-  .jess-note .note-head {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--workout-purple);
-    margin-bottom: 6px;
-  }
-
-  /* Legend */
-  .legend {
-    padding: 14px 20px;
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    border-top: 1px solid var(--border);
-    background: var(--cream);
-  }
-
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-mid); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-
-  footer {
-    padding: 18px 24px;
-    font-size: 11px;
-    color: var(--text-mid);
-    border-top: 1px solid var(--border);
-    line-height: 1.8;
-  }
-  /* Body Stats Tracker */
-  .tracker-view { padding: 16px; }
-
-  .baseline-card {
-    background: var(--text);
-    color: var(--cream);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
-  }
-
-  .baseline-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: #B0A49C;
-    margin-bottom: 4px;
-  }
-
-  .baseline-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 18px;
-    margin-bottom: 14px;
-  }
-
-  .baseline-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .baseline-stat {
-    background: rgba(255,255,255,0.08);
-    border-radius: 8px;
-    padding: 10px 12px;
-  }
-
-  .baseline-stat .stat-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: #B0A49C;
-    margin-bottom: 2px;
-  }
-
-  .baseline-stat .stat-val {
-    font-family: 'DM Serif Display', serif;
-    font-size: 18px;
-    color: var(--debra-pink);
-  }
-
-  .baseline-stat .stat-sub {
-    font-size: 10px;
-    color: #B0A49C;
-  }
-
-  .segmental-card {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 16px;
-  }
-
-  .segmental-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    margin-bottom: 12px;
-    color: var(--text);
-  }
-
-  .segmental-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .seg-item {
-    background: var(--cream);
-    border-radius: 8px;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-  }
-
-  .seg-item .seg-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-mid);
-    margin-bottom: 2px;
-  }
-
-  .seg-item .seg-val {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    color: var(--rust);
-  }
-
-  .seg-item .seg-pct {
-    font-size: 11px;
-    color: var(--text-mid);
-  }
-
-  .log-section {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-
-  .log-header {
-    background: var(--debra-pink);
-    color: white;
-    padding: 14px 18px;
-    font-family: 'DM Serif Display', serif;
-    font-size: 17px;
-    font-weight: 400;
-  }
-
-  .log-form {
-    padding: 16px 18px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .log-field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .log-field label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-mid);
-  }
-
-  .log-field input {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    background: var(--cream);
-    color: var(--text);
-    width: 100%;
-  }
-
-  .log-field input:focus {
-    outline: none;
-    border-color: var(--debra-pink);
-  }
-
-  .log-field.full { grid-column: 1 / -1; }
-
-  .log-btn {
-    grid-column: 1 / -1;
-    background: var(--debra-pink);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 0.3px;
-  }
-
-  .log-btn:active { opacity: 0.85; }
-
-  .entries-list { padding: 0 18px 16px; }
-
-  .entry-card {
-    background: var(--cream);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-  }
-
-  .entry-date {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-mid);
-    margin-bottom: 8px;
-  }
-
-  .entry-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
-
-  .entry-stat { text-align: center; }
-
-  .entry-stat .e-val {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    color: var(--debra-pink);
-    display: block;
-  }
-
-  .entry-stat .e-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-mid);
-  }
-
-  .entry-delta {
-    font-size: 10px;
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px solid var(--border);
-    color: var(--text-mid);
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .delta-pos { color: var(--sage); font-weight: 600; }
-  .delta-neg { color: var(--rust); font-weight: 600; }
-
-  .empty-state {
-    text-align: center;
-    padding: 24px 20px;
-    color: var(--text-mid);
-    font-size: 12px;
-    font-style: italic;
-  }
-
-  .goals-card {
-    background: var(--sage-light);
-    border: 1px solid #C0D4C2;
-    border-radius: 12px;
-    padding: 16px 18px;
-    margin-bottom: 16px;
-  }
-
-  .goals-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    color: var(--sage);
-    margin-bottom: 10px;
-  }
-
-  .goal-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    padding: 4px 0;
-    border-bottom: 1px solid #C0D4C2;
-    color: var(--text);
-  }
-
-  .goal-row:last-child { border-bottom: none; }
-  .goal-row span:last-child { font-weight: 600; color: var(--sage); }
-
-  footer strong { color: var(--text); font-weight: 600; }
+  :root{
+    --cream:#FAF7F2; --warm-white:#FFFDF9; --rust:#C4622D; --rust-light:#F0E0D6;
+    --iron:#7B4F3A; --sage:#6B7F6E; --sage-light:#E4EDE5;
+    --debra-pink:#D4607A; --debra-bg:#FFF0F3; --workout-purple:#6B4F8A;
+    --workout-bg:#F3F0F8; --workout-border:#D4C8E8;
+    --text:#2A1F1A; --text-mid:#6B5C54; --border:#E8DDD6;
+    --training-bg:#FEF4EF; --rest-bg:#F0F4F0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:14px;line-height:1.6;
+       max-width:560px;margin:0 auto;padding-bottom:calc(140px + env(safe-area-inset-bottom))}
+  header{background:var(--text);color:var(--cream);padding:calc(24px + env(safe-area-inset-top)) 24px 22px}
+  header h1{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;letter-spacing:-0.3px;margin-bottom:4px}
+  header p{font-size:11px;color:#B0A49C;letter-spacing:0.8px;text-transform:uppercase;font-weight:500}
+
+  .main-tabs{display:flex;border-bottom:2px solid var(--border);background:var(--warm-white);position:sticky;top:0;z-index:5}
+  .main-tab{flex:1;padding:13px 8px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--text-mid);
+            border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;user-select:none;letter-spacing:0.3px}
+  .main-tab.active{color:var(--text);border-bottom-color:var(--text)}
+  .main-tab.active-workout{color:var(--debra-pink);border-bottom-color:var(--debra-pink)}
+  .main-tab.active-tracker{color:var(--debra-pink);border-bottom-color:var(--debra-pink)}
+
+  .view-panel{display:none}
+  .view-panel.active{display:block}
+
+  .macros-bar{display:flex;border-bottom:1px solid var(--border)}
+  .macro-block{flex:1;padding:12px 14px;border-right:1px solid var(--border);background:var(--warm-white)}
+  .macro-block:last-child{border-right:none}
+  .macro-block .label{font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-mid);font-weight:600;display:block;margin-bottom:2px}
+  .macro-block .value{font-family:'DM Serif Display',serif;font-size:16px;color:var(--debra-pink)}
+  .macro-block .sub{font-size:10px;color:var(--text-mid)}
+
+  .iron-banner{background:var(--iron);color:white;padding:8px 20px;font-size:11px;display:flex;align-items:center;gap:8px}
+  .iron-banner strong{font-weight:600}
+
+  .day-card{border-bottom:1px solid var(--border);background:var(--warm-white)}
+  .day-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none}
+  .day-header.training{background:var(--training-bg)}
+  .day-header.rest{background:var(--rest-bg)}
+  .day-name{font-family:'DM Serif Display',serif;font-size:18px;font-weight:400}
+  .day-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .badge{font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;padding:3px 8px;border-radius:20px}
+  .badge.training{background:var(--rust);color:white}
+  .badge.rest{background:var(--sage);color:white}
+  .badge.iron{background:var(--iron);color:white}
+  .badge.home{background:var(--workout-purple);color:white}
+  .chevron{font-size:12px;color:var(--text-mid);transition:transform .2s;margin-left:4px}
+  .day-body{display:none;padding:0 16px 20px}
+  .day-body.open{display:block}
+
+  .workout-inline{margin-top:14px;background:var(--workout-bg);border:1px solid var(--workout-border);border-radius:10px;padding:14px 16px}
+  .workout-inline-label{font-size:9px;text-transform:uppercase;letter-spacing:0.9px;font-weight:700;color:var(--workout-purple);margin-bottom:6px}
+  .workout-inline-title{font-family:'DM Serif Display',serif;font-size:15px;color:var(--workout-purple);margin-bottom:8px}
+
+  .meal-slot{margin-top:14px}
+  .slot-label{font-size:10px;text-transform:uppercase;letter-spacing:0.9px;font-weight:700;color:var(--text-mid);
+              padding:6px 0 8px;border-bottom:1px solid var(--border);margin-bottom:10px}
+  .person-card{border-radius:8px;padding:12px 14px;border:1px solid #F0C0CC;background:var(--debra-bg)}
+  .meal-title{font-family:'DM Serif Display',serif;font-size:14px;margin-bottom:3px;line-height:1.3}
+  .meal-flavor{font-size:11px;color:var(--rust);font-style:italic;margin-bottom:6px}
+  .meal-items{font-size:11px;color:var(--text-mid);line-height:1.8}
+  .iron-tag{display:inline-block;font-size:9px;background:var(--iron);color:white;padding:1px 5px;border-radius:10px;margin-left:3px;font-weight:600;vertical-align:middle}
+  .c-tag{display:inline-block;font-size:9px;background:var(--sage);color:white;padding:1px 5px;border-radius:10px;margin-left:3px;font-weight:600;vertical-align:middle}
+  .day-tip{margin-top:12px;background:var(--sage-light);border-left:3px solid var(--sage);padding:8px 12px;font-size:11.5px;color:#3D5240;border-radius:0 6px 6px 0}
+
+  .legend{padding:14px 20px;display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--cream)}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-mid)}
+  .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  footer{padding:18px 24px;font-size:11px;color:var(--text-mid);border-top:1px solid var(--border);line-height:1.8}
+  footer strong{color:var(--text);font-weight:600}
+
+  /* ---- Body Stats ---- */
+  .tracker-view{padding:16px}
+  .baseline-card{background:var(--text);color:var(--cream);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+  .baseline-label{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:#B0A49C;margin-bottom:4px}
+  .baseline-title{font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:14px}
+  .baseline-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .baseline-stat{background:rgba(255,255,255,0.08);border-radius:8px;padding:10px 12px}
+  .baseline-stat .stat-label{font-size:9px;text-transform:uppercase;letter-spacing:0.6px;color:#B0A49C;margin-bottom:2px}
+  .baseline-stat .stat-val{font-family:'DM Serif Display',serif;font-size:18px;color:var(--debra-pink)}
+  .baseline-stat .stat-sub{font-size:10px;color:#B0A49C}
+  .segmental-card{background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:16px}
+  .segmental-title{font-family:'DM Serif Display',serif;font-size:16px;margin-bottom:12px}
+  .segmental-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .seg-item{background:var(--cream);border-radius:8px;padding:10px 12px;border:1px solid var(--border)}
+  .seg-item .seg-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-mid);margin-bottom:2px}
+  .seg-item .seg-val{font-family:'DM Serif Display',serif;font-size:16px;color:var(--rust)}
+  .seg-item .seg-pct{font-size:11px;color:var(--text-mid)}
+  .goals-card{background:var(--sage-light);border:1px solid #C0D4C2;border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .goals-title{font-family:'DM Serif Display',serif;font-size:16px;color:var(--sage);margin-bottom:10px}
+  .goal-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid #C0D4C2;color:var(--text)}
+  .goal-row:last-child{border-bottom:none}
+  .goal-row span:last-child{font-weight:600;color:var(--sage)}
+  .log-section{background:var(--warm-white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+  .log-header{background:var(--debra-pink);color:white;padding:14px 18px;font-family:'DM Serif Display',serif;font-size:17px}
+  .log-form{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .log-field{display:flex;flex-direction:column;gap:4px}
+  .log-field label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-mid)}
+  .log-field input{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--cream);color:var(--text);width:100%}
+  .log-field input:focus{outline:none;border-color:var(--debra-pink)}
+  .log-field.full{grid-column:1/-1}
+  .log-btn{grid-column:1/-1;background:var(--debra-pink);color:white;border:none;border-radius:8px;padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.3px}
+  .log-btn:active{opacity:.85}
+  .entries-list{padding:0 18px 16px}
+  .entry-card{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .entry-date{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-mid);margin-bottom:8px}
+  .entry-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .entry-stat{text-align:center}
+  .entry-stat .e-val{font-family:'DM Serif Display',serif;font-size:16px;color:var(--debra-pink);display:block}
+  .entry-stat .e-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-mid)}
+  .entry-delta{font-size:10px;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);color:var(--text-mid);display:flex;gap:10px;flex-wrap:wrap}
+  .delta-pos{color:var(--sage);font-weight:600}
+  .delta-neg{color:var(--rust);font-weight:600}
+  .empty-state{text-align:center;padding:24px 20px;color:var(--text-mid);font-size:12px;font-style:italic}
+
+  /* ---- LiftLog (workouts) ---- */
+  .ll-subnav{display:flex;gap:8px;padding:14px 16px 4px}
+  .ll-subtab{flex:1;background:transparent;border:1px solid var(--border);border-radius:10px;padding:8px 0;font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer}
+  .ll-subtab.on{background:var(--text);color:var(--cream);border-color:var(--text)}
+  .ll-track{display:flex;gap:6px;background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:4px;margin:12px 16px 12px}
+  .ll-trackBtn{flex:1;background:transparent;color:var(--text-mid);border:none;border-radius:9px;padding:10px 0;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.3px}
+  .ll-trackBtn.on{background:var(--debra-pink);color:#fff}
+  .ll-jess{margin:0 16px 12px;background:linear-gradient(135deg,#F3F0F8,#FFF0F3);border:1px solid var(--workout-border);border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.6}
+  .ll-jess .h{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--workout-purple);margin-bottom:5px}
+  .ll-daychips{display:flex;gap:6px;overflow-x:auto;padding:0 16px 6px;scrollbar-width:none}
+  .ll-daychips::-webkit-scrollbar{display:none}
+  .ll-chip{white-space:nowrap;background:var(--warm-white);color:var(--text-mid);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer}
+  .ll-chip.on{background:var(--debra-bg);color:var(--debra-pink);border-color:var(--debra-pink)}
+  .ll-daytitle{font-family:'DM Serif Display',serif;font-size:20px;padding:4px 18px 8px;color:var(--text);width:100%;background:transparent;border:none}
+  .ll-tag{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--debra-pink);padding:6px 18px 6px}
+  .ll-card{background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin:0 16px 10px}
+  .ll-card.soft{background:var(--cream)}
+  .ll-exhead{display:flex;align-items:center;gap:8px}
+  .ll-exname{flex:1;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--text);padding:2px;min-width:0}
+  .ll-target{font-size:12px;color:var(--debra-pink);font-weight:600;white-space:nowrap}
+  .ll-x{background:transparent;border:none;color:var(--text-mid);font-size:13px;cursor:pointer;padding:4px}
+  .ll-note{font-size:11px;color:var(--text-mid);font-style:italic;padding:2px 2px 4px}
+  .ll-gridhead,.ll-setrow{display:grid;grid-template-columns:28px 1fr 1fr 80px;gap:8px;align-items:center}
+  .ll-gridhead{font-size:9px;letter-spacing:.6px;color:var(--text-mid);text-transform:uppercase;padding:8px 2px 6px}
+  .ll-setrow{margin-bottom:8px;padding:4px 2px;border-radius:8px}
+  .ll-setrow.done{background:var(--sage-light)}
+  .ll-setno{text-align:center;font-size:13px;font-weight:700;color:var(--text-mid)}
+  .ll-in{width:100%;background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:10px 6px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;text-align:center;color:var(--text)}
+  .ll-in:focus{outline:none;border-color:var(--debra-pink)}
+  .ll-rowbtns{display:flex;gap:6px;justify-content:flex-end}
+  .ll-check{width:38px;height:38px;background:var(--cream);border:1px solid var(--border);border-radius:9px;color:var(--text-mid);font-size:16px;font-weight:800;cursor:pointer}
+  .ll-check.on{background:var(--sage);border-color:var(--sage);color:#fff}
+  .ll-minix{width:24px;height:38px;background:transparent;border:none;color:var(--text-mid);font-size:18px;cursor:pointer}
+  .ll-addset{width:100%;background:transparent;border:1px dashed var(--border);border-radius:8px;color:var(--text-mid);padding:8px 0;font-size:12px;font-weight:600;cursor:pointer;margin-top:2px}
+  .ll-addex{width:calc(100% - 32px);margin:2px 16px 14px;background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:12px 0;font-size:13px;font-weight:600;color:var(--text);cursor:pointer}
+  .ll-summary{display:flex;align-items:center;gap:16px;background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:0 16px}
+  .ll-sumn{font-family:'DM Serif Display',serif;font-size:24px;line-height:1;color:var(--text)}
+  .ll-suml{font-size:10px;color:var(--text-mid);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+  .ll-finish{margin-left:auto;background:var(--debra-pink);color:#fff;border:none;border-radius:10px;padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer}
+  .ll-finish:disabled{background:var(--border);color:var(--text-mid);cursor:not-allowed}
+  .ll-tip{font-size:11px;color:var(--text-mid);text-align:center;padding:12px 16px 0;line-height:1.5}
+  .ll-ghost{width:calc(100% - 32px);margin:8px 16px 0;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-mid);padding:11px 0;font-size:12px;cursor:pointer}
+  .ll-hist{background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 16px 10px}
+  .ll-histhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .ll-badge{font-size:10px;color:var(--debra-pink);font-weight:700;margin-right:6px}
+  .ll-histline{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:3px 0}
+  .ll-histline .r{color:var(--text-mid);text-align:right}
+  .ll-histfoot{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .ll-vol{color:var(--debra-pink);font-weight:700;font-family:'DM Serif Display',serif}
+  .ll-footR{display:flex;gap:6px;align-items:center}
+  .ll-synced{color:var(--sage);font-size:12px;font-weight:600}
+  .ll-syncing{color:var(--text-mid);font-size:12px}
+  .ll-syncerr{color:var(--rust);font-size:11px;padding-top:6px}
+  .ll-copy{background:var(--cream);border:1px solid var(--border);border-radius:8px;color:var(--debra-pink);padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer}
+  .ll-chart{display:flex;align-items:flex-end;gap:6px;height:64px}
+  .ll-bar{flex:1;min-height:3px;background:var(--debra-pink);border-radius:3px;opacity:.85}
+  .ll-empty{text-align:center;color:var(--text-mid);font-style:italic;padding:40px 20px}
+  .ll-restbar{position:fixed;bottom:0;left:0;right:0;max-width:560px;margin:0 auto;background:var(--debra-pink);color:#fff;
+              padding:14px 16px calc(16px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:14px;box-shadow:0 -6px 24px rgba(0,0,0,.2);z-index:20}
+  .ll-restbar[hidden]{display:none}
+  .ll-restleft{text-align:center;min-width:72px}
+  .ll-resttime{font-family:'DM Serif Display',serif;font-size:32px;line-height:1}
+  .ll-restlbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:.85}
+  .ll-restbtns{display:flex;flex-wrap:wrap;gap:6px;flex:1;justify-content:flex-end}
+  .ll-preset{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 10px;font-size:12px;font-weight:600;cursor:pointer}
+  .ll-preset.on{background:#fff;color:var(--debra-pink)}
+  .ll-ract{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}
+  .ll-ract.resume{background:#fff;color:var(--debra-pink)}
+  .ll-ract.skip{background:var(--text);color:#fff;border-color:var(--text)}
+  .ll-restprog{position:absolute;bottom:0;left:0;height:3px;background:rgba(255,255,255,.6);transition:width .25s linear}
 </style>
 </head>
-<body class="view-both">
+<body>
 
 <header>
-  <h1>Cotton Family Weekly Plan</h1>
-  <p>Starting 6/15/2026 · Meals + Home Workouts · Iron-optimized</p>
+  <h1>Debra · Weekly Plan</h1>
+  <p>Meals · Workouts · Body Stats · Iron-optimized</p>
 </header>
 
-<!-- Main view tabs -->
 <div class="main-tabs">
   <div class="main-tab active" onclick="setMainView('meals', this)">🍽 Meals</div>
   <div class="main-tab" onclick="setMainView('workouts', this)">💪 Workouts</div>
   <div class="main-tab" onclick="setMainView('tracker', this)">📊 Body Stats</div>
 </div>
 
-<!-- MEALS PANEL -->
+<!-- MEALS -->
 <div class="view-panel active" id="panel-meals">
-
-  <div class="person-tabs">
-    <div class="person-tab active-both" onclick="setView('both', this)">👫 Both</div>
-    <div class="person-tab" onclick="setView('debra', this)">💗 Debra</div>
-    <div class="person-tab" onclick="setView('bryan', this)">💙 Bryan</div>
-  </div>
-
   <div class="macros-bar" id="macrosBar"></div>
-
   <div class="iron-banner">
-    🩸 <strong>Debra iron strategy:</strong> Spinach every breakfast · Bell peppers for absorption · Red meat 3x/week · Space dairy 1–2 hrs from iron meals
+    🩸 <strong>Iron strategy:</strong> Spinach every breakfast · Bell peppers for absorption · Red meat 3x/week · Space dairy 1–2 hrs from iron meals
   </div>
-
   <div class="week-grid" id="weekGrid"></div>
-
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--iron)"></div> High iron</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div> Vit C boost</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--workout-purple)"></div> Home workout day</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--debra-pink)"></div> Debra</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--bryan-blue)"></div> Bryan</div>
   </div>
-
   <footer>
-    <strong>Cook-once system:</strong> Same protein batch, same pot of rice or potatoes — weigh Bryan's portion first, then Debra's. Sauce separately where needed. Batch cook Sunday for Mon/Tue, Wednesday night for Thu/Fri.<br><br>
-    <strong>Iron absorption:</strong> Heme iron (red meat) absorbs freely. Non-heme iron (spinach, eggs) needs vitamin C alongside. Avoid coffee/tea within 1 hr of meals. Space Greek yogurt snack at least 1 hr from iron-heavy meals.
+    <strong>Cook-once system:</strong> Batch cook Sunday for Mon/Tue, Wednesday night for Thu/Fri. Same protein batch, same pot of rice or potatoes — sauce separately where needed.<br><br>
+    <strong>Iron absorption:</strong> Heme iron (red meat) absorbs freely. Non-heme iron (spinach, eggs) needs vitamin C alongside. Avoid coffee/tea within 1 hr of meals. Space Greek yogurt at least 1 hr from iron-heavy meals.
   </footer>
-
 </div>
 
-<!-- WORKOUTS PANEL -->
+<!-- WORKOUTS (LiftLog) -->
 <div class="view-panel" id="panel-workouts">
-  <div class="workout-view">
-
-    <div class="jess-note">
-      <div class="note-head">💜 From Jess — Your Flexibility Plan</div>
-      Don't view the home workout as the backup plan. View it as <strong>"My flexibility plan."</strong> Some weeks you hit all 4 gym sessions. Some weeks it's 2 gym + 2 home. The win is getting 4 workouts done and showing up for yourself — regardless of where.
-    </div>
-
-    <!-- MONDAY -->
-    <div class="workout-card">
-      <div class="workout-card-header">
-        <div class="workout-day-label">Monday · Home Alternative</div>
-        <div class="workout-card-title">Lower Body Strength</div>
-      </div>
-      <div class="workout-section">
-        <div class="section-head">Warm-Up · 2 Rounds</div>
-        <div class="warmup-items">
-          Glute Bridge × 15<br>
-          Bodyweight Squat × 10<br>
-          Band Lateral Walk × 15/side
-        </div>
-      </div>
-      <div class="workout-section">
-        <div class="section-head">Main Work</div>
-        <div class="exercise-row"><span class="ex-num">1</span><span class="ex-name">Goblet Squat</span><span class="ex-sets">4 × 10–12</span></div>
-        <div class="ex-note">Heaviest Bowflex weight you can control</div>
-        <div class="exercise-row"><span class="ex-num">2</span><span class="ex-name">DB Romanian Deadlift</span><span class="ex-sets">4 × 10</span></div>
-        <div class="ex-note">Slow eccentric — 3 seconds down</div>
-        <div class="exercise-row"><span class="ex-num">3</span><span class="ex-name">Bench Hip Thrust</span><span class="ex-sets">4 × 12</span></div>
-        <div class="ex-note">Dumbbell across hips</div>
-        <div class="exercise-row"><span class="ex-num">4</span><span class="ex-name">DB Step-Up</span><span class="ex-sets">3 × 10/leg</span></div>
-        <div class="ex-note">Knee-friendly, easy to load at home</div>
-        <div class="exercise-row"><span class="ex-num">5</span><span class="ex-name">Banded Hamstring Curl</span><span class="ex-sets">3 × 15</span></div>
-        <div class="ex-note">Anchor band low</div>
-        <div class="exercise-row"><span class="ex-num">6</span><span class="ex-name">Standing Calf Raise</span><span class="ex-sets">3 × 20</span></div>
-        <div class="ex-note">Holding dumbbells</div>
-      </div>
-      <div class="workout-section">
-        <div class="finisher-box">✨ <strong>Optional Finisher:</strong> Walking Pad · 10–15 minutes</div>
-      </div>
-    </div>
-
-    <!-- TUESDAY -->
-    <div class="workout-card">
-      <div class="workout-card-header">
-        <div class="workout-day-label">Tuesday · Home Alternative</div>
-        <div class="workout-card-title">Upper Body Strength</div>
-      </div>
-      <div class="workout-section">
-        <div class="section-head">Warm-Up</div>
-        <div class="warmup-items">
-          Band Pull Apart × 20<br>
-          External Rotation × 15<br>
-          Arm Circles × 20
-        </div>
-      </div>
-      <div class="workout-section">
-        <div class="section-head">Main Work</div>
-        <div class="exercise-row"><span class="ex-num">1</span><span class="ex-name">Chest Supported DB Row</span><span class="ex-sets">4 × 10–12</span></div>
-        <div class="ex-note">Bench at incline</div>
-        <div class="exercise-row"><span class="ex-num">2</span><span class="ex-name">Incline DB Press</span><span class="ex-sets">4 × 10</span></div>
-        <div class="ex-note">Neutral grip — DBs facing each other</div>
-        <div class="exercise-row"><span class="ex-num">3</span><span class="ex-name">One Arm DB Row</span><span class="ex-sets">3 × 12/side</span></div>
-        <div class="exercise-row"><span class="ex-num">4</span><span class="ex-name">Seated DB Shoulder Press</span><span class="ex-sets">3 × 10</span></div>
-        <div class="exercise-row"><span class="ex-num">5</span><span class="ex-name">DB Lateral Raise</span><span class="ex-sets">3 × 15</span></div>
-        <div class="exercise-row"><span class="ex-num">6</span><span class="ex-name">Hammer Curl</span><span class="ex-sets">3 × 12</span></div>
-        <div class="exercise-row"><span class="ex-num">7</span><span class="ex-name">Band Tricep Pressdown</span><span class="ex-sets">3 × 15</span></div>
-      </div>
-    </div>
-
-    <!-- THURSDAY -->
-    <div class="workout-card">
-      <div class="workout-card-header">
-        <div class="workout-day-label">Thursday · Home Alternative</div>
-        <div class="workout-card-title">Lower Body — Glute Focus</div>
-      </div>
-      <div class="workout-section">
-        <div class="section-head">Warm-Up · 2 Rounds</div>
-        <div class="warmup-items">
-          Glute Bridge × 15<br>
-          Band Walks × 20<br>
-          Air Squats × 10
-        </div>
-      </div>
-      <div class="workout-section">
-        <div class="section-head">Main Work</div>
-        <div class="exercise-row"><span class="ex-num">1</span><span class="ex-name">DB Hip Thrust</span><span class="ex-sets">4 × 15</span></div>
-        <div class="exercise-row"><span class="ex-num">2</span><span class="ex-name">DB Romanian Deadlift</span><span class="ex-sets">4 × 12</span></div>
-        <div class="exercise-row"><span class="ex-num">3</span><span class="ex-name">DB Sumo Squat</span><span class="ex-sets">3 × 12</span></div>
-        <div class="exercise-row"><span class="ex-num">4</span><span class="ex-name">DB Step-Up</span><span class="ex-sets">3 × 12/leg</span></div>
-        <div class="exercise-row"><span class="ex-num">5</span><span class="ex-name">Banded Abduction</span><span class="ex-sets">3 × 25</span></div>
-        <div class="exercise-row"><span class="ex-num">6</span><span class="ex-name">Frog Pumps</span><span class="ex-sets">3 × 30</span></div>
-      </div>
-      <div class="workout-section">
-        <div class="finisher-box">🚴 <strong>Optional Conditioning:</strong> Peloton · 15–20 min Zone 2 HR · conversational pace</div>
-      </div>
-    </div>
-
-  </div>
+  <div id="llmount"></div>
 </div>
 
-<!-- BODY STATS TRACKER PANEL -->
+<!-- BODY STATS -->
 <div class="view-panel" id="panel-tracker">
   <div class="tracker-view">
-
-    <!-- Baseline -->
     <div class="baseline-card">
       <div class="baseline-label">Baseline · InBody 06/10/2026</div>
-      <div class="baseline-title">Debra's Starting Point</div>
+      <div class="baseline-title">Starting Point</div>
       <div class="baseline-grid">
-        <div class="baseline-stat">
-          <div class="stat-label">Total Weight</div>
-          <div class="stat-val">114.7</div>
-          <div class="stat-sub">lbs</div>
-        </div>
-        <div class="baseline-stat">
-          <div class="stat-label">Body Fat %</div>
-          <div class="stat-val">25.1%</div>
-          <div class="stat-sub">28.7 lbs fat mass</div>
-        </div>
-        <div class="baseline-stat">
-          <div class="stat-label">Skeletal Muscle</div>
-          <div class="stat-val">46.3</div>
-          <div class="stat-sub">lbs</div>
-        </div>
-        <div class="baseline-stat">
-          <div class="stat-label">InBody Score</div>
-          <div class="stat-val">79</div>
-          <div class="stat-sub">Visceral fat: 5</div>
-        </div>
-        <div class="baseline-stat">
-          <div class="stat-label">Dry Lean Mass</div>
-          <div class="stat-val">23.1</div>
-          <div class="stat-sub">lbs</div>
-        </div>
-        <div class="baseline-stat">
-          <div class="stat-label">Hydration</div>
-          <div class="stat-val">54.8%</div>
-          <div class="stat-sub">62.8 lbs body water</div>
-        </div>
+        <div class="baseline-stat"><div class="stat-label">Total Weight</div><div class="stat-val">114.7</div><div class="stat-sub">lbs</div></div>
+        <div class="baseline-stat"><div class="stat-label">Body Fat %</div><div class="stat-val">25.1%</div><div class="stat-sub">28.7 lbs fat mass</div></div>
+        <div class="baseline-stat"><div class="stat-label">Skeletal Muscle</div><div class="stat-val">46.3</div><div class="stat-sub">lbs</div></div>
+        <div class="baseline-stat"><div class="stat-label">InBody Score</div><div class="stat-val">79</div><div class="stat-sub">Visceral fat: 5</div></div>
+        <div class="baseline-stat"><div class="stat-label">Dry Lean Mass</div><div class="stat-val">23.1</div><div class="stat-sub">lbs</div></div>
+        <div class="baseline-stat"><div class="stat-label">Hydration</div><div class="stat-val">54.8%</div><div class="stat-sub">62.8 lbs body water</div></div>
       </div>
     </div>
-
-    <!-- Segmental -->
     <div class="segmental-card">
       <div class="segmental-title">Segmental Lean Analysis · Baseline</div>
       <div class="segmental-grid">
-        <div class="seg-item" style="grid-column: 1/-1;">
-          <div class="seg-label">Trunk</div>
-          <div class="seg-val">36.2 lbs</div>
-          <div class="seg-pct">97.2% — strong</div>
-        </div>
-        <div class="seg-item">
-          <div class="seg-label">Left Arm</div>
-          <div class="seg-val">3.8 lbs</div>
-          <div class="seg-pct">93.3% — room to grow</div>
-        </div>
-        <div class="seg-item">
-          <div class="seg-label">Right Arm</div>
-          <div class="seg-val">3.9 lbs</div>
-          <div class="seg-pct">94.4% — room to grow</div>
-        </div>
-        <div class="seg-item">
-          <div class="seg-label">Left Leg</div>
-          <div class="seg-val">12.6 lbs</div>
-          <div class="seg-pct">97.0% — balanced</div>
-        </div>
-        <div class="seg-item">
-          <div class="seg-label">Right Leg</div>
-          <div class="seg-val">12.7 lbs</div>
-          <div class="seg-pct">98.0% — balanced</div>
-        </div>
+        <div class="seg-item" style="grid-column:1/-1"><div class="seg-label">Trunk</div><div class="seg-val">36.2 lbs</div><div class="seg-pct">97.2% — strong</div></div>
+        <div class="seg-item"><div class="seg-label">Left Arm</div><div class="seg-val">3.8 lbs</div><div class="seg-pct">93.3% — room to grow</div></div>
+        <div class="seg-item"><div class="seg-label">Right Arm</div><div class="seg-val">3.9 lbs</div><div class="seg-pct">94.4% — room to grow</div></div>
+        <div class="seg-item"><div class="seg-label">Left Leg</div><div class="seg-val">12.6 lbs</div><div class="seg-pct">97.0% — balanced</div></div>
+        <div class="seg-item"><div class="seg-label">Right Leg</div><div class="seg-val">12.7 lbs</div><div class="seg-pct">98.0% — balanced</div></div>
       </div>
     </div>
-
-    <!-- Goals -->
     <div class="goals-card">
       <div class="goals-title">🎯 Recomp Goals</div>
       <div class="goal-row"><span>Body fat %</span><span>25.1% → ~22%</span></div>
@@ -980,378 +267,419 @@
       <div class="goal-row"><span>Hydration</span><span>54.8% → 60%+</span></div>
       <div class="goal-row"><span>Vegas checkpoint</span><span>July 2 — feel it, not just see it</span></div>
     </div>
-
-    <!-- Log new entry -->
     <div class="log-section">
       <div class="log-header">Log a Weigh-In</div>
-      <div class="log-form" id="logForm">
-        <div class="log-field full">
-          <label>Date</label>
-          <input type="date" id="logDate">
-        </div>
-        <div class="log-field">
-          <label>Weight (lbs)</label>
-          <input type="number" id="logWeight" placeholder="114.7" step="0.1">
-        </div>
-        <div class="log-field">
-          <label>Body Fat %</label>
-          <input type="number" id="logBF" placeholder="25.1" step="0.1">
-        </div>
-        <div class="log-field">
-          <label>Muscle Mass (lbs)</label>
-          <input type="number" id="logMuscle" placeholder="46.3" step="0.1">
-        </div>
-        <div class="log-field">
-          <label>InBody Score</label>
-          <input type="number" id="logScore" placeholder="79">
-        </div>
+      <div class="log-form">
+        <div class="log-field full"><label>Date</label><input type="date" id="logDate"></div>
+        <div class="log-field"><label>Weight (lbs)</label><input type="number" id="logWeight" placeholder="114.7" step="0.1"></div>
+        <div class="log-field"><label>Body Fat %</label><input type="number" id="logBF" placeholder="25.1" step="0.1"></div>
+        <div class="log-field"><label>Muscle Mass (lbs)</label><input type="number" id="logMuscle" placeholder="46.3" step="0.1"></div>
+        <div class="log-field"><label>InBody Score</label><input type="number" id="logScore" placeholder="79"></div>
         <button class="log-btn" onclick="logEntry()">Save Weigh-In</button>
       </div>
       <div class="entries-list" id="entriesList"></div>
     </div>
-
   </div>
 </div>
 
-<script>
-const macroSets = {
-  both: [
-    { label: "Debra Training", value: "~1,650", sub: "P130 · C165 · F50", cls: "debra" },
-    { label: "Debra Rest", value: "~1,450", sub: "P135 · C95 · F55", cls: "debra" },
-    { label: "Bryan Training", value: "~2,450", sub: "P210 · C260 · F65", cls: "bryan" },
-    { label: "Bryan Rest", value: "~2,150", sub: "P220 · C135 · F75", cls: "bryan" },
-  ],
-  debra: [
-    { label: "Training Cal", value: "~1,650", sub: "P130 · C165 · F50", cls: "debra" },
-    { label: "Rest Cal", value: "~1,450", sub: "P135 · C95 · F55", cls: "debra" },
-    { label: "Iron Goal", value: "18mg+", sub: "daily target", cls: "debra" },
-  ],
-  bryan: [
-    { label: "Training Cal", value: "~2,450", sub: "P210 · C260 · F65", cls: "bryan" },
-    { label: "Rest Cal", value: "~2,150", sub: "P220 · C135 · F75", cls: "bryan" },
-    { label: "Protein Goal", value: "210g+", sub: "training days", cls: "bryan" },
-  ]
-};
+<!-- Rest timer (shared, fixed) -->
+<div class="ll-restbar" id="llRest" hidden>
+  <div class="ll-restleft">
+    <div class="ll-resttime" id="llRestTime">0:00</div>
+    <div class="ll-restlbl" id="llRestLbl">rest</div>
+  </div>
+  <div class="ll-restbtns">
+    <button class="ll-preset" data-preset="60">60s</button>
+    <button class="ll-preset" data-preset="90">90s</button>
+    <button class="ll-preset" data-preset="120">120s</button>
+    <button class="ll-ract" id="llAdd15">+15</button>
+    <button class="ll-ract" id="llPause">&#9208; pause</button>
+    <button class="ll-ract skip" id="llSkip">skip</button>
+  </div>
+  <div class="ll-restprog" id="llRestProg"></div>
+</div>
 
-const days = [
-  {
-    name: "Monday", type: "training", ironPriority: "high", homeWorkout: "Lower Body Strength",
-    slots: [
-      { slot: "Breakfast", shared: "Same base — scale portions", debra: { title: "Smoky Egg & Spinach Hash", flavor: "Smoked paprika, cumin, chili flakes, hot sauce", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Smoky Egg & Spinach Hash", flavor: "Same seasoning — bigger everything", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
-      { slot: "Lunch", shared: "Same chicken batch — sauce separately at end", debra: { title: "Lemon-Herb Chicken + Rice", flavor: "Lemon, oregano, garlic — rice in chicken broth", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Spinach + veg 150g", iron: true }, { text: "Lemon finish", vitc: true }] }, bryan: { title: "Spicy Lemon-Herb Chicken + Rice", flavor: "Same chicken — chili flakes + sriracha drizzle on his", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Sriracha + chili flakes" }] } },
-      { slot: "Snack", shared: "Same snack — different portions", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + cinnamon", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }, { text: "⚠️ Space 1+ hr from iron meals" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + cinnamon", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
-      { slot: "Dinner", shared: "Same meal — portion steak and pasta before plating", debra: { title: "Sirloin Steak + Pasta", flavor: "Chimichurri or garlic butter pan sauce", items: [{ text: "Sirloin steak 140g", iron: true }, { text: "Pasta 170g + marinara 125g" }, { text: "Spinach salad 100g", iron: true }, { text: "Lemon vinaigrette", vitc: true }] }, bryan: { title: "Sirloin Steak + Pasta", flavor: "Same chimichurri — bigger plate", items: [{ text: "Sirloin steak 220g", iron: true }, { text: "Pasta 275g + marinara 150g" }, { text: "Salad 150g" }, { text: "Light dressing 20g" }] } }
-    ],
-    tip: "🩸 Highest iron day — steak dinner + spinach salad with lemon. Don't pair dinner with dairy. 💜 Home workout: Lower Body Strength — legs are already warmed up for the week."
-  },
-  {
-    name: "Tuesday", type: "training", ironPriority: "high", homeWorkout: "Upper Body Strength",
-    slots: [
-      { slot: "Breakfast", shared: "Same base — scale portions", debra: { title: "Egg Hash", flavor: "Everything bagel + hot sauce", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Egg Hash", flavor: "Everything bagel + hot sauce", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
-      { slot: "Lunch", shared: "Same ground beef batch — both taco style, his gets extra heat", debra: { title: "Taco-Spiced Ground Beef + Rice", flavor: "Cumin, chili, lime + fresh pico", items: [{ text: "Lean ground beef 93/7 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Spinach + veg 150g", iron: true }, { text: "Lime + pico", vitc: true }] }, bryan: { title: "Spicy Taco Ground Beef + Rice", flavor: "Same batch — jalapeños, hot sauce, extra chili", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Jalapeños + hot sauce + lime", vitc: true }] } },
-      { slot: "Snack", shared: "Same snack", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + vanilla", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + vanilla", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
-      { slot: "Dinner", shared: "Same steak + pasta — portion before plating", debra: { title: "Sirloin Steak + Pasta", flavor: "Garlic butter, parsley, chili flakes", items: [{ text: "Sirloin steak 140g", iron: true }, { text: "Pasta 170g + marinara 125g" }, { text: "Spinach salad 100g", iron: true }, { text: "Lemon vinaigrette", vitc: true }] }, bryan: { title: "Sirloin Steak + Pasta", flavor: "Garlic butter, parsley, chili flakes", items: [{ text: "Sirloin steak 220g", iron: true }, { text: "Pasta 275g + marinara 150g" }, { text: "Salad 150g" }, { text: "Light dressing 20g" }] } }
-    ],
-    tip: "💜 Home workout: Upper Body — shoulders and arms. This is the one that shows up first on your frame. 🩸 Ground beef at lunch keeps iron high between steak dinners."
-  },
-  {
-    name: "Wednesday", type: "rest", ironPriority: "mid",
-    slots: [
-      { slot: "Meal 1", shared: "Scale eggs — share the veggie base", debra: { title: "Spinach Scramble", flavor: "Za'atar + lemon zest + feta crumble", items: [{ text: "2 whole eggs + egg whites 200g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 75g" }] }, bryan: { title: "Egg Scramble", flavor: "Za'atar + lemon zest", items: [{ text: "3 whole eggs + egg whites 300g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 100g" }] } },
-      { slot: "Meal 2", shared: "Bryan uses leftover Tuesday ground beef — different toppings, no extra cook", debra: { title: "Miso-Glazed Salmon + Sweet Potato", flavor: "White miso, honey, soy, sesame — 5 min broil", items: [{ text: "Salmon 140g", iron: true }, { text: "Sweet potato 150g" }, { text: "Mixed veg 150g", vitc: true }, { text: "Olive oil 10g" }] }, bryan: { title: "Spicy Smash Burger Bowl", flavor: "Tuesday's beef reheated — pickled jalapeños, hot sauce, lettuce, tomato", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Sweet potato 250g" }, { text: "Lettuce + tomato 150g", vitc: true }, { text: "Pickled jalapeños + hot sauce" }, { text: "Olive oil 10g" }] } },
-      { slot: "Snack", shared: "Both do yogurt + almonds on rest days", debra: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 170g" }, { text: "Almonds 20g" }] }, bryan: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 250g" }, { text: "Almonds 30g" }] } },
-      { slot: "Meal 3", shared: "Same sheet pan — Greek lemon chicken for everyone including kids", debra: { title: "Greek Lemon Chicken + Roasted Veg", flavor: "Lemon, oregano, garlic, olive oil — sheet pan dinner", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Zucchini + cherry tomatoes 150g", vitc: true }, { text: "Spinach salad 100g", iron: true }, { text: "Feta crumble + lemon", vitc: true }] }, bryan: { title: "Greek Lemon Chicken + Roasted Veg", flavor: "Same — bigger portion", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Zucchini + cherry tomatoes 200g", vitc: true }, { text: "Large salad 150g" }, { text: "Avocado 75g" }, { text: "Olive oil dressing 15g" }] } }
-    ],
-    tip: "Rest day. Greek lemon chicken is hands-off once it's in the oven — kid-friendly, no separate dinner to cook. Sheet pan = one pan, everyone fed."
-  },
-  {
-    name: "Thursday", type: "training", ironPriority: "high", homeWorkout: "Lower Body — Glute Focus",
-    slots: [
-      { slot: "Breakfast", shared: "Same hash — scale everything", debra: { title: "Egg Hash", flavor: "Green harissa, jalapeño, cilantro", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Egg Hash", flavor: "Green harissa, jalapeño, cilantro", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
-      { slot: "Lunch", shared: "Same chicken batch — Debra goes Mediterranean, Bryan gets harissa", debra: { title: "Mediterranean Chicken + Rice", flavor: "Lemon, oregano, garlic — marinate overnight", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Spinach + veg 150g", iron: true }, { text: "Lemon + tomato", vitc: true }] }, bryan: { title: "Harissa Chicken + Rice", flavor: "Same chicken — harissa paste + roasted peppers on his", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Harissa paste + roasted peppers" }] } },
-      { slot: "Snack", shared: "Same snack", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + lemon zest", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + lemon zest", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
-      { slot: "Dinner", shared: "Mediterranean beef kofta — same batch, portion before plating. Kids will eat this.", debra: { title: "Mediterranean Beef Kofta + Tzatziki", flavor: "Cumin, coriander, garlic, parsley — served over spinach + pita", items: [{ text: "Lean ground beef 93/7 140g", iron: true }, { text: "Spinach + cucumber salad 100g", iron: true }, { text: "Tzatziki 30g" }, { text: "Whole grain pita (small) 60g" }, { text: "Lemon squeeze", vitc: true }] }, bryan: { title: "Mediterranean Beef Kofta + Tzatziki", flavor: "Same — bigger portion, add rice", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Jasmine rice 150g" }, { text: "Large salad 150g" }, { text: "Tzatziki 30g" }, { text: "Lemon squeeze", vitc: true }] } }
-    ],
-    tip: "💜 Home workout: Glute Focus — hip thrusts, RDLs, frog pumps. Optional Peloton Zone 2 after. Kofta is ground beef shaped into patties or logs — easy to cook, easy to scale, kids actually eat it."
-  },
-  {
-    name: "Friday", type: "training", ironPriority: "mid",
-    slots: [
-      { slot: "Breakfast", shared: "Italian-style hash — scale and go", debra: { title: "Egg Hash", flavor: "Italian herbs, sun-dried tomato, basil", items: [{ text: "2 whole eggs + egg whites 150g", iron: true }, { text: "Potatoes 200g + spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 50g" }] }, bryan: { title: "Egg Hash", flavor: "Italian herbs, sun-dried tomato, basil", items: [{ text: "3 whole eggs + egg whites 250g", iron: true }, { text: "Potatoes 350g + spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 75g" }] } },
-      { slot: "Lunch", shared: "Same teriyaki batch — his gets chili garlic sauce on top", debra: { title: "Teriyaki Chicken + Rice", flavor: "Coconut aminos, ginger, garlic, sesame", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Jasmine rice 180g" }, { text: "Mixed veg 150g", vitc: true }, { text: "Coconut aminos + sesame oil" }] }, bryan: { title: "Spicy Teriyaki Chicken + Rice", flavor: "Same base — chili garlic sauce + sriracha on top", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 300g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Chili garlic sauce + sriracha" }] } },
-      { slot: "Snack", shared: "Same snack", debra: { title: "Greek Yogurt + Blueberries", flavor: "Honey + crushed coconut", items: [{ text: "Nonfat Greek yogurt 170g" }, { text: "Blueberries 100g", vitc: true }, { text: "Honey 10g" }] }, bryan: { title: "Greek Yogurt + Blueberries", flavor: "Honey + crushed coconut", items: [{ text: "Nonfat Greek yogurt 250g" }, { text: "Blueberries 150g", vitc: true }, { text: "Honey 15g" }] } },
-      { slot: "Dinner", shared: "Salmon for both — end of the week, lighter dinner. Kids do well with honey-glazed.", debra: { title: "Honey Garlic Salmon + Asparagus", flavor: "Honey, garlic, lemon — 12 min in the oven", items: [{ text: "Salmon 140g", iron: true }, { text: "Asparagus 150g", iron: true }, { text: "Spinach salad 100g", iron: true }, { text: "Avocado 50g" }, { text: "Lemon finish", vitc: true }] }, bryan: { title: "Honey Garlic Salmon + Asparagus", flavor: "Same — bigger portion", items: [{ text: "Salmon 220g", iron: true }, { text: "Asparagus 200g", iron: true }, { text: "Large salad 150g" }, { text: "Avocado 75g" }, { text: "Olive oil dressing 15g" }] } }
-    ],
-    tip: "End of training week. Salmon Friday is a lighter reset after a heavy steak week — iron stays high, body feels less heavy going into the weekend."
-  },
-  {
-    name: "Saturday", type: "rest", ironPriority: "mid",
-    slots: [
-      { slot: "Meal 1", shared: "Weekend breakfast — scale eggs, share veggie base", debra: { title: "Spinach Egg Scramble", flavor: "Everything bagel + hot sauce", items: [{ text: "2 whole eggs + egg whites 200g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 75g" }] }, bryan: { title: "Egg Scramble", flavor: "Everything bagel + hot sauce", items: [{ text: "3 whole eggs + egg whites 300g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 100g" }] } },
-      { slot: "Meal 2", shared: "Both do chicken + sweet potato — same glaze, different weights", debra: { title: "Honey Sriracha Chicken + Sweet Potato", flavor: "Honey, sriracha, garlic — sheet pan", items: [{ text: "Chicken breast 150g", iron: true }, { text: "Sweet potato 150g" }, { text: "Mixed veg 150g", vitc: true }, { text: "Olive oil 10g" }] }, bryan: { title: "Honey Sriracha Chicken + Sweet Potato", flavor: "Same — bigger everything", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Sweet potato 250g" }, { text: "Mixed veg 200g", vitc: true }, { text: "Olive oil 10g" }] } },
-      { slot: "Snack", shared: "Both do yogurt + almonds", debra: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 170g" }, { text: "Almonds 20g" }] }, bryan: { title: "Greek Yogurt + Almonds", flavor: "Honey + cinnamon", items: [{ text: "Greek yogurt 250g" }, { text: "Almonds 30g" }] } },
-      { slot: "Meal 3", shared: "Chicken shawarma — one batch, family dinner. Kids love this one.", debra: { title: "Chicken Shawarma Bowl", flavor: "Cumin, paprika, turmeric, garlic, lemon — over greens", items: [{ text: "Chicken breast 140g", iron: true }, { text: "Spinach + cucumber + tomato 150g", iron: true, vitc: true }, { text: "Hummus 40g" }, { text: "Avocado 50g" }, { text: "Lemon + fresh parsley", vitc: true }] }, bryan: { title: "Chicken Shawarma Bowl", flavor: "Same — add rice for his carbs", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Jasmine rice 150g" }, { text: "Large salad 150g" }, { text: "Avocado 75g" }, { text: "Olive oil dressing 15g" }] } }
-    ],
-    tip: "Saturday = batch prep day + shawarma night. Cook proteins + hash base for Mon/Tue. Marinate Monday chicken tonight. Shawarma seasoning takes 2 minutes to mix and the whole family eats it."
-  },
-  {
-    name: "Sunday", type: "rest", ironPriority: "mid",
-    slots: [
-      { slot: "Meal 1", shared: "Tuscan-style eggs — same pan, scale portions", debra: { title: "Tuscan Egg Scramble", flavor: "Sundried tomato, basil, light parmesan", items: [{ text: "2 whole eggs + egg whites 200g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 75g", vitc: true }, { text: "Avocado 75g" }] }, bryan: { title: "Tuscan Egg Scramble", flavor: "Sundried tomato, basil, light parmesan", items: [{ text: "3 whole eggs + egg whites 300g", iron: true }, { text: "Spinach 75g", iron: true }, { text: "Bell peppers 100g", vitc: true }, { text: "Avocado 100g" }] } },
-      { slot: "Meal 2", shared: "Greek chicken for both — same marinade, different weights", debra: { title: "Lemon-Oregano Chicken + Sweet Potato", flavor: "Greek marinade — lemon, oregano, garlic", items: [{ text: "Chicken breast 150g", iron: true }, { text: "Sweet potato 150g" }, { text: "Mixed veg 150g" }, { text: "Olive oil 10g" }, { text: "Lemon + oregano", vitc: true }] }, bryan: { title: "Lemon-Oregano Chicken + Sweet Potato", flavor: "Same — bigger everything", items: [{ text: "Chicken breast 220g", iron: true }, { text: "Sweet potato 250g" }, { text: "Mixed veg 200g" }, { text: "Olive oil 10g" }, { text: "Lemon + oregano", vitc: true }] } },
-      { slot: "Snack", shared: "Both do yogurt + almonds", debra: { title: "Greek Yogurt + Almonds", flavor: "Honey + crushed pistachios", items: [{ text: "Greek yogurt 170g" }, { text: "Almonds 20g" }] }, bryan: { title: "Greek Yogurt + Almonds", flavor: "Honey + crushed pistachios", items: [{ text: "Greek yogurt 250g" }, { text: "Almonds 30g" }] } },
-      { slot: "Meal 3", shared: "Mediterranean ground beef stuffed peppers — family dinner, easy Sunday cook", debra: { title: "Mediterranean Stuffed Peppers", flavor: "Beef + tomato + herbs + feta — baked until tender", items: [{ text: "Lean ground beef 93/7 140g", iron: true }, { text: "Bell peppers 2 whole", vitc: true }, { text: "Diced tomatoes + spinach 100g", iron: true, vitc: true }, { text: "Feta crumble 20g" }, { text: "Fresh parsley + lemon", vitc: true }] }, bryan: { title: "Mediterranean Stuffed Peppers", flavor: "Same — bigger filling, add side rice", items: [{ text: "Lean ground beef 93/7 200g", iron: true }, { text: "Bell peppers 2 whole", vitc: true }, { text: "Diced tomatoes + spinach 100g", iron: true, vitc: true }, { text: "Jasmine rice 150g" }, { text: "Feta crumble 20g" }] } }
-    ],
-    tip: "Sunday reset + stuffed peppers are made in the oven — prep takes 10 minutes, oven does the rest. Marinate Monday chicken, batch the hash base, and you're set for the week."
-  }
+<script>
+/* ============ MEALS (Debra only) ============ */
+var macros = [
+  { label:"Training Cal", value:"~1,650", sub:"P130 · C165 · F50" },
+  { label:"Rest Cal", value:"~1,450", sub:"P135 · C95 · F55" },
+  { label:"Iron Goal", value:"18mg+", sub:"daily target" }
+];
+var days = [
+  { name:"Monday", type:"training", ironPriority:"high", homeWorkout:"Lower Body Strength", slots:[
+    { slot:"Breakfast", title:"Smoky Egg & Spinach Hash", flavor:"Smoked paprika, cumin, chili flakes, hot sauce", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
+    { slot:"Lunch", title:"Lemon-Herb Chicken + Rice", flavor:"Lemon, oregano, garlic — rice in chicken broth", items:[{text:"Chicken breast 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Spinach + veg 150g",iron:true},{text:"Lemon finish",vitc:true}] },
+    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + cinnamon", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"},{text:"⚠️ Space 1+ hr from iron meals"}] },
+    { slot:"Dinner", title:"Sirloin Steak + Pasta", flavor:"Chimichurri or garlic butter pan sauce", items:[{text:"Sirloin steak 140g",iron:true},{text:"Pasta 170g + marinara 125g"},{text:"Spinach salad 100g",iron:true},{text:"Lemon vinaigrette",vitc:true}] }
+  ], tip:"🩸 Highest iron day — steak dinner + spinach salad with lemon. Don't pair dinner with dairy. 💜 Home option: Lower Body Strength." },
+  { name:"Tuesday", type:"training", ironPriority:"high", homeWorkout:"Upper Body Strength", slots:[
+    { slot:"Breakfast", title:"Egg Hash", flavor:"Everything bagel + hot sauce", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
+    { slot:"Lunch", title:"Taco-Spiced Ground Beef + Rice", flavor:"Cumin, chili, lime + fresh pico", items:[{text:"Lean ground beef 93/7 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Spinach + veg 150g",iron:true},{text:"Lime + pico",vitc:true}] },
+    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + vanilla", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"}] },
+    { slot:"Dinner", title:"Sirloin Steak + Pasta", flavor:"Garlic butter, parsley, chili flakes", items:[{text:"Sirloin steak 140g",iron:true},{text:"Pasta 170g + marinara 125g"},{text:"Spinach salad 100g",iron:true},{text:"Lemon vinaigrette",vitc:true}] }
+  ], tip:"💜 Home option: Upper Body — shoulders and arms show up first on your frame. 🩸 Ground beef at lunch keeps iron high between steak dinners." },
+  { name:"Wednesday", type:"rest", ironPriority:"mid", slots:[
+    { slot:"Meal 1", title:"Spinach Scramble", flavor:"Za'atar + lemon zest + feta crumble", items:[{text:"2 whole eggs + egg whites 200g",iron:true},{text:"Spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 75g"}] },
+    { slot:"Meal 2", title:"Miso-Glazed Salmon + Sweet Potato", flavor:"White miso, honey, soy, sesame — 5 min broil", items:[{text:"Salmon 140g",iron:true},{text:"Sweet potato 150g"},{text:"Mixed veg 150g",vitc:true},{text:"Olive oil 10g"}] },
+    { slot:"Snack", title:"Greek Yogurt + Almonds", flavor:"Honey + cinnamon", items:[{text:"Greek yogurt 170g"},{text:"Almonds 20g"}] },
+    { slot:"Meal 3", title:"Greek Lemon Chicken + Roasted Veg", flavor:"Lemon, oregano, garlic, olive oil — sheet pan", items:[{text:"Chicken breast 140g",iron:true},{text:"Zucchini + cherry tomatoes 150g",vitc:true},{text:"Spinach salad 100g",iron:true},{text:"Feta crumble + lemon",vitc:true}] }
+  ], tip:"Rest day. Greek lemon chicken is hands-off once it's in the oven — kid-friendly, no separate dinner to cook." },
+  { name:"Thursday", type:"training", ironPriority:"high", homeWorkout:"Lower Body — Glute Focus", slots:[
+    { slot:"Breakfast", title:"Egg Hash", flavor:"Green harissa, jalapeño, cilantro", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
+    { slot:"Lunch", title:"Mediterranean Chicken + Rice", flavor:"Lemon, oregano, garlic — marinate overnight", items:[{text:"Chicken breast 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Spinach + veg 150g",iron:true},{text:"Lemon + tomato",vitc:true}] },
+    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + lemon zest", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"}] },
+    { slot:"Dinner", title:"Mediterranean Beef Kofta + Tzatziki", flavor:"Cumin, coriander, garlic, parsley — over spinach + pita", items:[{text:"Lean ground beef 93/7 140g",iron:true},{text:"Spinach + cucumber salad 100g",iron:true},{text:"Tzatziki 30g"},{text:"Whole grain pita (small) 60g"},{text:"Lemon squeeze",vitc:true}] }
+  ], tip:"💜 Home option: Glute Focus — hip thrusts, RDLs, frog pumps. Optional Peloton Zone 2 after. Kofta scales easily and kids eat it." },
+  { name:"Friday", type:"training", ironPriority:"mid", slots:[
+    { slot:"Breakfast", title:"Egg Hash", flavor:"Italian herbs, sun-dried tomato, basil", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
+    { slot:"Lunch", title:"Teriyaki Chicken + Rice", flavor:"Coconut aminos, ginger, garlic, sesame", items:[{text:"Chicken breast 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Mixed veg 150g",vitc:true},{text:"Coconut aminos + sesame oil"}] },
+    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + crushed coconut", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"}] },
+    { slot:"Dinner", title:"Honey Garlic Salmon + Asparagus", flavor:"Honey, garlic, lemon — 12 min in the oven", items:[{text:"Salmon 140g",iron:true},{text:"Asparagus 150g",iron:true},{text:"Spinach salad 100g",iron:true},{text:"Avocado 50g"},{text:"Lemon finish",vitc:true}] }
+  ], tip:"End of training week. Salmon Friday is a lighter reset after a heavy steak week — iron stays high, body feels less heavy into the weekend." },
+  { name:"Saturday", type:"rest", ironPriority:"mid", slots:[
+    { slot:"Meal 1", title:"Spinach Egg Scramble", flavor:"Everything bagel + hot sauce", items:[{text:"2 whole eggs + egg whites 200g",iron:true},{text:"Spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 75g"}] },
+    { slot:"Meal 2", title:"Honey Sriracha Chicken + Sweet Potato", flavor:"Honey, sriracha, garlic — sheet pan", items:[{text:"Chicken breast 150g",iron:true},{text:"Sweet potato 150g"},{text:"Mixed veg 150g",vitc:true},{text:"Olive oil 10g"}] },
+    { slot:"Snack", title:"Greek Yogurt + Almonds", flavor:"Honey + cinnamon", items:[{text:"Greek yogurt 170g"},{text:"Almonds 20g"}] },
+    { slot:"Meal 3", title:"Chicken Shawarma Bowl", flavor:"Cumin, paprika, turmeric, garlic, lemon — over greens", items:[{text:"Chicken breast 140g",iron:true},{text:"Spinach + cucumber + tomato 150g",iron:true,vitc:true},{text:"Hummus 40g"},{text:"Avocado 50g"},{text:"Lemon + fresh parsley",vitc:true}] }
+  ], tip:"Saturday = batch prep + shawarma night. Cook proteins + hash base for Mon/Tue. Marinate Monday chicken tonight." },
+  { name:"Sunday", type:"rest", ironPriority:"mid", slots:[
+    { slot:"Meal 1", title:"Tuscan Egg Scramble", flavor:"Sundried tomato, basil, light parmesan", items:[{text:"2 whole eggs + egg whites 200g",iron:true},{text:"Spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 75g"}] },
+    { slot:"Meal 2", title:"Lemon-Oregano Chicken + Sweet Potato", flavor:"Greek marinade — lemon, oregano, garlic", items:[{text:"Chicken breast 150g",iron:true},{text:"Sweet potato 150g"},{text:"Mixed veg 150g"},{text:"Olive oil 10g"},{text:"Lemon + oregano",vitc:true}] },
+    { slot:"Snack", title:"Greek Yogurt + Almonds", flavor:"Honey + crushed pistachios", items:[{text:"Greek yogurt 170g"},{text:"Almonds 20g"}] },
+    { slot:"Meal 3", title:"Mediterranean Stuffed Peppers", flavor:"Beef + tomato + herbs + feta — baked until tender", items:[{text:"Lean ground beef 93/7 140g",iron:true},{text:"Bell peppers 2 whole",vitc:true},{text:"Diced tomatoes + spinach 100g",iron:true,vitc:true},{text:"Feta crumble 20g"},{text:"Fresh parsley + lemon",vitc:true}] }
+  ], tip:"Sunday reset + stuffed peppers are hands-off in the oven. Marinate Monday chicken, batch the hash base, and you're set for the week." }
 ];
 
-let currentView = 'both';
-
-function setMainView(view, el) {
-  document.querySelectorAll('.main-tab').forEach(t => t.className = 'main-tab');
-  if (view === 'workouts') el.className = 'main-tab active-workout';
-  else if (view === 'tracker') el.className = 'main-tab active-tracker';
-  else el.className = 'main-tab active';
-  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-' + view).classList.add('active');
+function setMainView(view, el){
+  document.querySelectorAll('.main-tab').forEach(function(t){t.className='main-tab';});
+  el.className = view==='meals' ? 'main-tab active' : 'main-tab active-workout';
+  document.querySelectorAll('.view-panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('panel-'+view).classList.add('active');
 }
 
-function setView(view, el) {
-  currentView = view;
-  document.body.className = `view-${view}`;
-  document.querySelectorAll('.person-tab').forEach(t => t.className = 'person-tab');
-  el.className = `person-tab active-${view}`;
-  renderMacros(view);
+function mealTag(type){
+  var s=document.createElement('span');
+  s.className = type==='iron' ? 'iron-tag' : 'c-tag';
+  s.textContent = type==='iron' ? '🩸' : '🍋';
+  return s;
 }
-
-function renderMacros(view) {
-  const bar = document.getElementById('macrosBar');
-  bar.innerHTML = '';
-  macroSets[view].forEach(m => {
-    const div = document.createElement('div');
-    div.className = `macro-block ${m.cls}`;
-    div.innerHTML = `<span class="label">${m.label}</span><span class="value">${m.value}</span><span class="sub">${m.sub}</span>`;
-    bar.appendChild(div);
+function renderMacros(){
+  var bar=document.getElementById('macrosBar'); bar.innerHTML='';
+  macros.forEach(function(m){
+    var d=document.createElement('div'); d.className='macro-block';
+    d.innerHTML='<span class="label">'+m.label+'</span><span class="value">'+m.value+'</span><span class="sub">'+m.sub+'</span>';
+    bar.appendChild(d);
   });
 }
-
-function buildTag(type) {
-  const span = document.createElement('span');
-  span.className = type === 'iron' ? 'iron-tag' : 'c-tag';
-  span.textContent = type === 'iron' ? '🩸' : '🍋';
-  return span;
-}
-
-function renderPersonCard(data, person) {
-  const div = document.createElement('div');
-  div.className = `person-card ${person} ${person}-only`;
-  const nameTag = document.createElement('div');
-  nameTag.className = 'person-name-tag';
-  nameTag.textContent = person === 'debra' ? '💗 Debra' : '💙 Bryan';
-  const title = document.createElement('div');
-  title.className = 'meal-title';
-  title.textContent = data.title;
-  const flavor = document.createElement('div');
-  flavor.className = 'meal-flavor';
-  flavor.textContent = data.flavor;
-  const items = document.createElement('div');
-  items.className = 'meal-items';
-  data.items.forEach(item => {
-    const line = document.createElement('div');
-    line.textContent = item.text;
-    if (item.iron) line.appendChild(buildTag('iron'));
-    if (item.vitc) line.appendChild(buildTag('vitc'));
-    items.appendChild(line);
-  });
-  div.appendChild(nameTag);
-  div.appendChild(title);
-  div.appendChild(flavor);
-  div.appendChild(items);
-  return div;
-}
-
-function renderDay(day, index) {
-  const card = document.createElement('div');
-  card.className = 'day-card';
-
-  const header = document.createElement('div');
-  header.className = `day-header ${day.type}`;
-
-  const nameSpan = document.createElement('span');
-  nameSpan.className = 'day-name';
-  nameSpan.textContent = day.name;
-
-  const meta = document.createElement('div');
-  meta.className = 'day-meta';
-
-  const badge = document.createElement('span');
-  badge.className = `badge ${day.type}`;
-  badge.textContent = day.type === 'training' ? '🏋️ Training' : '🌿 Rest';
-  meta.appendChild(badge);
-
-  if (day.ironPriority === 'high') {
-    const ironBadge = document.createElement('span');
-    ironBadge.className = 'badge iron';
-    ironBadge.textContent = '🩸 High Iron';
-    meta.appendChild(ironBadge);
+function renderDay(day, index){
+  var card=document.createElement('div'); card.className='day-card';
+  var header=document.createElement('div'); header.className='day-header '+day.type;
+  var nameSpan=document.createElement('span'); nameSpan.className='day-name'; nameSpan.textContent=day.name;
+  var meta=document.createElement('div'); meta.className='day-meta';
+  var badge=document.createElement('span'); badge.className='badge '+day.type;
+  badge.textContent = day.type==='training' ? '🏋️ Training' : '🌿 Rest'; meta.appendChild(badge);
+  if(day.ironPriority==='high'){var ib=document.createElement('span'); ib.className='badge iron'; ib.textContent='🩸 High Iron'; meta.appendChild(ib);}
+  if(day.homeWorkout){var hb=document.createElement('span'); hb.className='badge home'; hb.textContent='💜 Home Option'; meta.appendChild(hb);}
+  var chev=document.createElement('span'); chev.className='chevron'; chev.textContent='▼'; meta.appendChild(chev);
+  header.appendChild(nameSpan); header.appendChild(meta);
+  var body=document.createElement('div'); body.className='day-body'+(index===0?' open':'');
+  if(day.homeWorkout){
+    var wb=document.createElement('div'); wb.className='workout-inline';
+    wb.innerHTML='<div class="workout-inline-label">💜 Home Alternative</div><div class="workout-inline-title">'+day.homeWorkout+'</div><div style="font-size:11px;color:var(--text-mid)">Log it live in the <strong>Workouts</strong> tab above.</div>';
+    body.appendChild(wb);
   }
-
-  if (day.homeWorkout) {
-    const hwBadge = document.createElement('span');
-    hwBadge.className = 'badge home';
-    hwBadge.textContent = '💜 Home Option';
-    meta.appendChild(hwBadge);
-  }
-
-  const chevron = document.createElement('span');
-  chevron.className = 'chevron';
-  chevron.textContent = '▼';
-  meta.appendChild(chevron);
-
-  header.appendChild(nameSpan);
-  header.appendChild(meta);
-
-  const body = document.createElement('div');
-  body.className = 'day-body' + (index === 0 ? ' open' : '');
-
-  // Workout inline block
-  if (day.homeWorkout) {
-    const workoutBlock = document.createElement('div');
-    workoutBlock.className = 'workout-inline';
-    workoutBlock.innerHTML = `
-      <div class="workout-inline-label">💜 Home Alternative</div>
-      <div class="workout-inline-title">${day.homeWorkout}</div>
-      <div style="font-size:11px;color:var(--text-mid)">Tap the <strong>Home Workouts</strong> tab above for the full routine with sets + reps.</div>
-    `;
-    body.appendChild(workoutBlock);
-  }
-
-  day.slots.forEach(slot => {
-    const slotDiv = document.createElement('div');
-    slotDiv.className = 'meal-slot';
-    const slotLabel = document.createElement('div');
-    slotLabel.className = 'slot-label';
-    slotLabel.textContent = slot.slot;
-    slotDiv.appendChild(slotLabel);
-    const personsRow = document.createElement('div');
-    personsRow.className = 'persons-row';
-    personsRow.appendChild(renderPersonCard(slot.debra, 'debra'));
-    personsRow.appendChild(renderPersonCard(slot.bryan, 'bryan'));
-    slotDiv.appendChild(personsRow);
-    if (slot.shared) {
-      const note = document.createElement('div');
-      note.className = 'shared-note';
-      note.textContent = '🍳 ' + slot.shared;
-      slotDiv.appendChild(note);
-    }
-    body.appendChild(slotDiv);
+  day.slots.forEach(function(slot){
+    var sd=document.createElement('div'); sd.className='meal-slot';
+    var sl=document.createElement('div'); sl.className='slot-label'; sl.textContent=slot.slot; sd.appendChild(sl);
+    var pc=document.createElement('div'); pc.className='person-card';
+    var t=document.createElement('div'); t.className='meal-title'; t.textContent=slot.title;
+    var fl=document.createElement('div'); fl.className='meal-flavor'; fl.textContent=slot.flavor;
+    var it=document.createElement('div'); it.className='meal-items';
+    slot.items.forEach(function(item){
+      var line=document.createElement('div'); line.textContent=item.text;
+      if(item.iron) line.appendChild(mealTag('iron'));
+      if(item.vitc) line.appendChild(mealTag('vitc'));
+      it.appendChild(line);
+    });
+    pc.appendChild(t); pc.appendChild(fl); pc.appendChild(it); sd.appendChild(pc); body.appendChild(sd);
   });
-
-  const tip = document.createElement('div');
-  tip.className = 'day-tip';
-  tip.innerHTML = day.tip;
-  body.appendChild(tip);
-
-  card.appendChild(header);
-  card.appendChild(body);
-
-  header.addEventListener('click', () => {
-    const isOpen = body.classList.contains('open');
-    document.querySelectorAll('.day-body').forEach(b => b.classList.remove('open'));
-    document.querySelectorAll('.chevron').forEach(c => c.style.transform = '');
-    if (!isOpen) {
-      body.classList.add('open');
-      chevron.style.transform = 'rotate(180deg)';
-    }
+  var tip=document.createElement('div'); tip.className='day-tip'; tip.innerHTML=day.tip; body.appendChild(tip);
+  card.appendChild(header); card.appendChild(body);
+  header.addEventListener('click', function(){
+    var isOpen=body.classList.contains('open');
+    document.querySelectorAll('.day-body').forEach(function(b){b.classList.remove('open');});
+    document.querySelectorAll('.chevron').forEach(function(c){c.style.transform='';});
+    if(!isOpen){body.classList.add('open'); chev.style.transform='rotate(180deg)';}
   });
-
-  if (index === 0) chevron.style.transform = 'rotate(180deg)';
+  if(index===0) chev.style.transform='rotate(180deg)';
   return card;
 }
+renderMacros();
+var grid=document.getElementById('weekGrid');
+days.forEach(function(d,i){grid.appendChild(renderDay(d,i));});
 
-renderMacros('both');
-const grid = document.getElementById('weekGrid');
-days.forEach((day, i) => grid.appendChild(renderDay(day, i)));
+/* ============ BODY STATS ============ */
+var TKEY='debra:weighins:v1';
+var BASELINE={weight:114.7,bf:25.1,muscle:46.3,score:79};
+var entries=[];
+try{entries=JSON.parse(localStorage.getItem(TKEY)||'[]');}catch(e){entries=[];}
+function saveEntries(){try{localStorage.setItem(TKEY,JSON.stringify(entries));}catch(e){}}
 
-// ---- TRACKER ----
-const BASELINE = { weight: 114.7, bf: 25.1, muscle: 46.3, score: 79 };
-let entries = [];
-
-function saveEntries() { /* in-memory only */ }
-
-function logEntry() {
-  const date = document.getElementById('logDate').value;
-  const weight = parseFloat(document.getElementById('logWeight').value);
-  const bf = parseFloat(document.getElementById('logBF').value);
-  const muscle = parseFloat(document.getElementById('logMuscle').value);
-  const score = parseFloat(document.getElementById('logScore').value);
-
-  if (!date || isNaN(weight)) {
-    alert('Please enter at least a date and weight.');
-    return;
-  }
-
-  entries.unshift({ date, weight, bf: isNaN(bf) ? null : bf, muscle: isNaN(muscle) ? null : muscle, score: isNaN(score) ? null : score });
-  saveEntries();
-  renderEntries();
-
-  document.getElementById('logDate').value = '';
-  document.getElementById('logWeight').value = '';
-  document.getElementById('logBF').value = '';
-  document.getElementById('logMuscle').value = '';
-  document.getElementById('logScore').value = '';
+function logEntry(){
+  var date=document.getElementById('logDate').value;
+  var weight=parseFloat(document.getElementById('logWeight').value);
+  var bf=parseFloat(document.getElementById('logBF').value);
+  var muscle=parseFloat(document.getElementById('logMuscle').value);
+  var score=parseFloat(document.getElementById('logScore').value);
+  if(!date||isNaN(weight)){alert('Please enter at least a date and weight.');return;}
+  entries.unshift({date:date,weight:weight,bf:isNaN(bf)?null:bf,muscle:isNaN(muscle)?null:muscle,score:isNaN(score)?null:score});
+  saveEntries(); renderEntries();
+  document.getElementById('logWeight').value='';document.getElementById('logBF').value='';
+  document.getElementById('logMuscle').value='';document.getElementById('logScore').value='';
 }
-
-function delta(current, baseline, lowerIsBetter) {
-  if (current === null || current === undefined) return '';
-  const diff = (current - baseline).toFixed(1);
-  const better = lowerIsBetter ? diff < 0 : diff > 0;
-  const sign = diff > 0 ? '+' : '';
-  const cls = better ? 'delta-pos' : (diff == 0 ? '' : 'delta-neg');
-  return `<span class="${cls}">${sign}${diff}</span>`;
+function delta(cur,base,lowerBetter){
+  if(cur===null||cur===undefined) return '';
+  var diff=(cur-base).toFixed(1);
+  var better = lowerBetter ? diff<0 : diff>0;
+  var sign = diff>0 ? '+' : '';
+  var cls = better ? 'delta-pos' : (diff==0?'':'delta-neg');
+  return '<span class="'+cls+'">'+sign+diff+'</span>';
 }
-
-function renderEntries() {
-  const list = document.getElementById('entriesList');
-  if (!entries.length) {
-    list.innerHTML = '<div class="empty-state">No weigh-ins logged yet. Add your first one above.</div>';
-    return;
-  }
-
-  list.innerHTML = entries.map((e, i) => {
-    const prev = entries[i + 1] || BASELINE;
-    const weightDelta = e.weight && prev.weight ? ((e.weight - prev.weight) > 0 ? `<span class="delta-neg">+${(e.weight - prev.weight).toFixed(1)}</span>` : `<span class="delta-pos">${(e.weight - prev.weight).toFixed(1)}</span>`) : '';
-    const bfDelta = e.bf != null && prev.bf != null ? (e.bf < prev.bf ? `<span class="delta-pos">${(e.bf - prev.bf).toFixed(1)}%</span>` : `<span class="delta-neg">+${(e.bf - prev.bf).toFixed(1)}%</span>`) : '';
-    const muscleDelta = e.muscle != null && prev.muscle != null ? (e.muscle > prev.muscle ? `<span class="delta-pos">+${(e.muscle - prev.muscle).toFixed(1)} lbs</span>` : `<span class="delta-neg">${(e.muscle - prev.muscle).toFixed(1)} lbs</span>`) : '';
-
-    const sinceBaseline = i === entries.length - 1 ? '' : `
-      <div style="font-size:10px;color:var(--text-mid);margin-top:4px;">
-        vs baseline: weight ${delta(e.weight, BASELINE.weight, true)} · bf ${e.bf != null ? delta(e.bf, BASELINE.bf, true) + '%' : '—'} · muscle ${e.muscle != null ? delta(e.muscle, BASELINE.muscle, false) + ' lbs' : '—'}
-      </div>`;
-
-    return `
-      <div class="entry-card">
-        <div class="entry-date">${new Date(e.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</div>
-        <div class="entry-stats">
-          <div class="entry-stat"><span class="e-val">${e.weight}</span><span class="e-label">lbs</span></div>
-          <div class="entry-stat"><span class="e-val">${e.bf != null ? e.bf + '%' : '—'}</span><span class="e-label">body fat</span></div>
-          <div class="entry-stat"><span class="e-val">${e.muscle != null ? e.muscle : '—'}</span><span class="e-label">muscle lbs</span></div>
-        </div>
-        ${e.score != null ? `<div style="font-size:11px;color:var(--text-mid);margin-top:6px;">InBody score: <strong style="color:var(--debra-pink)">${e.score}</strong></div>` : ''}
-        <div class="entry-delta">
-          vs prev: weight ${weightDelta || '—'} · bf ${bfDelta || '—'} · muscle ${muscleDelta || '—'}
-        </div>
-        ${sinceBaseline}
-      </div>`;
+function renderEntries(){
+  var list=document.getElementById('entriesList');
+  if(!entries.length){list.innerHTML='<div class="empty-state">No weigh-ins logged yet. Add your first one above.</div>';return;}
+  list.innerHTML=entries.map(function(e,i){
+    var prev=entries[i+1]||BASELINE;
+    var wD = e.weight&&prev.weight ? ((e.weight-prev.weight)>0?'<span class="delta-neg">+'+(e.weight-prev.weight).toFixed(1)+'</span>':'<span class="delta-pos">'+(e.weight-prev.weight).toFixed(1)+'</span>') : '';
+    var bD = e.bf!=null&&prev.bf!=null ? (e.bf<prev.bf?'<span class="delta-pos">'+(e.bf-prev.bf).toFixed(1)+'%</span>':'<span class="delta-neg">+'+(e.bf-prev.bf).toFixed(1)+'%</span>') : '';
+    var mD = e.muscle!=null&&prev.muscle!=null ? (e.muscle>prev.muscle?'<span class="delta-pos">+'+(e.muscle-prev.muscle).toFixed(1)+' lbs</span>':'<span class="delta-neg">'+(e.muscle-prev.muscle).toFixed(1)+' lbs</span>') : '';
+    var sb = i===entries.length-1 ? '' : '<div style="font-size:10px;color:var(--text-mid);margin-top:4px;">vs baseline: weight '+delta(e.weight,BASELINE.weight,true)+' · bf '+(e.bf!=null?delta(e.bf,BASELINE.bf,true)+'%':'—')+' · muscle '+(e.muscle!=null?delta(e.muscle,BASELINE.muscle,false)+' lbs':'—')+'</div>';
+    return '<div class="entry-card"><div class="entry-date">'+new Date(e.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})+'</div>'+
+      '<div class="entry-stats"><div class="entry-stat"><span class="e-val">'+e.weight+'</span><span class="e-label">lbs</span></div>'+
+      '<div class="entry-stat"><span class="e-val">'+(e.bf!=null?e.bf+'%':'—')+'</span><span class="e-label">body fat</span></div>'+
+      '<div class="entry-stat"><span class="e-val">'+(e.muscle!=null?e.muscle:'—')+'</span><span class="e-label">muscle lbs</span></div></div>'+
+      (e.score!=null?'<div style="font-size:11px;color:var(--text-mid);margin-top:6px;">InBody score: <strong style="color:var(--debra-pink)">'+e.score+'</strong></div>':'')+
+      '<div class="entry-delta">vs prev: weight '+(wD||'—')+' · bf '+(bD||'—')+' · muscle '+(mD||'—')+'</div>'+sb+'</div>';
   }).join('');
 }
-
-// Set today's date as default
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('logDate').value = today;
-
+document.getElementById('logDate').value=new Date().toISOString().split('T')[0];
 renderEntries();
+
+/* ============ LIFTLOG (workouts) ============ */
+(function(){
+"use strict";
+var uid=function(){return Math.random().toString(36).slice(2,9);};
+function ex(name,sets,reps,tag,note){return {id:uid(),name:name,targetSets:sets,targetReps:reps||"",tag:tag||"Main",note:note||"",lastWeight:""};}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+
+function defaultPlan(){return {
+gym:[
+ {id:uid(),name:"Day 1 \u00b7 Legs",exercises:[
+  ex("Hip bridge",2,"","Warm-up"),ex("Side walk, right \u2014 band",2,"","Warm-up"),
+  ex("Side walk, left \u2014 band",2,"","Warm-up"),ex("Air squat",2,"","Warm-up"),
+  ex("Seated leg press",3),ex("Stiff-leg deadlift \u2014 DB",3),ex("Seated leg curl",3),
+  ex("Goblet squat \u2014 DB, box",3),ex("Hip thrust \u2014 machine",4),ex("Standing calf raise",3)]},
+ {id:uid(),name:"Day 2 \u00b7 Upper",exercises:[
+  ex("Incline bench DB row",3),ex("Incline DB bench press",3),ex("Lat pulldown, wide grip",3),
+  ex("Shoulder press \u2014 plate-loaded",3),ex("Lateral raise, right \u2014 pulley",3),
+  ex("Lateral raise, left \u2014 pulley",3),ex("Triceps extension \u2014 pulley",3),
+  ex("Biceps curl, standing alt \u2014 DB",3)]},
+ {id:uid(),name:"Day 3 \u00b7 Legs",exercises:[
+  ex("Treadmill",1,"5 min","Warm-up"),ex("Squat \u2014 Smith machine",3),ex("Deadlift \u2014 DB",3),
+  ex("Seated leg curl",3),ex("Hip thrust \u2014 machine",4),ex("Seated leg extension",3),
+  ex("Leg abduction \u2014 machine",3)]},
+ {id:uid(),name:"Day 4 \u00b7 Upper + Core",exercises:[
+  ex("One-arm row, right \u2014 DB",4),ex("One-arm row, left \u2014 DB",4),ex("Bench press \u2014 DB",4),
+  ex("Incline push-up \u2014 box",4),ex("Band face pulls",4),ex("Lateral raise \u2014 DB",3),
+  ex("Hammer curl \u2014 DB",3),ex("Cross-arm tricep pushdown, left \u2014 band",3),
+  ex("Cross-arm tricep pushdown, right \u2014 band",3),ex("Dead bug, alternating",3,"","Core"),
+  ex("Lying leg raise",3,"","Core"),ex("Side plank, right",3,"","Core"),ex("Side plank, left",3,"","Core")]}
+],
+home:[
+ {id:uid(),name:"Mon \u00b7 Lower Strength",exercises:[
+  ex("Glute bridge",2,"15","Warm-up","2 rounds"),ex("Bodyweight squat",2,"10","Warm-up","2 rounds"),
+  ex("Band lateral walk",2,"15/side","Warm-up","2 rounds"),
+  ex("Goblet squat",4,"10\u201312","Main","Heaviest Bowflex you can control"),
+  ex("DB Romanian deadlift",4,"10","Main","3s down"),ex("Bench hip thrust",4,"12","Main","DB across hips"),
+  ex("DB step-up",3,"10/leg","Main"),ex("Banded hamstring curl",3,"15","Main","Anchor band low"),
+  ex("Standing calf raise",3,"20","Main","Holding DBs"),ex("Walking pad",1,"10\u201315 min","Finisher","Optional")]},
+ {id:uid(),name:"Tue \u00b7 Upper Strength",exercises:[
+  ex("Band pull apart",1,"20","Warm-up"),ex("External rotation",1,"15","Warm-up"),ex("Arm circles",1,"20","Warm-up"),
+  ex("Chest-supported DB row",4,"10\u201312","Main","Bench at incline"),ex("Incline DB press",4,"10","Main","Neutral grip"),
+  ex("One-arm DB row",3,"12/side","Main"),ex("Seated DB shoulder press",3,"10","Main"),
+  ex("DB lateral raise",3,"15","Main"),ex("Hammer curl",3,"12","Main"),ex("Band tricep pressdown",3,"15","Main")]},
+ {id:uid(),name:"Thu \u00b7 Lower \u00b7 Glutes",exercises:[
+  ex("Glute bridge",2,"15","Warm-up","2 rounds"),ex("Band walks",2,"20","Warm-up","2 rounds"),
+  ex("Air squats",2,"10","Warm-up","2 rounds"),ex("DB hip thrust",4,"15","Main"),
+  ex("DB Romanian deadlift",4,"12","Main"),ex("DB sumo squat",3,"12","Main"),ex("DB step-up",3,"12/leg","Main"),
+  ex("Banded abduction",3,"25","Main"),ex("Frog pumps",3,"30","Main"),ex("Peloton",1,"15\u201320 min","Finisher","Zone 2, optional")]}
+]};}
+
+var K="liftlog:v1:";
+function load(key,def){try{var raw=localStorage.getItem(K+key);return raw?JSON.parse(raw):def;}catch(e){return def;}}
+function save(key,val){try{localStorage.setItem(K+key,JSON.stringify(val));}catch(e){}}
+
+var storedPlan=load("plan",null);
+var plan=storedPlan||defaultPlan();
+var fresh=!storedPlan;
+var hist=load("history",[]);
+var settings=load("settings",{rest:90});
+var active=load("active",null)||{};
+var track=(active.track==="home"||active.track==="gym")?active.track:"gym";
+var dayId=null, logs=active.logs||{}, view="lift";
+(function(){var ds=plan[track];dayId=(active.dayId&&ds.some(function(d){return d.id===active.dayId;}))?active.dayId:ds[0].id;})();
+
+function pPlan(){save("plan",plan);}
+function pActive(){save("active",{track:track,dayId:dayId,logs:logs});}
+function pHist(){save("history",hist);}
+function pSet(){save("settings",settings);}
+
+function daysOf(){return plan[track];}
+function curDay(){var ds=daysOf();for(var i=0;i<ds.length;i++){if(ds[i].id===dayId)return ds[i];}return ds[0];}
+function rowsFor(e){if(!logs[e.id]){var a=[];for(var i=0;i<e.targetSets;i++)a.push({weight:e.lastWeight||"",reps:"",done:false});logs[e.id]=a;}return logs[e.id];}
+function volume(){var d=curDay(),t=0;d.exercises.forEach(function(e){rowsFor(e).forEach(function(r){if(r.done)t+=(parseFloat(r.weight)||0)*(parseFloat(r.reps)||0);});});return t;}
+function doneCount(){var d=curDay(),n=0;d.exercises.forEach(function(e){rowsFor(e).forEach(function(r){if(r.done)n++;});});return n;}
+
+/* rest timer */
+var rest=null,tick=null,firedT=false;
+var rb=document.getElementById("llRest"),rt=document.getElementById("llRestTime"),rl=document.getElementById("llRestLbl"),rp=document.getElementById("llRestProg");
+var actx=null;
+function blip(){try{var AC=window.AudioContext||window.webkitAudioContext;if(!actx)actx=new AC();if(actx.state==="suspended")actx.resume();var o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=720;g.gain.setValueAtTime(0.0001,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.1,actx.currentTime+0.02);g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+0.34);o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+0.35);}catch(e){}}
+function remaining(){if(!rest)return 0;if(rest.paused!=null)return rest.paused;return Math.max(0,Math.ceil((rest.end-Date.now())/1000));}
+function startRest(){rest={end:Date.now()+settings.rest*1000,total:settings.rest,paused:null};firedT=false;runTick();}
+function runTick(){if(tick)clearInterval(tick);paintRest();if(!rest)return;tick=setInterval(paintRest,250);}
+function paintRest(){if(!rest){rb.hidden=true;if(tick){clearInterval(tick);tick=null;}return;}rb.hidden=false;var s=remaining();rt.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0");rl.textContent=s===0?"go \u{1F497}":(rest.paused!=null?"paused":"rest");rp.style.width=(rest.total?(s/rest.total)*100:0)+"%";if(s===0&&!firedT){firedT=true;blip();}if(s>0)firedT=false;}
+document.getElementById("llAdd15").onclick=function(){if(!rest)return;if(rest.paused!=null){rest.paused+=15;}else{rest.end+=15000;}rest.total+=15;paintRest();};
+document.getElementById("llPause").onclick=function(){if(!rest)return;if(rest.paused!=null){rest.end=Date.now()+rest.paused*1000;rest.paused=null;this.textContent="\u23F8 pause";this.classList.remove("resume");runTick();}else{rest.paused=remaining();this.textContent="\u25B6 resume";this.classList.add("resume");if(tick){clearInterval(tick);tick=null;}paintRest();}};
+document.getElementById("llSkip").onclick=function(){rest=null;var pb=document.getElementById("llPause");pb.textContent="\u23F8 pause";pb.classList.remove("resume");paintRest();};
+Array.prototype.forEach.call(document.querySelectorAll(".ll-preset"),function(b){b.onclick=function(){settings.rest=parseInt(b.dataset.preset,10);pSet();paintPresets();};});
+function paintPresets(){Array.prototype.forEach.call(document.querySelectorAll(".ll-preset"),function(b){b.classList.toggle("on",parseInt(b.dataset.preset,10)===settings.rest);});}
+
+/* notion sync */
+function syncSession(s,cb){
+  fetch("/.netlify/functions/sync",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({date:s.date,track:s.track,dayName:s.dayName,entries:s.entries,volume:s.volume})})
+  .then(function(r){return r.json().then(function(d){return {ok:r.ok,data:d};});})
+  .then(function(res){if(res.ok){s.synced=true;s.syncErr=null;}else{s.synced=false;s.syncErr=(res.data&&res.data.error)||"Sync failed.";}pHist();cb&&cb();})
+  .catch(function(){s.synced=false;s.syncErr="Offline \u2014 tap Sync to retry.";pHist();cb&&cb();});
+}
+function notionBlock(s){
+  var d=new Date(s.date);
+  var iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  var nice=d.toLocaleDateString(undefined,{month:"short",day:"numeric"});
+  var sd=0;s.entries.forEach(function(e){sd+=e.sets.length;});
+  var tc=s.track==="home"?"Home":"Gym";
+  var det=s.entries.map(function(e){return "- "+e.name+": "+e.sets.map(function(x){return (x.weight||"\u2013")+"\u00d7"+(x.reps||"\u2013");}).join(", ");}).join("\n");
+  return "WORKOUT LOG \u2014 sync to Notion\nSession: "+tc+" \u00b7 "+s.dayName+" \u2014 "+nice+"\nDate: "+iso+"\nTrack: "+tc+"\nDay: "+s.dayName+"\nVolume: "+s.volume+"\nSets Done: "+sd+"\nDetails:\n"+det;
+}
+function copyText(t,btn){
+  function ok(){btn.textContent="\u2713 copied";setTimeout(function(){btn.textContent="Copy";},1500);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb);}else fb();
+  function fb(){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);ok();}catch(e){}}
+}
+
+/* render */
+var mount=document.getElementById("llmount");
+function render(){
+  var h='<div class="ll-subnav">'+
+    '<button class="ll-subtab'+(view==="lift"?" on":"")+'" data-view="lift">Workout</button>'+
+    '<button class="ll-subtab'+(view==="history"?" on":"")+'" data-view="history">History</button></div>';
+  h+='<div class="ll-track">'+
+    '<button class="ll-trackBtn'+(track==="gym"?" on":"")+'" data-track="gym">Gym</button>'+
+    '<button class="ll-trackBtn'+(track==="home"?" on":"")+'" data-track="home">Home</button></div>';
+  h += view==="lift" ? liftHTML() : histHTML();
+  mount.innerHTML=h;
+  wire();
+}
+function liftHTML(){
+  var d=curDay(),h="",lastTag=null;
+  if(track==="home"){h+='<div class="ll-jess"><div class="h">💜 From Jess — Your Flexibility Plan</div>Not a backup plan — this is your flexibility plan. The win is getting 4 workouts done and showing up for yourself, wherever that happens.</div>';}
+  h+='<div class="ll-daychips">';
+  daysOf().forEach(function(x){h+='<button class="ll-chip'+(x.id===dayId?" on":"")+'" data-day="'+x.id+'">'+esc(x.name.split("\u00b7")[0].trim())+'</button>';});
+  h+='</div>';
+  h+='<input class="ll-daytitle" id="llDayTitle" value="'+esc(d.name)+'">';
+  d.exercises.forEach(function(e){
+    var soft=(e.tag==="Warm-up"||e.tag==="Finisher");
+    if(e.tag!==lastTag){h+='<div class="ll-tag">'+esc(e.tag)+'</div>';lastTag=e.tag;}
+    h+='<section class="ll-card'+(soft?" soft":"")+'">';
+    h+='<div class="ll-exhead"><input class="ll-exname" data-exname="'+e.id+'" value="'+esc(e.name)+'"><span class="ll-target">'+(e.targetReps?e.targetSets+"\u00d7"+esc(e.targetReps):e.targetSets+" sets")+'</span><button class="ll-x" data-rmex="'+e.id+'">\u2715</button></div>';
+    if(e.note)h+='<div class="ll-note">'+esc(e.note)+'</div>';
+    h+='<div class="ll-gridhead"><span>SET</span><span>WEIGHT</span><span>REPS</span><span></span></div>';
+    rowsFor(e).forEach(function(r,i){
+      h+='<div class="ll-setrow'+(r.done?" done":"")+'" data-row="'+e.id+'|'+i+'"><span class="ll-setno">'+(i+1)+'</span>'+
+        '<input class="ll-in" inputmode="decimal" data-f="weight" data-k="'+e.id+'|'+i+'" value="'+esc(r.weight)+'" placeholder="'+esc(e.lastWeight||"\u2014")+'">'+
+        '<input class="ll-in" inputmode="numeric" data-f="reps" data-k="'+e.id+'|'+i+'" value="'+esc(r.reps)+'" placeholder="'+esc(e.targetReps||"\u2014")+'">'+
+        '<div class="ll-rowbtns"><button class="ll-check'+(r.done?" on":"")+'" data-done="'+e.id+'|'+i+'">\u2713</button><button class="ll-minix" data-rmset="'+e.id+'|'+i+'">\u2013</button></div></div>';
+    });
+    h+='<button class="ll-addset" data-addset="'+e.id+'">+ set</button></section>';
+  });
+  h+='<button class="ll-addex" id="llAddEx">+ add exercise</button>';
+  h+='<div class="ll-summary"><div><div class="ll-sumn" id="llSets">'+doneCount()+'</div><div class="ll-suml">sets done</div></div>'+
+     '<div><div class="ll-sumn" id="llVol">'+Math.round(volume()).toLocaleString()+'</div><div class="ll-suml">volume</div></div>'+
+     '<button class="ll-finish" id="llFinish"'+(doneCount()?"":" disabled")+'>Finish &amp; save</button></div>';
+  h+='<p class="ll-tip">Your music keeps playing — this never grabs audio. Optional soft blip when rest ends.</p>';
+  h+='<button class="ll-ghost" id="llBackup">Download backup</button>';
+  return h;
+}
+function histHTML(){
+  if(!hist.length)return '<div class="ll-empty">No sessions yet. Finish a workout and it lands here — and in your Notion log.</div>';
+  var h="",pts=hist.slice(0,12).reverse();
+  if(pts.length>1){var max=Math.max.apply(null,pts.map(function(p){return p.volume;}).concat([1]));
+    h+='<div class="ll-hist"><div class="ll-tag" style="padding:0 0 10px">Volume trend</div><div class="ll-chart">';
+    pts.forEach(function(p){h+='<div class="ll-bar" style="height:'+((p.volume/max)*100)+'%"></div>';});h+='</div></div>';}
+  hist.forEach(function(s){
+    h+='<section class="ll-hist"><div class="ll-histhead"><span style="font-weight:700"><span class="ll-badge">'+(s.track==="home"?"HOME":"GYM")+'</span>'+esc(s.dayName)+'</span><span style="color:var(--text-mid);font-size:12px">'+new Date(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})+'</span></div>';
+    s.entries.forEach(function(e){h+='<div class="ll-histline"><span>'+esc(e.name)+'</span><span class="r">'+e.sets.map(function(x){return (esc(x.weight)||"\u2013")+"\u00d7"+(esc(x.reps)||"\u2013");}).join("  \u00b7  ")+'</span></div>';});
+    var status;
+    if(s.syncing)status='<span class="ll-syncing">syncing\u2026</span>';
+    else if(s.synced)status='<span class="ll-synced">\u2713 in Notion</span>';
+    else status='<button class="ll-copy" data-sync="'+s.id+'">Sync</button><button class="ll-copy" data-copy="'+s.id+'">Copy</button>';
+    h+='<div class="ll-histfoot"><span class="ll-vol">'+s.volume.toLocaleString()+' vol</span><span class="ll-footR">'+status+'</span></div>';
+    if(s.syncErr&&!s.synced)h+='<div class="ll-syncerr">'+esc(s.syncErr)+'</div>';
+    h+='</section>';
+  });
+  h+='<button class="ll-ghost" id="llClear">Clear history</button>';
+  return h;
+}
+function summaryRefresh(){var a=mount.querySelector("#llSets"),b=mount.querySelector("#llVol"),f=mount.querySelector("#llFinish");if(!a)return;var n=doneCount();a.textContent=n;b.textContent=Math.round(volume()).toLocaleString();f.disabled=!n;}
+
+function wire(){
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-view]"),function(b){b.onclick=function(){view=b.dataset.view;render();};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-track]"),function(b){b.onclick=function(){track=b.dataset.track;dayId=plan[track][0].id;pActive();render();};});
+  if(view!=="lift")return wireHist();
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-day]"),function(b){b.onclick=function(){dayId=b.dataset.day;pActive();render();};});
+  var dt=mount.querySelector("#llDayTitle");if(dt)dt.oninput=function(){curDay().name=dt.value;pPlan();};
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-exname]"),function(inp){inp.oninput=function(){curDay().exercises.forEach(function(e){if(e.id===inp.dataset.exname)e.name=inp.value;});pPlan();};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-rmex]"),function(b){b.onclick=function(){var id=b.dataset.rmex;editDay(function(d){d.exercises=d.exercises.filter(function(e){return e.id!==id;});return d;});delete logs[id];pPlan();pActive();render();};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-k]"),function(inp){inp.oninput=function(){var p=inp.dataset.k.split("|"),id=p[0],i=parseInt(p[1],10);if(!logs[id])return;logs[id][i][inp.dataset.f]=inp.value;pActive();summaryRefresh();};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-done]"),function(b){b.onclick=function(){var p=b.dataset.done.split("|"),id=p[0],i=parseInt(p[1],10);var r=logs[id][i];r.done=!r.done;b.classList.toggle("on",r.done);var row=mount.querySelector('[data-row="'+id+'|'+i+'"]');if(row)row.classList.toggle("done",r.done);if(r.done){if(r.weight){plan[track].forEach(function(d){d.exercises.forEach(function(e){if(e.id===id)e.lastWeight=r.weight;});});pPlan();}startRest();}pActive();summaryRefresh();};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-addset]"),function(b){b.onclick=function(){var id=b.dataset.addset,rows=logs[id],last=rows[rows.length-1];rows.push({weight:(last&&last.weight)||"",reps:"",done:false});pActive();render();};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-rmset]"),function(b){b.onclick=function(){var p=b.dataset.rmset.split("|"),id=p[0],i=parseInt(p[1],10);logs[id].splice(i,1);pActive();render();};});
+  var ae=mount.querySelector("#llAddEx");if(ae)ae.onclick=function(){curDay().exercises.push(ex("New exercise",3));pPlan();render();};
+  var fb=mount.querySelector("#llFinish");if(fb)fb.onclick=finish;
+  var bk=mount.querySelector("#llBackup");if(bk)bk.onclick=function(){var data={plan:plan,history:hist,weighins:entries,exported:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="debra-backup-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);};
+}
+function wireHist(){
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-sync]"),function(b){b.onclick=function(){var id=b.dataset.sync,s=null;hist.forEach(function(x){if(x.id===id)s=x;});if(!s)return;s.syncing=true;render();syncSession(s,function(){s.syncing=false;render();});};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-copy]"),function(b){b.onclick=function(){var id=b.dataset.copy,s=null;hist.forEach(function(x){if(x.id===id)s=x;});if(s)copyText(notionBlock(s),b);};});
+  var c=mount.querySelector("#llClear");if(c)c.onclick=function(){if(confirm("Clear all history?")){hist=[];pHist();render();}};
+}
+function editDay(fn){plan[track]=plan[track].map(function(d){return d.id===dayId?fn(d):d;});}
+function finish(){
+  var d=curDay(),entries2=[];
+  d.exercises.forEach(function(e){var sets=rowsFor(e).filter(function(r){return r.done;}).map(function(r){return {weight:r.weight,reps:r.reps};});if(sets.length)entries2.push({name:e.name,sets:sets});});
+  if(!entries2.length)return;
+  var session={id:uid(),date:Date.now(),track:track,dayName:d.name,entries:entries2,volume:Math.round(volume()),synced:false,syncing:true};
+  hist.unshift(session);pHist();logs={};pActive();rest=null;paintRest();view="history";render();
+  syncSession(session,function(){session.syncing=false;if(view==="history")render();});
+}
+
+if(fresh){pPlan();pActive();pSet();}
+paintPresets();
+render();
+paintRest();
+})();
 </script>
 </body>
 </html>
