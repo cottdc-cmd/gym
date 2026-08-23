@@ -81,6 +81,22 @@
   footer{padding:18px 24px;font-size:11px;color:var(--text-mid);border-top:1px solid var(--border);line-height:1.8}
   footer strong{color:var(--text);font-weight:600}
 
+    .phase-note{padding:12px 20px 6px;font-size:11.5px;color:var(--text-mid);line-height:1.6}
+  .day-header.phase{background:var(--debra-bg)}
+  .priority{font-size:11px;color:var(--rust);font-style:italic;margin:10px 2px 2px}
+  .meal-note{font-size:10.5px;color:var(--text-mid);font-style:italic;margin-top:4px}
+  .swaps{margin:12px 16px 4px;background:var(--warm-white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .swaps summary{padding:14px 16px;font-family:'DM Serif Display',serif;font-size:16px;color:var(--rust);cursor:pointer;list-style:none}
+  .swaps summary::-webkit-details-marker{display:none}
+  .swaps summary::after{content:'▾';float:right;color:var(--text-mid);font-size:13px}
+  .swaps[open] summary::after{content:'▴'}
+  .swaps[open] summary{border-bottom:1px solid var(--border)}
+  .swap-body{padding:12px 16px 16px}
+  .swap-group{padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-mid);line-height:1.7}
+  .swap-group:last-child{border-bottom:none}
+  .swap-h{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--iron);margin-bottom:3px}
+  .swap-note{font-size:10.5px;font-style:italic;color:var(--rust);margin-top:4px}
+  .swap-foot{font-size:10.5px;color:var(--text-mid);font-style:italic;padding-top:10px}
   /* ---- Body Stats ---- */
   .tracker-view{padding:16px}
   .baseline-card{background:var(--text);color:var(--cream);border-radius:12px;padding:18px 20px;margin-bottom:16px}
@@ -201,7 +217,7 @@
 
 <header>
   <h1>Debra · Weekly Plan</h1>
-  <p>Meals · Workouts · Body Stats · Iron-optimized</p>
+  <p>Cycle-synced meals · Workouts · Body Stats</p>
 </header>
 
 <div class="main-tabs">
@@ -214,17 +230,24 @@
 <div class="view-panel active" id="panel-meals">
   <div class="macros-bar" id="macrosBar"></div>
   <div class="iron-banner">
-    🩸 <strong>Iron strategy:</strong> Spinach every breakfast · Bell peppers for absorption · Red meat 3x/week · Space dairy 1–2 hrs from iron meals
+    🩸 <strong>Standing rules:</strong> Iron meal + a vitamin-C food together · keep yogurt away from your iron anchor · moderate-fat proteins → skip the added oil that meal
   </div>
-  <div class="week-grid" id="weekGrid"></div>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--iron)"></div> High iron</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div> Vit C boost</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--workout-purple)"></div> Home workout day</div>
-  </div>
+  <div class="phase-note">Pick &amp; choose by cycle phase — tap a phase to open it. Portions follow Jessica's swap list; this changes <em>what</em> to reach for, not how much.</div>
+  <div class="week-grid" id="phaseGrid"></div>
+  <details class="swaps">
+    <summary>🔄 Swap List</summary>
+    <div class="swap-body">
+      <div class="swap-group"><div class="swap-h">Lean protein · ≈120–125g cooked chicken</div>Chicken breast 120g · Shrimp 150g · White fish / tilapia 150g</div>
+      <div class="swap-group"><div class="swap-h">Moderate-fat protein · sub for steak / salmon</div>Sirloin steak 120g · 93/7 ground beef 120g · Salmon 115g<div class="swap-note">Using these in place of chicken? Skip that meal's added oil/avocado — the protein covers it.</div></div>
+      <div class="swap-group"><div class="swap-h">Carbs · ≈25–30g</div>Jasmine rice 100g · Sweet potato 130g · White/gold potato 150g · Pasta 85g · Rice cakes ×3 (~27g) · Oats 35g dry · Sourdough 55g</div>
+      <div class="swap-group"><div class="swap-h">Fats · ≈10g</div>Avocado 65–70g · Olive oil 10g · Almonds 20g · Natural peanut butter 16–18g</div>
+      <div class="swap-group"><div class="swap-h">Fruit</div>Blueberries 100g · Strawberries 150g · Raspberries 125g · Apple 100g · Pineapple 100g</div>
+      <div class="swap-foot">Jessica's turkey options left off — you're turkey-free.</div>
+    </div>
+  </details>
   <footer>
-    <strong>Cook-once system:</strong> Batch cook Sunday for Mon/Tue, Wednesday night for Thu/Fri. Same protein batch, same pot of rice or potatoes — sauce separately where needed.<br><br>
-    <strong>Iron absorption:</strong> Heme iron (red meat) absorbs freely. Non-heme iron (spinach, eggs) needs vitamin C alongside. Avoid coffee/tea within 1 hr of meals. Space Greek yogurt at least 1 hr from iron-heavy meals.
+    <strong>Turkey-free, protein-forward.</strong> Built on Jessica Rivers' macros (updated 8/12/26).<br><br>
+    <strong>Standing rules, every day:</strong> Pair iron-rich meals with a vitamin-C food in the same meal (peppers, tomato, citrus, berries). Keep dairy (yogurt) away from your steak/egg iron anchor. Moderate-fat proteins (thighs, flank, salmon, prosciutto) — drop the added olive oil that meal.
   </footer>
 </div>
 
@@ -302,53 +325,35 @@
 <script>
 /* ============ MEALS (Debra only) ============ */
 var macros = [
-  { label:"Training Cal", value:"~1,650", sub:"P130 · C165 · F50" },
-  { label:"Rest Cal", value:"~1,450", sub:"P135 · C95 · F55" },
+  { label:"Training Cal", value:"~1,575", sub:"P130 · C145 · F50" },
+  { label:"Rest Cal", value:"~1,400", sub:"P130 · C85 · F60" },
   { label:"Iron Goal", value:"18mg+", sub:"daily target" }
 ];
-var days = [
-  { name:"Monday", type:"training", ironPriority:"high", homeWorkout:"Lower Body Strength", slots:[
-    { slot:"Breakfast", title:"Smoky Egg & Spinach Hash", flavor:"Smoked paprika, cumin, chili flakes, hot sauce", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
-    { slot:"Lunch", title:"Lemon-Herb Chicken + Rice", flavor:"Lemon, oregano, garlic — rice in chicken broth", items:[{text:"Chicken breast 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Spinach + veg 150g",iron:true},{text:"Lemon finish",vitc:true}] },
-    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + cinnamon", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"},{text:"⚠️ Space 1+ hr from iron meals"}] },
-    { slot:"Dinner", title:"Sirloin Steak + Pasta", flavor:"Chimichurri or garlic butter pan sauce", items:[{text:"Sirloin steak 140g",iron:true},{text:"Pasta 170g + marinara 125g"},{text:"Spinach salad 100g",iron:true},{text:"Lemon vinaigrette",vitc:true}] }
-  ], tip:"🩸 Highest iron day — steak dinner + spinach salad with lemon. Don't pair dinner with dairy. 💜 Home option: Lower Body Strength." },
-  { name:"Tuesday", type:"training", ironPriority:"high", homeWorkout:"Upper Body Strength", slots:[
-    { slot:"Breakfast", title:"Egg Hash", flavor:"Everything bagel + hot sauce", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
-    { slot:"Lunch", title:"Taco-Spiced Ground Beef + Rice", flavor:"Cumin, chili, lime + fresh pico", items:[{text:"Lean ground beef 93/7 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Spinach + veg 150g",iron:true},{text:"Lime + pico",vitc:true}] },
-    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + vanilla", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"}] },
-    { slot:"Dinner", title:"Sirloin Steak + Pasta", flavor:"Garlic butter, parsley, chili flakes", items:[{text:"Sirloin steak 140g",iron:true},{text:"Pasta 170g + marinara 125g"},{text:"Spinach salad 100g",iron:true},{text:"Lemon vinaigrette",vitc:true}] }
-  ], tip:"💜 Home option: Upper Body — shoulders and arms show up first on your frame. 🩸 Ground beef at lunch keeps iron high between steak dinners." },
-  { name:"Wednesday", type:"rest", ironPriority:"mid", slots:[
-    { slot:"Meal 1", title:"Spinach Scramble", flavor:"Za'atar + lemon zest + feta crumble", items:[{text:"2 whole eggs + egg whites 200g",iron:true},{text:"Spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 75g"}] },
-    { slot:"Meal 2", title:"Miso-Glazed Salmon + Sweet Potato", flavor:"White miso, honey, soy, sesame — 5 min broil", items:[{text:"Salmon 140g",iron:true},{text:"Sweet potato 150g"},{text:"Mixed veg 150g",vitc:true},{text:"Olive oil 10g"}] },
-    { slot:"Snack", title:"Greek Yogurt + Almonds", flavor:"Honey + cinnamon", items:[{text:"Greek yogurt 170g"},{text:"Almonds 20g"}] },
-    { slot:"Meal 3", title:"Greek Lemon Chicken + Roasted Veg", flavor:"Lemon, oregano, garlic, olive oil — sheet pan", items:[{text:"Chicken breast 140g",iron:true},{text:"Zucchini + cherry tomatoes 150g",vitc:true},{text:"Spinach salad 100g",iron:true},{text:"Feta crumble + lemon",vitc:true}] }
-  ], tip:"Rest day. Greek lemon chicken is hands-off once it's in the oven — kid-friendly, no separate dinner to cook." },
-  { name:"Thursday", type:"training", ironPriority:"high", homeWorkout:"Lower Body — Glute Focus", slots:[
-    { slot:"Breakfast", title:"Egg Hash", flavor:"Green harissa, jalapeño, cilantro", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
-    { slot:"Lunch", title:"Mediterranean Chicken + Rice", flavor:"Lemon, oregano, garlic — marinate overnight", items:[{text:"Chicken breast 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Spinach + veg 150g",iron:true},{text:"Lemon + tomato",vitc:true}] },
-    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + lemon zest", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"}] },
-    { slot:"Dinner", title:"Mediterranean Beef Kofta + Tzatziki", flavor:"Cumin, coriander, garlic, parsley — over spinach + pita", items:[{text:"Lean ground beef 93/7 140g",iron:true},{text:"Spinach + cucumber salad 100g",iron:true},{text:"Tzatziki 30g"},{text:"Whole grain pita (small) 60g"},{text:"Lemon squeeze",vitc:true}] }
-  ], tip:"💜 Home option: Glute Focus — hip thrusts, RDLs, frog pumps. Optional Peloton Zone 2 after. Kofta scales easily and kids eat it." },
-  { name:"Friday", type:"training", ironPriority:"mid", slots:[
-    { slot:"Breakfast", title:"Egg Hash", flavor:"Italian herbs, sun-dried tomato, basil", items:[{text:"2 whole eggs + egg whites 150g",iron:true},{text:"Potatoes 200g + spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 50g"}] },
-    { slot:"Lunch", title:"Teriyaki Chicken + Rice", flavor:"Coconut aminos, ginger, garlic, sesame", items:[{text:"Chicken breast 140g",iron:true},{text:"Jasmine rice 180g"},{text:"Mixed veg 150g",vitc:true},{text:"Coconut aminos + sesame oil"}] },
-    { slot:"Snack", title:"Greek Yogurt + Blueberries", flavor:"Honey + crushed coconut", items:[{text:"Nonfat Greek yogurt 170g"},{text:"Blueberries 100g",vitc:true},{text:"Honey 10g"}] },
-    { slot:"Dinner", title:"Honey Garlic Salmon + Asparagus", flavor:"Honey, garlic, lemon — 12 min in the oven", items:[{text:"Salmon 140g",iron:true},{text:"Asparagus 150g",iron:true},{text:"Spinach salad 100g",iron:true},{text:"Avocado 50g"},{text:"Lemon finish",vitc:true}] }
-  ], tip:"End of training week. Salmon Friday is a lighter reset after a heavy steak week — iron stays high, body feels less heavy into the weekend." },
-  { name:"Saturday", type:"rest", ironPriority:"mid", slots:[
-    { slot:"Meal 1", title:"Spinach Egg Scramble", flavor:"Everything bagel + hot sauce", items:[{text:"2 whole eggs + egg whites 200g",iron:true},{text:"Spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 75g"}] },
-    { slot:"Meal 2", title:"Honey Sriracha Chicken + Sweet Potato", flavor:"Honey, sriracha, garlic — sheet pan", items:[{text:"Chicken breast 150g",iron:true},{text:"Sweet potato 150g"},{text:"Mixed veg 150g",vitc:true},{text:"Olive oil 10g"}] },
-    { slot:"Snack", title:"Greek Yogurt + Almonds", flavor:"Honey + cinnamon", items:[{text:"Greek yogurt 170g"},{text:"Almonds 20g"}] },
-    { slot:"Meal 3", title:"Chicken Shawarma Bowl", flavor:"Cumin, paprika, turmeric, garlic, lemon — over greens", items:[{text:"Chicken breast 140g",iron:true},{text:"Spinach + cucumber + tomato 150g",iron:true,vitc:true},{text:"Hummus 40g"},{text:"Avocado 50g"},{text:"Lemon + fresh parsley",vitc:true}] }
-  ], tip:"Saturday = batch prep + shawarma night. Cook proteins + hash base for Mon/Tue. Marinate Monday chicken tonight." },
-  { name:"Sunday", type:"rest", ironPriority:"mid", slots:[
-    { slot:"Meal 1", title:"Tuscan Egg Scramble", flavor:"Sundried tomato, basil, light parmesan", items:[{text:"2 whole eggs + egg whites 200g",iron:true},{text:"Spinach 75g",iron:true},{text:"Bell peppers 75g",vitc:true},{text:"Avocado 75g"}] },
-    { slot:"Meal 2", title:"Lemon-Oregano Chicken + Sweet Potato", flavor:"Greek marinade — lemon, oregano, garlic", items:[{text:"Chicken breast 150g",iron:true},{text:"Sweet potato 150g"},{text:"Mixed veg 150g"},{text:"Olive oil 10g"},{text:"Lemon + oregano",vitc:true}] },
-    { slot:"Snack", title:"Greek Yogurt + Almonds", flavor:"Honey + crushed pistachios", items:[{text:"Greek yogurt 170g"},{text:"Almonds 20g"}] },
-    { slot:"Meal 3", title:"Mediterranean Stuffed Peppers", flavor:"Beef + tomato + herbs + feta — baked until tender", items:[{text:"Lean ground beef 93/7 140g",iron:true},{text:"Bell peppers 2 whole",vitc:true},{text:"Diced tomatoes + spinach 100g",iron:true,vitc:true},{text:"Feta crumble 20g"},{text:"Fresh parsley + lemon",vitc:true}] }
-  ], tip:"Sunday reset + stuffed peppers are hands-off in the oven. Marinate Monday chicken, batch the hash base, and you're set for the week." }
+var phases = [
+  { name:"Follicular", sub:"post-period · rebuilding iron · energy climbing", priority:"heme iron, lean into training-day carbs", meals:[
+    { slot:"Breakfast", text:"Eggs + egg whites + peppers + avocado", note:"Add smoked salmon or prosciutto for extra iron" },
+    { slot:"Lunch", text:"Chicken thighs + rice / sweet potato + peppers or broccoli" },
+    { slot:"Snack", text:"Greek yogurt + pumpkin seeds", note:"Zinc + iron bump over almonds" },
+    { slot:"Dinner", text:"Flank steak + pasta + marinara + salad", anchor:true }
+  ]},
+  { name:"Ovulation", sub:"~day 14–16 · energy peak · no major shift", priority:"variety, antioxidant color", meals:[
+    { slot:"Breakfast", text:"Eggs + egg whites + peppers + avocado" },
+    { slot:"Lunch", text:"Chicken thighs + rice + broccoli or mixed veg" },
+    { slot:"Snack", text:"Greek yogurt + berries" },
+    { slot:"Dinner", text:"Salmon + asparagus + salad + avocado" }
+  ]},
+  { name:"Luteal", sub:"cravings / fatigue / mood · histamine tends to show here", priority:"blood sugar stability, magnesium, watch cured/aged foods if flaring", meals:[
+    { slot:"Breakfast", text:"Eggs + egg whites + avocado + peppers", note:"Skip smoked salmon/prosciutto if histamine's active — stick to fresh" },
+    { slot:"Lunch", text:"Chicken thighs + sweet potato + veg", note:"Steady carb pairing to avoid crashes" },
+    { slot:"Snack", text:"Greek yogurt + almonds or pumpkin seeds; small square of dark chocolate if a craving hits", note:"Magnesium — better than a random reach" },
+    { slot:"Dinner", text:"Flank steak or salmon + extra avocado / olive oil for satiety", note:"Skip manchego/prosciutto here if flaring — both aged/cured" }
+  ]},
+  { name:"Menstrual", sub:"iron losses restart · energy often lower", priority:"iron, warm / easy prep", meals:[
+    { slot:"Breakfast", text:"Eggs + egg whites + peppers + avocado + prosciutto" },
+    { slot:"Lunch", text:"Flank steak + rice + roasted (not raw) veg" },
+    { slot:"Snack", text:"Greek yogurt + pumpkin seeds" },
+    { slot:"Dinner", text:"Flank steak + pasta + marinara + salad — or salmon if you want lighter" }
+  ]}
 ];
 
 function setMainView(view, el){
@@ -372,52 +377,39 @@ function renderMacros(){
     bar.appendChild(d);
   });
 }
-function renderDay(day, index){
+function renderPhase(p, index){
   var card=document.createElement('div'); card.className='day-card';
-  var header=document.createElement('div'); header.className='day-header '+day.type;
-  var nameSpan=document.createElement('span'); nameSpan.className='day-name'; nameSpan.textContent=day.name;
-  var meta=document.createElement('div'); meta.className='day-meta';
-  var badge=document.createElement('span'); badge.className='badge '+day.type;
-  badge.textContent = day.type==='training' ? '🏋️ Training' : '🌿 Rest'; meta.appendChild(badge);
-  if(day.ironPriority==='high'){var ib=document.createElement('span'); ib.className='badge iron'; ib.textContent='🩸 High Iron'; meta.appendChild(ib);}
-  if(day.homeWorkout){var hb=document.createElement('span'); hb.className='badge home'; hb.textContent='💜 Home Option'; meta.appendChild(hb);}
-  var chev=document.createElement('span'); chev.className='chevron'; chev.textContent='▼'; meta.appendChild(chev);
-  header.appendChild(nameSpan); header.appendChild(meta);
+  var header=document.createElement('div'); header.className='day-header phase';
+  var left=document.createElement('div');
+  var nameEl=document.createElement('div'); nameEl.className='day-name'; nameEl.textContent=p.name;
+  var subEl=document.createElement('div'); subEl.style.cssText='font-size:11px;color:var(--text-mid);margin-top:2px'; subEl.textContent=p.sub;
+  left.appendChild(nameEl); left.appendChild(subEl);
+  var chev=document.createElement('span'); chev.className='chevron'; chev.textContent='▼';
+  header.appendChild(left); header.appendChild(chev);
   var body=document.createElement('div'); body.className='day-body'+(index===0?' open':'');
-  if(day.homeWorkout){
-    var wb=document.createElement('div'); wb.className='workout-inline';
-    wb.innerHTML='<div class="workout-inline-label">💜 Home Alternative</div><div class="workout-inline-title">'+day.homeWorkout+'</div><div style="font-size:11px;color:var(--text-mid)">Log it live in the <strong>Workouts</strong> tab above.</div>';
-    body.appendChild(wb);
-  }
-  day.slots.forEach(function(slot){
+  var pr=document.createElement('div'); pr.className='priority'; pr.textContent='Priority: '+p.priority; body.appendChild(pr);
+  p.meals.forEach(function(m){
     var sd=document.createElement('div'); sd.className='meal-slot';
-    var sl=document.createElement('div'); sl.className='slot-label'; sl.textContent=slot.slot; sd.appendChild(sl);
+    var sl=document.createElement('div'); sl.className='slot-label'; sl.textContent=m.slot; sd.appendChild(sl);
     var pc=document.createElement('div'); pc.className='person-card';
-    var t=document.createElement('div'); t.className='meal-title'; t.textContent=slot.title;
-    var fl=document.createElement('div'); fl.className='meal-flavor'; fl.textContent=slot.flavor;
-    var it=document.createElement('div'); it.className='meal-items';
-    slot.items.forEach(function(item){
-      var line=document.createElement('div'); line.textContent=item.text;
-      if(item.iron) line.appendChild(mealTag('iron'));
-      if(item.vitc) line.appendChild(mealTag('vitc'));
-      it.appendChild(line);
-    });
-    pc.appendChild(t); pc.appendChild(fl); pc.appendChild(it); sd.appendChild(pc); body.appendChild(sd);
+    var t=document.createElement('div'); t.className='meal-title'; t.textContent=m.text; pc.appendChild(t);
+    if(m.anchor){var a=document.createElement('div'); a.className='meal-flavor'; a.textContent='⚓ Your iron anchor'; pc.appendChild(a);}
+    if(m.note){var n=document.createElement('div'); n.className='meal-note'; n.textContent=m.note; pc.appendChild(n);}
+    sd.appendChild(pc); body.appendChild(sd);
   });
-  var tip=document.createElement('div'); tip.className='day-tip'; tip.innerHTML=day.tip; body.appendChild(tip);
   card.appendChild(header); card.appendChild(body);
   header.addEventListener('click', function(){
-    var isOpen=body.classList.contains('open');
-    document.querySelectorAll('.day-body').forEach(function(b){b.classList.remove('open');});
-    document.querySelectorAll('.chevron').forEach(function(c){c.style.transform='';});
-    if(!isOpen){body.classList.add('open'); chev.style.transform='rotate(180deg)';}
+    var open=body.classList.contains('open');
+    document.querySelectorAll('#phaseGrid .day-body').forEach(function(b){b.classList.remove('open');});
+    document.querySelectorAll('#phaseGrid .chevron').forEach(function(c){c.style.transform='';});
+    if(!open){body.classList.add('open'); chev.style.transform='rotate(180deg)';}
   });
   if(index===0) chev.style.transform='rotate(180deg)';
   return card;
 }
 renderMacros();
-var grid=document.getElementById('weekGrid');
-days.forEach(function(d,i){grid.appendChild(renderDay(d,i));});
+var grid=document.getElementById('phaseGrid');
+phases.forEach(function(p,i){grid.appendChild(renderPhase(p,i));});
 
 /* ============ BODY STATS ============ */
 var TKEY='debra:weighins:v1';
