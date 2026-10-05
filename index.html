@@ -101,6 +101,30 @@
   .swap-h{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--iron);margin-bottom:3px}
   .swap-note{font-size:10.5px;font-style:italic;color:var(--rust);margin-top:4px}
   .swap-foot{font-size:10.5px;color:var(--text-mid);font-style:italic;padding-top:10px}
+  .cardio{margin:14px 16px 4px;background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+  .cardio-h{font-family:'DM Serif Display',serif;font-size:16px;color:var(--debra-pink);margin-bottom:4px}
+  .cardio-t{font-size:12px;color:var(--text-mid);line-height:1.6}
+  .cardio-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+  .liss{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);background:var(--cream);color:var(--text-mid);font-size:11px;font-weight:700;cursor:pointer}
+  .liss.on{background:var(--debra-pink);border-color:var(--debra-pink);color:#fff}
+  .liss-lbl{font-size:11px;color:var(--text-mid)}
+  .latest-card{background:var(--debra-bg);border:1px solid #F0C0CC;border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .latest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;text-align:center}
+  .latest-grid .v{font-family:'DM Serif Display',serif;font-size:18px;color:var(--debra-pink);display:block}
+  .latest-grid .l{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-mid)}
+  .latest-grid .d{font-size:10px;font-weight:600}
+  .wk-head{display:flex;justify-content:space-between;align-items:baseline;padding:16px 20px 8px}
+  .wk-title{font-family:'DM Serif Display',serif;font-size:20px}
+  .wk-sub{font-size:11px;color:var(--text-mid)}
+  .wk-tip{margin:0 16px 10px;font-size:11.5px;color:var(--text-mid);background:var(--warm-white);border:1px solid var(--border);border-radius:10px;padding:10px 12px;line-height:1.5}
+  .wk-meal{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .wk-meal:last-child{border-bottom:none}
+  .wk-slot{min-width:72px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-mid);padding-top:2px}
+  .wk-out{color:var(--debra-pink);font-weight:600}
+  .badge.today{background:var(--debra-pink);color:#fff}
+  .swaps ul{padding-left:18px;font-size:12px;color:var(--text-mid);line-height:1.7}
+  .swaps ol{padding-left:18px;font-size:12px;color:var(--text-mid);line-height:1.7}
+  .swaps li b{color:var(--text)}
   /* ---- Body Stats ---- */
   .tracker-view{padding:16px}
   .baseline-card{background:var(--text);color:var(--cream);border-radius:12px;padding:18px 20px;margin-bottom:16px}
@@ -221,7 +245,7 @@
 
 <header>
   <h1>Debra · Weekly Plan</h1>
-  <p>Cycle-synced meals · Workouts · Body Stats</p>
+  <p>Meals · Workouts · Body Stats</p>
 </header>
 
 <div class="main-tabs">
@@ -236,8 +260,60 @@
   <div class="iron-banner">
     🩸 <strong>Standing rules:</strong> Iron meal + a vitamin-C food together · keep yogurt away from your iron anchor · moderate-fat proteins → skip the added oil that meal
   </div>
-  <div class="phase-note">Pick &amp; choose by cycle phase — tap a phase to open it. Portions follow Jessica's swap list; this changes <em>what</em> to reach for, not how much.</div>
-  <div class="week-grid" id="phaseGrid"></div>
+  
+  
+  
+  <div class="wk-head"><span class="wk-title">This Week</span><span class="wk-sub">Oct 5–11 · cooks from frozen</span></div>
+  <div class="wk-tip"><strong>Gym mornings:</strong> eat breakfast 45–60 min before lifting if your stomach likes it. If not, have the carb half (toast or rice) before and the eggs right after.</div>
+  <div id="weekPlan"></div>
+
+  <details class="swaps"><summary>⚖️ Portions</summary><div class="swap-body"><ul>
+    <li><b>Training breakfast:</b> 2 eggs + 125g whites, 60g spinach, 80g pepper, 75g sourdough, 30g avocado</li>
+    <li><b>Hash:</b> 200g gold potato, 2 eggs + 125g whites, pepper</li>
+    <li><b>Rice bowl breakfast:</b> 90g cooked rice, 120g thigh, 2 jammy eggs, 1 tsp Kewpie</li>
+    <li><b>Rest breakfast:</b> 2 eggs + 75g whites, 60g taco beef, peppers, 30g avocado, no toast</li>
+    <li><b>Proteins:</b> breast 150g · thigh 170g (200g rest days) · ground beef 150g</li>
+    <li><b>Carbs:</b> training 90g cooked rice or 150g potato · rest 60g rice or 100g potato</li>
+    <li><b>Snack, training:</b> 200g Greek yogurt, 120g strawberries, 25g dry oats</li>
+    <li><b>Snack, rest:</b> 200g yogurt, 150g strawberries, 10g almonds</li>
+    <li><b>Lunch add-ons:</b> 1 Tbsp sesame sauce, 40g avocado on salads. No added oil on thigh and beef meals.</li>
+    <li><b>Albacore lunch:</b> 1 can (142g), 90g rice training · 60g rice or 2 rice cakes rest</li>
+    <li><b>Chili (Sat):</b> 150g cooked taco beef, 150g canned tomatoes, 100g drained beans, 60g rice on the side</li>
+    <li><b>Friday:</b> 45g sourdough at breakfast, 60g rice at lunch, no oats at snack. Dinner out target: 35–40P, ~600 cal.</li>
+  </ul><div class="swap-foot">Weigh raw unless noted.</div></div></details>
+
+  <details class="swaps"><summary>🧊 Sunday Batch</summary><div class="swap-body"><ol>
+    <li><b>Thighs, 2.5 lb:</b> Dijon-lemon braise, Dutch oven, covered, in stock, ~45 min</li>
+    <li><b>Breasts, 2 lb:</b> simmer from frozen in stock with garlic, ginger, soy, ~35 min. Shred, toss in sesame sauce.</li>
+    <li><b>Ground beef, ~1 lb:</b> brown from frozen in a covered skillet, then cumin, garlic, tomato paste, jalapeño</li>
+    <li><b>Rice, potatoes, prep:</b> 1.5 cups dry jasmine rice, 600g gold potatoes boiled + cooled, jammy eggs, chopped veg, diced peppers, green yogurt sauce, egg bites</li>
+  </ol><div class="swap-foot">Freeze Fri–Sun portions; move to fridge Thursday night. Mon–Thu lunches on the eye-level shelf, labeled by day.</div></div></details>
+
+  <details class="swaps"><summary>🍽 Friday Dinner Out</summary><div class="swap-body"><ul>
+    <li><b>Anchor:</b> grilled fish, steak, chicken, or shrimp</li>
+    <li><b>Side:</b> a veggie or fiber side, plus half the starch</li>
+    <li><b>Sauces:</b> on the side</li>
+    <li><b>Drinks:</b> one replaces the bread or starch, not the protein</li>
+  </ul></div></details>
+
+  <details class="swaps"><summary>🛟 Floor Options · low-energy days</summary><div class="swap-body"><ul>
+    <li><b>Mon, Thu:</b> 3 boiled eggs, 90g rice, cucumber, sesame sauce</li>
+    <li><b>Tue:</b> microwave taco beef + potatoes, tzatziki</li>
+    <li><b>Wed:</b> 1 can albacore, cucumber, Kewpie + mustard, 2 rice cakes</li>
+    <li><b>Fri:</b> the lunch bowl, no cooking</li>
+    <li><b>Sat:</b> 3 scrambled eggs + 125g whites, tomatoes</li>
+    <li><b>Sun:</b> 150g taco beef, spinach, avocado, green sauce</li>
+  </ul></div></details>
+
+  <details class="swaps"><summary>🛒 Grocery List</summary><div class="swap-body"><ul>
+    <li><b>Produce:</b> avocados ×4, limes ×3, lemons ×2, garlic, yellow onions ×2, scallions, baby spinach ×1, strawberries ×2 lb</li>
+    <li><b>Dairy + eggs:</b> eggs ×18 (check count), liquid egg whites 32 oz, plain Greek yogurt ×1 tub</li>
+    <li><b>Bakery:</b> sourdough loaf</li>
+    <li><b>Pantry:</b> toasted sesame oil, rice vinegar, black beans ×1 can, rice cakes, almonds, gold potatoes (top up to 3 lb)</li>
+    <li><b>Optional:</b> kimchi</li>
+    <li><b>Meat:</b> none, all in the freezer</li>
+  </ul><div class="swap-foot">Gut support: daily yogurt is the probiotic; strawberries, onions, garlic + Sat beans are the fiber.</div></div></details>
+
   <details class="swaps">
     <summary>🔄 Swap List</summary>
     <div class="swap-body">
@@ -290,19 +366,33 @@
     </div>
   </details>
   <footer>
-    <strong>Turkey-free, protein-forward.</strong> Built on Jessica Rivers' macros (updated 8/12/26).<br><br>
+    <strong>Turkey-free, protein-forward.</strong> Built on Jessica Rivers' macros (updated 9/28/26).<br><br>
     <strong>Standing rules, every day:</strong> Pair iron-rich meals with a vitamin-C food in the same meal (peppers, tomato, citrus, berries). Keep dairy (yogurt) away from your steak/egg iron anchor. Moderate-fat proteins (thighs, flank, salmon, prosciutto) — drop the added olive oil that meal.
   </footer>
 </div>
 
 <!-- WORKOUTS (LiftLog) -->
 <div class="view-panel" id="panel-workouts">
+  <div class="cardio">
+    <div class="cardio-h">🫀 Cardio + Steps</div>
+    <div class="cardio-t"><strong>3 × 30-min LISS</strong> per week · <strong>8–10k steps</strong> daily<br>Incline walk, bike, elliptical — steady and sustainable. Not HIIT.</div>
+    <div class="cardio-row"><button class="liss" data-liss="0">1</button><button class="liss" data-liss="1">2</button><button class="liss" data-liss="2">3</button><span class="liss-lbl" id="lissLbl">this week</span></div>
+  </div>
   <div id="llmount"></div>
 </div>
 
 <!-- BODY STATS -->
 <div class="view-panel" id="panel-tracker">
   <div class="tracker-view">
+    <div class="latest-card">
+      <div class="baseline-label" style="color:var(--text-mid)">Latest scan · per Jess 9/28/2026</div>
+      <div class="latest-grid">
+        <div><span class="v">118.4</span><span class="l">lbs</span><div class="d" style="color:var(--text-mid)">+3.7</div></div>
+        <div><span class="v">25.7%</span><span class="l">body fat</span><div class="d" style="color:var(--rust)">+0.6</div></div>
+        <div><span class="v">47.8</span><span class="l">muscle lbs</span><div class="d" style="color:var(--sage)">+1.5</div></div>
+      </div>
+      <div style="font-size:10px;color:var(--text-mid);margin-top:8px;text-align:center">vs. June baseline</div>
+    </div>
     <div class="baseline-card">
       <div class="baseline-label">Baseline · InBody 06/10/2026</div>
       <div class="baseline-title">Starting Point</div>
@@ -369,37 +459,51 @@
 <script>
 /* ============ MEALS (Debra only) ============ */
 var macros = [
-  { label:"Training Cal", value:"~1,575", sub:"P130 · C145 · F50" },
-  { label:"Rest Cal", value:"~1,400", sub:"P130 · C85 · F60" },
+  { label:"Training Cal", value:"~1,600", sub:"P130 · C155 · F50" },
+  { label:"Rest Cal", value:"~1,400–1,425", sub:"P135 · C85–90 · F55" },
   { label:"Iron Goal", value:"18mg+", sub:"daily target" }
 ];
-var phases = [
-  { name:"Follicular", sub:"post-period · rebuilding iron · energy climbing", priority:"heme iron, lean into training-day carbs", meals:[
-    { slot:"Breakfast", text:"Eggs + egg whites + peppers + avocado", note:"Add smoked salmon or prosciutto for extra iron" },
-    { slot:"Lunch", text:"Chicken thighs + rice / sweet potato + peppers or broccoli" },
-    { slot:"Snack", text:"Greek yogurt + pumpkin seeds", note:"Zinc + iron bump over almonds" },
-    { slot:"Dinner", text:"Flank steak + pasta + marinara + salad", anchor:true }
-  ]},
-  { name:"Ovulation", sub:"~day 14–16 · energy peak · no major shift", priority:"variety, antioxidant color", meals:[
-    { slot:"Breakfast", text:"Eggs + egg whites + peppers + avocado" },
-    { slot:"Lunch", text:"Chicken thighs + rice + broccoli or mixed veg" },
-    { slot:"Snack", text:"Greek yogurt + berries" },
-    { slot:"Dinner", text:"Salmon + asparagus + salad + avocado" }
-  ]},
-  { name:"Luteal", sub:"cravings / fatigue / mood · histamine tends to show here", priority:"blood sugar stability, magnesium, watch cured/aged foods if flaring", meals:[
-    { slot:"Breakfast", text:"Eggs + egg whites + avocado + peppers", note:"Skip smoked salmon/prosciutto if histamine's active — stick to fresh" },
-    { slot:"Lunch", text:"Chicken thighs + sweet potato + veg", note:"Steady carb pairing to avoid crashes" },
-    { slot:"Snack", text:"Greek yogurt + almonds or pumpkin seeds; small square of dark chocolate if a craving hits", note:"Magnesium — better than a random reach" },
-    { slot:"Dinner", text:"Flank steak or salmon + extra avocado / olive oil for satiety", note:"Skip manchego/prosciutto here if flaring — both aged/cured" }
-  ]},
-  { name:"Menstrual", sub:"iron losses restart · energy often lower", priority:"iron, warm / easy prep", meals:[
-    { slot:"Breakfast", text:"Eggs + egg whites + peppers + avocado + prosciutto" },
-    { slot:"Lunch", text:"Flank steak + rice + roasted (not raw) veg" },
-    { slot:"Snack", text:"Greek yogurt + pumpkin seeds" },
-    { slot:"Dinner", text:"Flank steak + pasta + marinara + salad — or salmon if you want lighter" }
-  ]}
+var week=[
+  {d:"Monday",t:"training",b:"Pepper-spinach scramble on sourdough",l:"Shredded sesame chicken bowl",s:"Yogurt, strawberries, oats",n:"Dijon-lemon thigh, rice, broccoli",p:132},
+  {d:"Tuesday",t:"training",b:"Potato-pepper hash + eggs (boiled potatoes, crisped)",l:"Dijon thigh rice bowl, cucumber salad",s:"Yogurt, strawberries, oats",n:"Taco beef potato bowl",p:132},
+  {d:"Wednesday",t:"rest",b:"Egg + taco beef scramble, avocado",l:"Sesame chicken salad",s:"Yogurt, strawberries, almonds",n:"Dijon thigh, roasted veg + potato",p:130},
+  {d:"Thursday",t:"training",b:"Rice bowl: shredded thigh, 2 jammy eggs, Kewpie",l:"Albacore rice bowl, cucumber, sesame sauce",s:"Yogurt, strawberries, oats",n:"Sesame chicken fried rice: egg, peppers, broccoli",p:132},
+  {d:"Friday",t:"training",b:"Pepper-spinach scramble on sourdough",l:"Shredded sesame chicken bowl",s:"Yogurt, strawberries",n:"OUT",p:130},
+  {d:"Saturday",t:"rest",b:"Egg-pepper skillet",l:"Albacore salad in pepper boats + rice cakes",s:"Yogurt, strawberries, almonds",n:"Beef chili: taco beef, San Marzano tomatoes, beans",p:130},
+  {d:"Sunday",t:"rest",b:"Egg scramble, avocado",l:"Egg + tuna salad over spinach, green yogurt sauce",s:"Yogurt, strawberries, almonds",n:"Thigh with green yogurt sauce, roasted veg",p:132}
 ];
-
+function renderWeek(){
+  var wrap=document.getElementById('weekPlan'); if(!wrap) return;
+  var todayIdx=(new Date().getDay()+6)%7;
+  week.forEach(function(w,i){
+    var card=document.createElement('div'); card.className='day-card';
+    var head=document.createElement('div'); head.className='day-header '+w.t;
+    var nm=document.createElement('span'); nm.className='day-name'; nm.textContent=w.d;
+    var meta=document.createElement('div'); meta.className='day-meta';
+    if(i===todayIdx){var tb=document.createElement('span');tb.className='badge today';tb.textContent='Today';meta.appendChild(tb);}
+    var b=document.createElement('span'); b.className='badge '+w.t; b.textContent=w.t==='training'?'🏋️ Training':'🌿 Rest'; meta.appendChild(b);
+    var pr=document.createElement('span'); pr.style.cssText='font-size:11px;color:var(--text-mid);font-weight:600'; pr.textContent=w.p+'g P'; meta.appendChild(pr);
+    var ch=document.createElement('span'); ch.className='chevron'; ch.textContent='▼'; meta.appendChild(ch);
+    head.appendChild(nm); head.appendChild(meta);
+    var body=document.createElement('div'); body.className='day-body'+(i===todayIdx?' open':'');
+    [['Breakfast',w.b],['Lunch',w.l],['3pm snack',w.s],['Dinner',w.n]].forEach(function(m){
+      var row=document.createElement('div'); row.className='wk-meal';
+      var sl=document.createElement('span'); sl.className='wk-slot'; sl.textContent=m[0];
+      var tx=document.createElement('span');
+      if(m[1]==='OUT'){tx.className='wk-out';tx.textContent='Dinner out · see playbook below';} else tx.textContent=m[1];
+      row.appendChild(sl); row.appendChild(tx); body.appendChild(row);
+    });
+    card.appendChild(head); card.appendChild(body);
+    if(i===todayIdx) ch.style.transform='rotate(180deg)';
+    head.addEventListener('click',function(){
+      var open=body.classList.contains('open');
+      wrap.querySelectorAll('.day-body').forEach(function(x){x.classList.remove('open');});
+      wrap.querySelectorAll('.chevron').forEach(function(x){x.style.transform='';});
+      if(!open){body.classList.add('open');ch.style.transform='rotate(180deg)';}
+    });
+    wrap.appendChild(card);
+  });
+}
 function setMainView(view, el){
   document.querySelectorAll('.main-tab').forEach(function(t){t.className='main-tab';});
   el.className = view==='meals' ? 'main-tab active' : 'main-tab active-workout';
@@ -421,39 +525,9 @@ function renderMacros(){
     bar.appendChild(d);
   });
 }
-function renderPhase(p, index){
-  var card=document.createElement('div'); card.className='day-card';
-  var header=document.createElement('div'); header.className='day-header phase';
-  var left=document.createElement('div');
-  var nameEl=document.createElement('div'); nameEl.className='day-name'; nameEl.textContent=p.name;
-  var subEl=document.createElement('div'); subEl.style.cssText='font-size:11px;color:var(--text-mid);margin-top:2px'; subEl.textContent=p.sub;
-  left.appendChild(nameEl); left.appendChild(subEl);
-  var chev=document.createElement('span'); chev.className='chevron'; chev.textContent='▼';
-  header.appendChild(left); header.appendChild(chev);
-  var body=document.createElement('div'); body.className='day-body'+(index===0?' open':'');
-  var pr=document.createElement('div'); pr.className='priority'; pr.textContent='Priority: '+p.priority; body.appendChild(pr);
-  p.meals.forEach(function(m){
-    var sd=document.createElement('div'); sd.className='meal-slot';
-    var sl=document.createElement('div'); sl.className='slot-label'; sl.textContent=m.slot; sd.appendChild(sl);
-    var pc=document.createElement('div'); pc.className='person-card';
-    var t=document.createElement('div'); t.className='meal-title'; t.textContent=m.text; pc.appendChild(t);
-    if(m.anchor){var a=document.createElement('div'); a.className='meal-flavor'; a.textContent='⚓ Your iron anchor'; pc.appendChild(a);}
-    if(m.note){var n=document.createElement('div'); n.className='meal-note'; n.textContent=m.note; pc.appendChild(n);}
-    sd.appendChild(pc); body.appendChild(sd);
-  });
-  card.appendChild(header); card.appendChild(body);
-  header.addEventListener('click', function(){
-    var open=body.classList.contains('open');
-    document.querySelectorAll('#phaseGrid .day-body').forEach(function(b){b.classList.remove('open');});
-    document.querySelectorAll('#phaseGrid .chevron').forEach(function(c){c.style.transform='';});
-    if(!open){body.classList.add('open'); chev.style.transform='rotate(180deg)';}
-  });
-  if(index===0) chev.style.transform='rotate(180deg)';
-  return card;
-}
 renderMacros();
-var grid=document.getElementById('phaseGrid');
-phases.forEach(function(p,i){grid.appendChild(renderPhase(p,i));});
+renderWeek();
+
 
 /* ============ BODY STATS ============ */
 var TKEY='debra:weighins:v1';
@@ -502,6 +576,22 @@ function renderEntries(){
 document.getElementById('logDate').value=new Date().toISOString().split('T')[0];
 renderEntries();
 
+/* ============ LISS weekly tracker ============ */
+(function(){
+  var KEY='debra:liss:v1';
+  function weekKey(){var d=new Date();var day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return d.toISOString().slice(0,10);}
+  var st; try{st=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){st=null;}
+  if(!st||st.week!==weekKey()) st={week:weekKey(),done:[false,false,false]};
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+  function paint(){
+    var n=0;
+    document.querySelectorAll('[data-liss]').forEach(function(b){var i=+b.dataset.liss;b.classList.toggle('on',st.done[i]);b.textContent=st.done[i]?'✓':String(i+1);if(st.done[i])n++;});
+    var l=document.getElementById('lissLbl'); if(l) l.textContent = n===3 ? 'done this week 💗' : n+' of 3 this week';
+  }
+  document.querySelectorAll('[data-liss]').forEach(function(b){b.onclick=function(){var i=+b.dataset.liss;st.done[i]=!st.done[i];save();paint();};});
+  save(); paint();
+})();
+
 /* ============ LIFTLOG (workouts) ============ */
 (function(){
 "use strict";
@@ -509,29 +599,31 @@ var uid=function(){return Math.random().toString(36).slice(2,9);};
 function ex(name,sets,reps,tag,note){return {id:uid(),name:name,targetSets:sets,targetReps:reps||"",tag:tag||"Main",note:note||"",lastWeight:""};}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 
-function defaultPlan(){return {
-gym:[
+function gymDays(){return [
  {id:uid(),name:"Day 1 \u00b7 Legs",exercises:[
-  ex("Hip bridge",2,"","Warm-up"),ex("Side walk, right \u2014 band",2,"","Warm-up"),
-  ex("Side walk, left \u2014 band",2,"","Warm-up"),ex("Air squat",2,"","Warm-up"),
-  ex("Seated leg press",3),ex("Stiff-leg deadlift \u2014 DB",3),ex("Seated leg curl",3),
-  ex("Goblet squat \u2014 DB, box",3),ex("Hip thrust \u2014 machine",4),ex("Standing calf raise",3)]},
+  ex("Side walk, right \u2014 band",2,"","Warm-up"),ex("Side walk, left \u2014 band",2,"","Warm-up"),
+  ex("Hip thrust \u2014 machine",4),ex("Squat \u2014 Smith machine",3),ex("Stiff-leg deadlift \u2014 DB",3),
+  ex("Seated leg press",3),ex("Goblet squat \u2014 DB, box",3),ex("Standing calf raise",3)]},
  {id:uid(),name:"Day 2 \u00b7 Upper",exercises:[
   ex("Incline bench DB row",3),ex("Incline DB bench press",3),ex("Lat pulldown, wide grip",3),
-  ex("Shoulder press \u2014 plate-loaded",3),ex("Lateral raise, right \u2014 pulley",3),
-  ex("Lateral raise, left \u2014 pulley",3),ex("Triceps extension \u2014 pulley",3),
-  ex("Biceps curl, standing alt \u2014 DB",3)]},
- {id:uid(),name:"Day 3 \u00b7 Legs",exercises:[
-  ex("Treadmill",1,"5 min","Warm-up"),ex("Squat \u2014 Smith machine",3),ex("Deadlift \u2014 DB",3),
-  ex("Seated leg curl",3),ex("Hip thrust \u2014 machine",4),ex("Seated leg extension",3),
-  ex("Leg abduction \u2014 machine",3)]},
+  ex("Side raise, seated \u2014 DB",3),ex("Shoulder press \u2014 plate-loaded",3),
+  ex("Triceps extension \u2014 pulley",3),ex("Biceps curl, standing alt \u2014 DB",3),
+  ex("Treadmill",1,"30 min","Cardio","LISS \u2014 steady pace")]},
+ {id:uid(),name:"Day 3 \u00b7 Legs + Glutes",exercises:[
+  ex("Squat \u2014 Smith machine",3),ex("Deadlift \u2014 DB",3),ex("Seated leg curl",3),
+  ex("Hip thrust \u2014 machine",4),ex("Glute kickback, left \u2014 pulley",2,"","Superset"),
+  ex("Glute kickback, right \u2014 pulley",2,"","Superset"),ex("Leg abduction \u2014 machine",3),
+  ex("Treadmill",1,"30 min","Cardio","LISS \u2014 steady pace")]},
  {id:uid(),name:"Day 4 \u00b7 Upper + Core",exercises:[
   ex("One-arm row, right \u2014 DB",4),ex("One-arm row, left \u2014 DB",4),ex("Bench press \u2014 DB",4),
-  ex("Incline push-up \u2014 box",4),ex("Band face pulls",4),ex("Lateral raise \u2014 DB",3),
-  ex("Hammer curl \u2014 DB",3),ex("Cross-arm tricep pushdown, left \u2014 band",3),
-  ex("Cross-arm tricep pushdown, right \u2014 band",3),ex("Dead bug, alternating",3,"","Core"),
-  ex("Lying leg raise",3,"","Core"),ex("Side plank, right",3,"","Core"),ex("Side plank, left",3,"","Core")]}
-],
+  ex("Incline push-up \u2014 box",4),ex("Lateral raise, standing \u2014 DB",3,"","Superset"),
+  ex("Hammer curl \u2014 DB",3,"","Superset"),ex("Cross-arm tricep pushdown, left \u2014 band",3,"","Superset 2"),
+  ex("Cross-arm tricep pushdown, right \u2014 band",3,"","Superset 2"),ex("Dead bug, alternating",3,"","Core"),
+  ex("Lying leg raise",3,"","Core"),ex("Side plank, right",3,"","Core"),ex("Side plank, left",3,"","Core"),
+  ex("Walking",1,"30 min","Cardio","LISS \u2014 steady pace")]}
+];}
+function defaultPlan(){return {
+gym:gymDays(),
 home:[
  {id:uid(),name:"Mon \u00b7 Lower Strength",exercises:[
   ex("Glute bridge",2,"15","Warm-up","2 rounds"),ex("Bodyweight squat",2,"10","Warm-up","2 rounds"),
@@ -559,6 +651,17 @@ function save(key,val){try{localStorage.setItem(K+key,JSON.stringify(val));}catc
 var storedPlan=load("plan",null);
 var plan=storedPlan||defaultPlan();
 var fresh=!storedPlan;
+var GYM_V=2;
+if(storedPlan && storedPlan.gymV!==GYM_V){
+  var memW={};
+  (storedPlan.gym||[]).forEach(function(d){d.exercises.forEach(function(x){if(x.lastWeight)memW[x.name.toLowerCase()]=x.lastWeight;});});
+  plan.gym=gymDays();
+  plan.gym.forEach(function(d){d.exercises.forEach(function(x){var w=memW[x.name.toLowerCase()];if(w)x.lastWeight=w;});});
+  plan.gymV=GYM_V;
+  try{var a0=JSON.parse(localStorage.getItem("liftlog:v1:active")||"{}");if(a0.track!=="home"){a0.dayId=null;a0.logs={};localStorage.setItem("liftlog:v1:active",JSON.stringify(a0));}}catch(e){}
+  save("plan",plan);
+}
+plan.gymV=GYM_V;
 var hist=load("history",[]);
 var settings=load("settings",{rest:90});
 var active=load("active",null)||{};
