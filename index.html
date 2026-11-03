@@ -279,9 +279,12 @@
   
   
   
-  <div class="wk-head"><span class="wk-title">This Week</span><span class="wk-sub">Oct 5–11 · cooks from frozen</span></div>
+  <div class="wk-head"><span class="wk-title">This Week</span><span class="wk-sub" id="weekSub">Oct 5–11 · cooks from frozen</span></div>
   <div class="wk-tip"><strong>Gym mornings:</strong> eat breakfast 45–60 min before lifting if your stomach likes it. If not, have the carb half (toast or rice) before and the eggs right after.</div>
   <div id="weekPlan"></div>
+  <div class="ll-tip" id="mealsStatus" style="padding-bottom:4px"></div>
+  <div id="notionWeek"></div>
+  <div id="staticWeek">
 
   <details class="swaps"><summary>⚖️ Portions</summary><div class="swap-body"><ul>
     <li><b>Training breakfast:</b> 2 eggs + 125g whites, 60g spinach, 80g pepper, 75g sourdough, 30g avocado</li>
@@ -329,6 +332,7 @@
     <li><b>Optional:</b> kimchi</li>
     <li><b>Meat:</b> none, all in the freezer</li>
   </ul><div class="swap-foot">Gut support: daily yogurt is the probiotic; strawberries, onions, garlic + Sat beans are the fiber.</div></div></details>
+  </div>
 
   <details class="swaps">
     <summary>🔄 Swap List</summary>
@@ -507,7 +511,7 @@ var week=[
   {d:"Sunday",t:"rest",b:"Egg scramble, avocado",l:"Egg + tuna salad over spinach, green yogurt sauce",s:"Yogurt, strawberries, almonds",n:"Thigh with green yogurt sauce, roasted veg",p:132}
 ];
 function renderWeek(){
-  var wrap=document.getElementById('weekPlan'); if(!wrap) return;
+  var wrap=document.getElementById('weekPlan'); if(!wrap) return; wrap.innerHTML='';
   var todayIdx=(new Date().getDay()+6)%7;
   week.forEach(function(w,i){
     var card=document.createElement('div'); card.className='day-card';
@@ -516,7 +520,7 @@ function renderWeek(){
     var meta=document.createElement('div'); meta.className='day-meta';
     if(i===todayIdx){var tb=document.createElement('span');tb.className='badge today';tb.textContent='Today';meta.appendChild(tb);}
     var b=document.createElement('span'); b.className='badge '+w.t; b.textContent=w.t==='training'?'🏋️ Training':'🌿 Rest'; meta.appendChild(b);
-    var pr=document.createElement('span'); pr.style.cssText='font-size:11px;color:var(--text-mid);font-weight:600'; pr.textContent=w.p+'g P'; meta.appendChild(pr);
+    var pr=document.createElement('span'); pr.style.cssText='font-size:11px;color:var(--text-mid);font-weight:600'; pr.textContent=typeof w.p==='number'?w.p+'g P':String(w.p||'').replace(/^about\s*/i,'~')+(/P$/.test(w.p||'')?'':' P'); if(!w.p) pr.textContent=''; meta.appendChild(pr);
     var ch=document.createElement('span'); ch.className='chevron'; ch.textContent='▼'; meta.appendChild(ch);
     head.appendChild(nm); head.appendChild(meta);
     var body=document.createElement('div'); body.className='day-body'+(i===todayIdx?' open':'');
@@ -564,6 +568,36 @@ function renderMacros(){
 }
 renderMacros();
 renderWeek();
+
+/* Weekly plan from Notion (newest "Weekly Meal Plan" page) */
+(function(){
+  var KEY='debra:mealplan:v1';
+  var status=document.getElementById('mealsStatus');
+  function apply(d,cached){
+    if(!d||!d.week||!d.week.length) return false;
+    week=d.week; renderWeek();
+    document.getElementById('weekSub').textContent=d.range+' · from Notion';
+    var box=document.getElementById('notionWeek'); box.innerHTML='';
+    if(d.intro){var tip=document.createElement('details');tip.className='swaps';tip.innerHTML='<summary>🎯 This Week\'s Notes</summary><div class="swap-body">'+d.intro+'</div>';box.appendChild(tip);}
+    (d.sections||[]).forEach(function(sec){
+      var det=document.createElement('details');det.className='swaps';
+      var sum=document.createElement('summary');sum.textContent=sec.title;det.appendChild(sum);
+      var body=document.createElement('div');body.className='swap-body';body.innerHTML=sec.html;det.appendChild(body);
+      box.appendChild(det);
+    });
+    document.getElementById('staticWeek').style.display='none';
+    status.innerHTML=(cached?'Saved copy · ':'')+'<a href="'+d.url+'" target="_blank" rel="noopener" style="color:inherit">Open in Notion</a>';
+    return true;
+  }
+  var cached=null; try{cached=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+  apply(cached,true);
+  fetch('/.netlify/functions/meals').then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});})
+    .then(function(res){
+      if(res.ok&&apply(res.d,false)){try{localStorage.setItem(KEY,JSON.stringify(res.d));}catch(e){}}
+      else if(!cached) status.textContent=(res.d&&res.d.error)||'Couldn\'t load this week\'s plan from Notion.';
+    })
+    .catch(function(){ if(!cached) status.textContent='Offline. Showing the last plan saved in the app.'; });
+})();
 
 
 /* ============ BODY STATS ============ */
