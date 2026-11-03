@@ -4,6 +4,8 @@
 // Nutrition hub (or to each Weekly Meal Plan page).
 
 const API = 'https://api.notion.com/v1';
+// Planner / Nutrition hub. Override with NOTION_NUTRITION_HUB if it moves.
+const HUB = (process.env.NOTION_NUTRITION_HUB || '2d95f002ea8a81c0ad7aeb1cf107de02').replace(/-/g, '');
 const env = (k) => (globalThis.Netlify ? Netlify.env.get(k) : process.env[k]);
 const json = (body, status = 200) =>
   Response.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
@@ -128,13 +130,14 @@ export default async () => {
       query: 'Weekly Meal Plan',
       filter: { property: 'object', value: 'page' },
       sort: { direction: 'descending', timestamp: 'last_edited_time' },
-      page_size: 20,
+      page_size: 50,
     });
     const plans = found.results
       .map((p) => ({ p, title: plain(Object.values(p.properties || {}).find((x) => x.type === 'title')?.title) }))
-      .filter((x) => /^weekly meal plan/i.test(x.title) && !x.p.archived)
+      .filter((x) => /^weekly meal plan/i.test(x.title) && !x.p.archived
+        && String(x.p.parent?.page_id || '').replace(/-/g, '') === HUB)
       .sort((a, b) => (a.p.created_time < b.p.created_time ? 1 : -1));
-    if (!plans.length) return json({ error: "Notion can't see any Weekly Meal Plan pages. Share the Nutrition hub with the integration." }, 404);
+    if (!plans.length) return json({ error: "No Weekly Meal Plan pages found in your Nutrition hub." }, 404);
     const { p, title } = plans[0];
 
     const blocks = await children(p.id, token);
