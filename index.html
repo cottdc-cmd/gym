@@ -264,10 +264,10 @@
 </header>
 
 <div class="main-tabs">
-  <div class="main-tab active" onclick="setMainView('meals', this)">🍽 Meals</div>
-  <div class="main-tab" onclick="setMainView('workouts', this)">💪 Workouts</div>
-  <div class="main-tab" onclick="setMainView('tracker', this)">📊 Body Stats</div>
-  <div class="main-tab" onclick="setMainView('adhoc', this)">✨ Ad hoc</div>
+  <div class="main-tab active" data-view="meals" onclick="setMainView('meals', this)">🍽 Meals</div>
+  <div class="main-tab" data-view="workouts" onclick="setMainView('workouts', this)">💪 Workouts</div>
+  <div class="main-tab" data-view="tracker" onclick="setMainView('tracker', this)">📊 Body Stats</div>
+  <div class="main-tab" data-view="adhoc" onclick="setMainView('adhoc', this)">✨ Ad hoc</div>
 </div>
 
 <!-- MEALS -->
@@ -401,8 +401,8 @@
 <div class="view-panel" id="panel-tracker">
   <div class="tracker-view">
     <div class="latest-card">
-      <div class="baseline-label" style="color:var(--text-mid)">Latest scan · per Jess 9/28/2026</div>
-      <div class="latest-grid">
+      <div class="baseline-label" style="color:var(--text-mid)" id="latestLbl">Latest scan · per Jess 9/28/2026</div>
+      <div class="latest-grid" id="latestGrid">
         <div><span class="v">118.4</span><span class="l">lbs</span><div class="d" style="color:var(--text-mid)">+3.7</div></div>
         <div><span class="v">25.7%</span><span class="l">body fat</span><div class="d" style="color:var(--rust)">+0.6</div></div>
         <div><span class="v">47.8</span><span class="l">muscle lbs</span><div class="d" style="color:var(--sage)">+1.5</div></div>
@@ -538,7 +538,10 @@ function renderWeek(){
     wrap.appendChild(card);
   });
 }
+function localISO(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
 function setMainView(view, el){
+  try{localStorage.setItem('debra:tab:v1',view);}catch(e){}
   document.querySelectorAll('.main-tab').forEach(function(t){t.className='main-tab';});
   el.className = view==='meals' ? 'main-tab active' : 'main-tab active-workout';
   document.querySelectorAll('.view-panel').forEach(function(p){p.classList.remove('active');});
@@ -568,6 +571,7 @@ var TKEY='debra:weighins:v1';
 var BASELINE={weight:114.7,bf:25.1,muscle:46.3,score:79};
 var entries=[];
 try{entries=JSON.parse(localStorage.getItem(TKEY)||'[]');}catch(e){entries=[];}
+entries.sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
 function saveEntries(){try{localStorage.setItem(TKEY,JSON.stringify(entries));}catch(e){}}
 
 function logEntry(){
@@ -578,6 +582,7 @@ function logEntry(){
   var score=parseFloat(document.getElementById('logScore').value);
   if(!date||isNaN(weight)){alert('Please enter at least a date and weight.');return;}
   entries.unshift({date:date,weight:weight,bf:isNaN(bf)?null:bf,muscle:isNaN(muscle)?null:muscle,score:isNaN(score)?null:score});
+  entries.sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
   saveEntries(); renderEntries();
   document.getElementById('logWeight').value='';document.getElementById('logBF').value='';
   document.getElementById('logMuscle').value='';document.getElementById('logScore').value='';
@@ -590,7 +595,17 @@ function delta(cur,base,lowerBetter){
   var cls = better ? 'delta-pos' : (diff==0?'':'delta-neg');
   return '<span class="'+cls+'">'+sign+diff+'</span>';
 }
+function renderLatest(){
+  var e=entries[0]; if(!e) return;
+  function d(cur,base,lower,unit){if(cur==null)return '<div class="d" style="color:var(--text-mid)">—</div>';var x=cur-base,good=lower?x<0:x>0;var c=x===0?'var(--text-mid)':(good?'var(--sage)':'var(--rust)');return '<div class="d" style="color:'+c+'">'+(x>0?'+':'')+x.toFixed(1)+(unit||'')+'</div>';}
+  document.getElementById('latestLbl').textContent='Latest weigh-in · '+new Date(e.date+'T12:00:00').toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
+  document.getElementById('latestGrid').innerHTML=
+    '<div><span class="v">'+e.weight+'</span><span class="l">lbs</span>'+d(e.weight,BASELINE.weight,true)+'</div>'+
+    '<div><span class="v">'+(e.bf!=null?e.bf+'%':'—')+'</span><span class="l">body fat</span>'+d(e.bf,BASELINE.bf,true)+'</div>'+
+    '<div><span class="v">'+(e.muscle!=null?e.muscle:'—')+'</span><span class="l">muscle lbs</span>'+d(e.muscle,BASELINE.muscle,false)+'</div>';
+}
 function renderEntries(){
+  renderLatest();
   var list=document.getElementById('entriesList');
   if(!entries.length){list.innerHTML='<div class="empty-state">No weigh-ins logged yet. Add your first one above.</div>';return;}
   list.innerHTML=entries.map(function(e,i){
@@ -607,14 +622,15 @@ function renderEntries(){
       '<div class="entry-delta">vs prev: weight '+(wD||'—')+' · bf '+(bD||'—')+' · muscle '+(mD||'—')+'</div>'+sb+'</div>';
   }).join('');
 }
-document.getElementById('logDate').value=new Date().toISOString().split('T')[0];
+document.getElementById('logDate').value=localISO();
 renderEntries();
 
 /* ============ LISS weekly tracker ============ */
 (function(){
   var KEY='debra:liss:v1';
-  function weekKey(){var d=new Date();var day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return d.toISOString().slice(0,10);}
+  function weekKey(){var d=new Date();var day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return localISO(d);}
   var st; try{st=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){st=null;}
+  if(st&&st.week!==weekKey()&&Math.abs(new Date(st.week+'T12:00:00')-new Date(weekKey()+'T12:00:00'))<=864e5*1.5) st.week=weekKey();
   if(!st||st.week!==weekKey()) st={week:weekKey(),done:[false,false,false]};
   function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
   function paint(){
@@ -697,9 +713,11 @@ if(storedPlan && storedPlan.gymV!==GYM_V){
 }
 plan.gymV=GYM_V;
 var hist=load("history",[]);
+hist.forEach(function(s){s.syncing=false;});
 var settings=load("settings",{rest:90});
 var active=load("active",null)||{};
-var track=(active.track==="home"||active.track==="gym")?active.track:"gym";
+if(!Array.isArray(plan.adhoc))plan.adhoc=[];
+var track=(active.track==="home"||active.track==="gym"||(active.track==="adhoc"&&plan.adhoc.length))?active.track:"gym";
 var dayId=null, logs=active.logs||{}, view="lift";
 (function(){var ds=plan[track];dayId=(active.dayId&&ds.some(function(d){return d.id===active.dayId;}))?active.dayId:ds[0].id;})();
 
@@ -732,9 +750,9 @@ function paintPresets(){Array.prototype.forEach.call(document.querySelectorAll("
 /* notion sync */
 function syncSession(s,cb){
   fetch("/.netlify/functions/sync",{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({date:s.date,track:s.track,dayName:s.dayName,entries:s.entries,volume:s.volume})})
-  .then(function(r){return r.json().then(function(d){return {ok:r.ok,data:d};});})
-  .then(function(res){if(res.ok){s.synced=true;s.syncErr=null;}else{s.synced=false;s.syncErr=(res.data&&res.data.error)||"Sync failed.";}pHist();cb&&cb();})
+    body:JSON.stringify({localDate:localISO(new Date(s.date)),track:s.track,dayName:s.dayName,entries:s.entries,volume:s.volume})})
+  .then(function(r){return r.json().catch(function(){return {};}).then(function(d){return {ok:r.ok,data:d};});})
+  .then(function(res){if(res.ok&&res.data&&res.data.ok){s.synced=true;s.syncErr=null;s.notionUrl=res.data.url||null;}else{s.synced=false;s.syncErr=(res.data&&res.data.error)||"Sync failed.";}pHist();cb&&cb();})
   .catch(function(){s.synced=false;s.syncErr="Offline \u2014 tap Sync to retry.";pHist();cb&&cb();});
 }
 function notionBlock(s){
@@ -742,7 +760,7 @@ function notionBlock(s){
   var iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
   var nice=d.toLocaleDateString(undefined,{month:"short",day:"numeric"});
   var sd=0;s.entries.forEach(function(e){sd+=e.sets.length;});
-  var tc=s.track==="home"?"Home":"Gym";
+  var tc=s.track==="home"?"Home":s.track==="adhoc"?"Ad hoc":"Gym";
   var det=s.entries.map(function(e){return "- "+e.name+": "+e.sets.map(function(x){return (x.weight||"\u2013")+"\u00d7"+(x.reps||"\u2013");}).join(", ");}).join("\n");
   return "WORKOUT LOG \u2014 sync to Notion\nSession: "+tc+" \u00b7 "+s.dayName+" \u2014 "+nice+"\nDate: "+iso+"\nTrack: "+tc+"\nDay: "+s.dayName+"\nVolume: "+s.volume+"\nSets Done: "+sd+"\nDetails:\n"+det;
 }
@@ -760,7 +778,8 @@ function render(){
     '<button class="ll-subtab'+(view==="history"?" on":"")+'" data-view="history">History</button></div>';
   h+='<div class="ll-track">'+
     '<button class="ll-trackBtn'+(track==="gym"?" on":"")+'" data-track="gym">Gym</button>'+
-    '<button class="ll-trackBtn'+(track==="home"?" on":"")+'" data-track="home">Home</button></div>';
+    '<button class="ll-trackBtn'+(track==="home"?" on":"")+'" data-track="home">Home</button>'+
+    (plan.adhoc.length?'<button class="ll-trackBtn'+(track==="adhoc"?" on":"")+'" data-track="adhoc">Ad hoc</button>':'')+'</div>';
   h += view==="lift" ? liftHTML() : histHTML();
   mount.innerHTML=h;
   wire();
@@ -768,6 +787,7 @@ function render(){
 function liftHTML(){
   var d=curDay(),h="",lastTag=null;
   if(track==="home"){h+='<div class="ll-jess"><div class="h">💜 From Jess — Your Flexibility Plan</div>Not a backup plan — this is your flexibility plan. The win is getting 4 workouts done and showing up for yourself, wherever that happens.</div>';}
+  if(track==="adhoc"&&d.notes){h+='<div class="ll-jess"><div class="h">Notes</div>'+esc(d.notes)+'</div>';}
   h+='<div class="ll-daychips">';
   daysOf().forEach(function(x){h+='<button class="ll-chip'+(x.id===dayId?" on":"")+'" data-day="'+x.id+'">'+esc(x.name.split("\u00b7")[0].trim())+'</button>';});
   h+='</div>';
@@ -793,6 +813,7 @@ function liftHTML(){
      '<button class="ll-finish" id="llFinish"'+(doneCount()?"":" disabled")+'>Finish &amp; save</button></div>';
   h+='<p class="ll-tip">Your music keeps playing — this never grabs audio. Optional soft blip when rest ends.</p>';
   h+='<button class="ll-ghost" id="llBackup">Download backup</button>';
+  h+='<button class="ll-ghost" id="llRestore">Restore from backup</button><input type="file" id="llRestoreFile" accept="application/json,.json" hidden>';
   return h;
 }
 function histHTML(){
@@ -802,11 +823,11 @@ function histHTML(){
     h+='<div class="ll-hist"><div class="ll-tag" style="padding:0 0 10px">Volume trend</div><div class="ll-chart">';
     pts.forEach(function(p){h+='<div class="ll-bar" style="height:'+((p.volume/max)*100)+'%"></div>';});h+='</div></div>';}
   hist.forEach(function(s){
-    h+='<section class="ll-hist"><div class="ll-histhead"><span style="font-weight:700"><span class="ll-badge">'+(s.track==="home"?"HOME":"GYM")+'</span>'+esc(s.dayName)+'</span><span style="color:var(--text-mid);font-size:12px">'+new Date(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})+'</span></div>';
+    h+='<section class="ll-hist"><div class="ll-histhead"><span style="font-weight:700"><span class="ll-badge">'+(s.track==="home"?"HOME":s.track==="adhoc"?"AD HOC":"GYM")+'</span>'+esc(s.dayName)+'</span><span style="color:var(--text-mid);font-size:12px">'+new Date(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})+'</span></div>';
     s.entries.forEach(function(e){h+='<div class="ll-histline"><span>'+esc(e.name)+'</span><span class="r">'+e.sets.map(function(x){return (esc(x.weight)||"\u2013")+"\u00d7"+(esc(x.reps)||"\u2013");}).join("  \u00b7  ")+'</span></div>';});
     var status;
     if(s.syncing)status='<span class="ll-syncing">syncing\u2026</span>';
-    else if(s.synced)status='<span class="ll-synced">\u2713 in Notion</span>';
+    else if(s.synced)status=s.notionUrl?'<a class="ll-synced" href="'+esc(s.notionUrl)+'" target="_blank" rel="noopener">\u2713 in Notion</a>':'<span class="ll-synced">\u2713 in Notion</span>';
     else status='<button class="ll-copy" data-sync="'+s.id+'">Sync</button><button class="ll-copy" data-copy="'+s.id+'">Copy</button>';
     h+='<div class="ll-histfoot"><span class="ll-vol">'+s.volume.toLocaleString()+' vol</span><span class="ll-footR">'+status+'</span></div>';
     if(s.syncErr&&!s.synced)h+='<div class="ll-syncerr">'+esc(s.syncErr)+'</div>';
@@ -824,14 +845,24 @@ function wire(){
   Array.prototype.forEach.call(mount.querySelectorAll("[data-day]"),function(b){b.onclick=function(){dayId=b.dataset.day;pActive();render();};});
   var dt=mount.querySelector("#llDayTitle");if(dt)dt.oninput=function(){curDay().name=dt.value;pPlan();};
   Array.prototype.forEach.call(mount.querySelectorAll("[data-exname]"),function(inp){inp.oninput=function(){curDay().exercises.forEach(function(e){if(e.id===inp.dataset.exname)e.name=inp.value;});pPlan();};});
-  Array.prototype.forEach.call(mount.querySelectorAll("[data-rmex]"),function(b){b.onclick=function(){var id=b.dataset.rmex;editDay(function(d){d.exercises=d.exercises.filter(function(e){return e.id!==id;});return d;});delete logs[id];pPlan();pActive();render();};});
+  Array.prototype.forEach.call(mount.querySelectorAll("[data-rmex]"),function(b){b.onclick=function(){var id=b.dataset.rmex;var nm="";curDay().exercises.forEach(function(e){if(e.id===id)nm=e.name;});if(!confirm('Remove "'+nm+'" from this day?'))return;editDay(function(d){d.exercises=d.exercises.filter(function(e){return e.id!==id;});return d;});delete logs[id];pPlan();pActive();render();};});
   Array.prototype.forEach.call(mount.querySelectorAll("[data-k]"),function(inp){inp.oninput=function(){var p=inp.dataset.k.split("|"),id=p[0],i=parseInt(p[1],10);if(!logs[id])return;logs[id][i][inp.dataset.f]=inp.value;pActive();summaryRefresh();};});
   Array.prototype.forEach.call(mount.querySelectorAll("[data-done]"),function(b){b.onclick=function(){var p=b.dataset.done.split("|"),id=p[0],i=parseInt(p[1],10);var r=logs[id][i];r.done=!r.done;b.classList.toggle("on",r.done);var row=mount.querySelector('[data-row="'+id+'|'+i+'"]');if(row)row.classList.toggle("done",r.done);if(r.done){if(r.weight){plan[track].forEach(function(d){d.exercises.forEach(function(e){if(e.id===id)e.lastWeight=r.weight;});});pPlan();}startRest();}pActive();summaryRefresh();};});
   Array.prototype.forEach.call(mount.querySelectorAll("[data-addset]"),function(b){b.onclick=function(){var id=b.dataset.addset,rows=logs[id],last=rows[rows.length-1];rows.push({weight:(last&&last.weight)||"",reps:"",done:false});pActive();render();};});
   Array.prototype.forEach.call(mount.querySelectorAll("[data-rmset]"),function(b){b.onclick=function(){var p=b.dataset.rmset.split("|"),id=p[0],i=parseInt(p[1],10);logs[id].splice(i,1);pActive();render();};});
   var ae=mount.querySelector("#llAddEx");if(ae)ae.onclick=function(){curDay().exercises.push(ex("New exercise",3));pPlan();render();};
   var fb=mount.querySelector("#llFinish");if(fb)fb.onclick=finish;
-  var bk=mount.querySelector("#llBackup");if(bk)bk.onclick=function(){var data={plan:plan,history:hist,weighins:entries,exported:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="debra-backup-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);};
+  var rs=mount.querySelector("#llRestore"),rf=mount.querySelector("#llRestoreFile");
+  if(rs)rs.onclick=function(){rf.value="";rf.click();};
+  if(rf)rf.onchange=function(){var f=rf.files&&rf.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){
+    var d;try{d=JSON.parse(rd.result);}catch(e){alert("That file isn't a backup.");return;}
+    var store=d&&d.storage;
+    if(!store&&d&&(d.plan||d.history||d.weighins)){store={};if(d.plan)store[K+"plan"]=JSON.stringify(d.plan);if(d.history)store[K+"history"]=JSON.stringify(d.history);if(d.weighins)store["debra:weighins:v1"]=JSON.stringify(d.weighins);}
+    if(!store||!Object.keys(store).length){alert("That file isn't a backup.");return;}
+    if(!confirm("Replace what's on this phone with the backup"+(d.exported?" from "+new Date(d.exported).toLocaleDateString():"")+"?"))return;
+    try{Object.keys(store).forEach(function(k){if(/^(debra:|liftlog:)/.test(k))localStorage.setItem(k,store[k]);});}catch(e){alert("Couldn't restore: "+e.message);return;}
+    location.reload();};rd.readAsText(f);};
+  var bk=mount.querySelector("#llBackup");if(bk)bk.onclick=function(){var storage={};try{for(var i=0;i<localStorage.length;i++){var key=localStorage.key(i);if(/^(debra:|liftlog:)/.test(key))storage[key]=localStorage.getItem(key);}}catch(e){}var data={version:2,storage:storage,exported:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="debra-backup-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);};
 }
 function wireHist(){
   Array.prototype.forEach.call(mount.querySelectorAll("[data-sync]"),function(b){b.onclick=function(){var id=b.dataset.sync,s=null;hist.forEach(function(x){if(x.id===id)s=x;});if(!s)return;s.syncing=true;render();syncSession(s,function(){s.syncing=false;render();});};});
@@ -848,7 +879,38 @@ function finish(){
   syncSession(session,function(){session.syncing=false;if(view==="history")render();});
 }
 
+function parseItem(txt,rounds){
+  var t=String(txt).trim(),m,sets=rounds||1,reps="";
+  if((m=t.match(/^(.*?)\s+(\d+)\s*[x\u00d7]\s*(\d+(?:\s*[-\u2013]\s*\d+)?(?:\s*\/\s*\w+)?)$/i))){t=m[1];sets=parseInt(m[2],10);reps=m[3];}
+  else if((m=t.match(/^(.*?)\s+(\d+(?:\s*[-\u2013]\s*\d+)?(?:\s*\/\s*\w+|\s*(?:sec|s|min))?)$/i))){t=m[1];reps=m[2];}
+  return {name:t,sets:sets,reps:reps};
+}
+window.llStartAdhoc=function(w){
+  var src="adhoc:"+w.id,day=null;
+  plan.adhoc.forEach(function(d){if(d.src===src)day=d;});
+  if(!day){
+    var memW={};["gym","home","adhoc"].forEach(function(t){(plan[t]||[]).forEach(function(d){d.exercises.forEach(function(x){if(x.lastWeight)memW[x.name.toLowerCase()]=x.lastWeight;});});});
+    var exs=[];
+    (w.sections||[]).forEach(function(sec){
+      var rm=String(sec.sub||"").match(/(\d+)\s*round/i),rounds=rm?parseInt(rm[1],10):0;
+      var tag=sec.h+(sec.sub?" \u00b7 "+sec.sub:"");
+      sec.items.forEach(function(it){var p=parseItem(it,rounds);var e=ex(p.name,Math.min(p.sets||1,10),p.reps,tag);e.lastWeight=memW[p.name.toLowerCase()]||"";exs.push(e);});
+    });
+    if(!exs.length)exs.push(ex("New exercise",3));
+    day={id:uid(),src:src,name:w.title,notes:(w.notes||[]).join(" \u00b7 "),exercises:exs};
+    plan.adhoc.unshift(day);
+    if(plan.adhoc.length>12)plan.adhoc.length=12;
+  }
+  track="adhoc";dayId=day.id;view="lift";pPlan();pActive();render();
+};
+window.llForgetAdhoc=function(id){
+  var src="adhoc:"+id;
+  plan.adhoc=plan.adhoc.filter(function(d){return d.src!==src;});
+  if(track==="adhoc"&&!plan.adhoc.some(function(d){return d.id===dayId;})){track="gym";dayId=plan.gym[0].id;}
+  pPlan();pActive();render();
+};
 if(fresh){pPlan();pActive();pSet();}
+if(navigator.onLine!==false){hist.forEach(function(s){if(!s.synced)syncSession(s,function(){if(view==="history")render();});});}
 paintPresets();
 render();
 paintRest();
@@ -869,7 +931,12 @@ paintRest();
   if(!Array.isArray(list)) list=[SEED];
   function save(){try{localStorage.setItem(KEY,JSON.stringify(list));}catch(e){}}
   save();
-  var openId=null;
+  var openId=null,editId=null;
+  function toText(w){
+    var out=[];(w.sections||[]).forEach(function(sec){out.push(sec.h+(sec.sub?' ('+sec.sub+')':'')+':');sec.items.forEach(function(i){out.push(i);});out.push('');});
+    if(w.notes&&w.notes.length){out.push('Notes:');w.notes.forEach(function(n){out.push(n);});}
+    return out.join('\n').trim();
+  }
   function el(tag,cls,txt){var x=document.createElement(tag);if(cls)x.className=cls;if(txt!=null)x.textContent=txt;return x;}
   function render(){
     var wrap=document.getElementById('ahList'); wrap.innerHTML='';
@@ -893,8 +960,14 @@ paintRest();
         body.appendChild(box);
       });
       if(w.notes&&w.notes.length) body.appendChild(el('div','day-tip',w.notes.join(' · ')));
+      var go=el('button','log-btn','Start this workout');go.style.cssText='width:100%;margin-top:14px';
+      go.onclick=function(){if(window.llStartAdhoc){window.llStartAdhoc(w);var t=document.querySelector('.main-tab[data-view="workouts"]');setMainView('workouts',t);window.scrollTo(0,0);}};
+      body.appendChild(go);
+      var edit=el('button','ah-del','Edit');edit.style.marginRight='16px';
+      edit.onclick=function(){editId=w.id;var f=document.getElementById('ahTitle');f.value=w.title;document.getElementById('ahMeta').value=w.meta||'';document.getElementById('ahBody').value=toText(w);document.getElementById('ahSave').textContent='Save Changes';var d=f.closest('details');if(d){d.open=true;d.scrollIntoView({behavior:'smooth'});}};
+      body.appendChild(edit);
       var del=el('button','ah-del','Delete this workout');
-      del.onclick=function(){if(!confirm('Delete "'+w.title+'"?'))return;list=list.filter(function(x){return x.id!==w.id;});save();render();};
+      del.onclick=function(){if(!confirm('Delete "'+w.title+'"?'))return;list=list.filter(function(x){return x.id!==w.id;});save();if(window.llForgetAdhoc)window.llForgetAdhoc(w.id);render();};
       body.appendChild(del);
       head.addEventListener('click',function(){openId=isOpen?null:w.id;render();});
       card.appendChild(head); card.appendChild(body); wrap.appendChild(card);
@@ -920,13 +993,16 @@ paintRest();
     var t=document.getElementById('ahTitle'),m=document.getElementById('ahMeta'),b=document.getElementById('ahBody');
     if(!t.value.trim()||!b.value.trim()){alert('Add a name and at least one move.');return;}
     var p=parse(b.value);
-    var w={id:'w'+Date.now(),title:t.value.trim(),meta:m.value.trim(),sections:p.sections,notes:p.notes};
-    list.unshift(w); save(); openId=w.id; render();
-    t.value='';m.value='';b.value='';
+    var w={id:editId||('w'+Date.now()),title:t.value.trim(),meta:m.value.trim(),sections:p.sections,notes:p.notes};
+    if(editId){list=list.map(function(x){return x.id===editId?w:x;});if(window.llForgetAdhoc)window.llForgetAdhoc(editId);}
+    else list.unshift(w);
+    save(); openId=w.id; editId=null; render();
+    t.value='';m.value='';b.value='';document.getElementById('ahSave').textContent='Save Workout';
     var d=b.closest('details'); if(d) d.open=false;
   };
   render();
 })();
+(function(){var v=null;try{v=localStorage.getItem('debra:tab:v1');}catch(e){}var t=v&&document.querySelector('.main-tab[data-view="'+v+'"]');if(t)setMainView(v,t);})();
 </script>
 </body>
 </html>
