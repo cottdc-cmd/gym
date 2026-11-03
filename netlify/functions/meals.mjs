@@ -121,7 +121,7 @@ async function renderBlocks(blocks, token) {
 }
 
 export default async () => {
-  const token = env('NOTION_TOKEN');
+  const token = env('NOTION_TOKEN') || env('NOTION_KEY');
   if (!token) return json({ error: "Notion isn't connected yet." }, 500);
   try {
     const found = await notion('/search', token, 'POST', {

@@ -46,7 +46,7 @@ const fmtSet = (x) => `${x.weight || '–'}×${x.reps || '–'}`;
 export default async (req) => {
   if (req.method !== 'POST') return json({ error: 'POST only' }, 405);
 
-  const token = env('NOTION_TOKEN');
+  const token = env('NOTION_TOKEN') || env('NOTION_KEY');
   if (!token) return json({ error: "Notion isn't connected yet. Add NOTION_TOKEN in Netlify." }, 500);
   const dbId = env('NOTION_WORKOUT_DB') || DEFAULT_DB;
 
