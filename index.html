@@ -239,19 +239,35 @@
   .ll-ract.resume{background:#fff;color:var(--debra-pink)}
   .ll-ract.skip{background:var(--text);color:#fff;border-color:var(--text)}
   .ll-restprog{position:absolute;bottom:0;left:0;height:3px;background:rgba(255,255,255,.6);transition:width .25s linear}
+  /* ---- Ad hoc ---- */
+  .main-tab{padding:13px 3px;white-space:nowrap;letter-spacing:0}
+  .ah-view{padding:14px 0 0}
+  .ah-intro{padding:0 20px 12px;font-size:11.5px;color:var(--text-mid)}
+  .ah-list{border-top:1px solid var(--border)}
+  .ah-meta{font-size:11px;color:var(--text-mid);font-weight:600}
+  .ah-sec{margin-top:14px}
+  .ah-sec-h{font-size:10px;text-transform:uppercase;letter-spacing:0.9px;font-weight:700;color:var(--debra-pink);
+            padding:0 0 6px;border-bottom:1px solid var(--border);margin-bottom:4px}
+  .ah-sec-h span{color:var(--text-mid);font-weight:600;letter-spacing:.4px;text-transform:none;margin-left:6px}
+  .ah-del{margin-top:12px;background:transparent;border:none;color:var(--text-mid);font-size:11px;text-decoration:underline;cursor:pointer;padding:4px 0}
+  .ah-form{display:flex;flex-direction:column;gap:10px}
+  .ah-form input,.ah-form textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--cream);color:var(--text);width:100%}
+  .ah-form textarea{min-height:160px;line-height:1.5}
+  .ah-form input:focus,.ah-form textarea:focus{outline:none;border-color:var(--debra-pink)}
 </style>
 </head>
 <body>
 
 <header>
   <h1>Debra · Weekly Plan</h1>
-  <p>Meals · Workouts · Body Stats</p>
+  <p>Meals · Workouts · Body Stats · Ad hoc</p>
 </header>
 
 <div class="main-tabs">
   <div class="main-tab active" onclick="setMainView('meals', this)">🍽 Meals</div>
   <div class="main-tab" onclick="setMainView('workouts', this)">💪 Workouts</div>
   <div class="main-tab" onclick="setMainView('tracker', this)">📊 Body Stats</div>
+  <div class="main-tab" onclick="setMainView('adhoc', this)">✨ Ad hoc</div>
 </div>
 
 <!-- MEALS -->
@@ -436,6 +452,24 @@
       </div>
       <div class="entries-list" id="entriesList"></div>
     </div>
+  </div>
+</div>
+
+<!-- AD HOC -->
+<div class="view-panel" id="panel-adhoc">
+  <div class="ah-view">
+    <div class="ah-intro">Saved one-off workouts. Tap one to open it.</div>
+    <div class="ah-list" id="ahList"></div>
+    <details class="swaps">
+      <summary>➕ Save a new one</summary>
+      <div class="swap-body ah-form">
+        <input id="ahTitle" placeholder="Name · e.g. Glutes + Core">
+        <input id="ahMeta" placeholder="Length / vibe · e.g. ~40 min, low energy">
+        <textarea id="ahBody" placeholder="Warm-up:&#10;Band pull-aparts 2x15&#10;&#10;Superset A (4 rounds):&#10;Shoulder press 8-10&#10;&#10;Notes:&#10;Rest 90 sec"></textarea>
+        <div class="swap-foot" style="padding-top:0">A line ending in ":" starts a new section. Everything under it is one move per line.</div>
+        <button class="log-btn" id="ahSave">Save Workout</button>
+      </div>
+    </details>
   </div>
 </div>
 
@@ -818,6 +852,80 @@ if(fresh){pPlan();pActive();pSet();}
 paintPresets();
 render();
 paintRest();
+})();
+
+/* ============ AD HOC workouts ============ */
+(function(){
+  var KEY='debra:adhoc:v1';
+  var SEED={id:'seed-shoulders-arms',title:'Shoulders + Arms',meta:'~50 min · luteal-friendly',sections:[
+    {h:'Warm-up',items:['Band pull-aparts 2x15','Arm circles','Light lateral raises 1x15']},
+    {h:'Superset A',sub:'4 rounds',items:['Seated DB shoulder press 8-10','Face pulls 12-15']},
+    {h:'Superset B',sub:'3 rounds',items:['Lateral raises 12-15','Rear delt fly 12-15']},
+    {h:'Superset C',sub:'3 rounds',items:['Incline DB curl 10-12','Rope pushdown 10-12']},
+    {h:'Finisher',sub:'2 rounds',items:['Hammer curl 12','Overhead triceps extension 12']}],
+    notes:['Stop 1-2 reps shy of failure','Rest 90-120 sec','Short on time? 3 rounds on A and skip the finisher']};
+  var list=null;
+  try{list=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){list=null;}
+  if(!Array.isArray(list)) list=[SEED];
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(list));}catch(e){}}
+  save();
+  var openId=null;
+  function el(tag,cls,txt){var x=document.createElement(tag);if(cls)x.className=cls;if(txt!=null)x.textContent=txt;return x;}
+  function render(){
+    var wrap=document.getElementById('ahList'); wrap.innerHTML='';
+    if(!list.length){wrap.appendChild(el('div','empty-state','Nothing saved yet. Add one below.'));return;}
+    list.forEach(function(w){
+      var card=el('div','day-card');
+      var head=el('div','day-header phase');
+      head.appendChild(el('span','day-name',w.title));
+      var meta=el('div','day-meta');
+      if(w.meta) meta.appendChild(el('span','ah-meta',w.meta));
+      var ch=el('span','chevron','▼'); meta.appendChild(ch);
+      head.appendChild(meta);
+      var isOpen=openId===w.id;
+      var body=el('div','day-body'+(isOpen?' open':''));
+      if(isOpen) ch.style.transform='rotate(180deg)';
+      (w.sections||[]).forEach(function(sec){
+        var box=el('div','ah-sec');
+        var h=el('div','ah-sec-h',sec.h); if(sec.sub) h.appendChild(el('span',null,sec.sub));
+        box.appendChild(h);
+        sec.items.forEach(function(it){box.appendChild(el('div','wk-meal',it));});
+        body.appendChild(box);
+      });
+      if(w.notes&&w.notes.length) body.appendChild(el('div','day-tip',w.notes.join(' · ')));
+      var del=el('button','ah-del','Delete this workout');
+      del.onclick=function(){if(!confirm('Delete "'+w.title+'"?'))return;list=list.filter(function(x){return x.id!==w.id;});save();render();};
+      body.appendChild(del);
+      head.addEventListener('click',function(){openId=isOpen?null:w.id;render();});
+      card.appendChild(head); card.appendChild(body); wrap.appendChild(card);
+    });
+  }
+  function parse(text){
+    var sections=[],notes=[],cur=null;
+    text.split('\n').forEach(function(raw){
+      var line=raw.trim(); if(!line) return;
+      if(/:$/.test(line)){
+        var name=line.slice(0,-1).trim(), m=name.match(/^(.*?)\s*\((.*)\)$/);
+        cur={h:m?m[1]:name,sub:m?m[2]:'',items:[]};
+        if(/^notes?$/i.test(cur.h)){cur.isNotes=true;}else sections.push(cur);
+        return;
+      }
+      line=line.replace(/^[-•*]\s*/,'');
+      if(cur&&cur.isNotes) notes.push(line);
+      else{ if(!cur){cur={h:'Workout',items:[]};sections.push(cur);} cur.items.push(line); }
+    });
+    return {sections:sections,notes:notes};
+  }
+  document.getElementById('ahSave').onclick=function(){
+    var t=document.getElementById('ahTitle'),m=document.getElementById('ahMeta'),b=document.getElementById('ahBody');
+    if(!t.value.trim()||!b.value.trim()){alert('Add a name and at least one move.');return;}
+    var p=parse(b.value);
+    var w={id:'w'+Date.now(),title:t.value.trim(),meta:m.value.trim(),sections:p.sections,notes:p.notes};
+    list.unshift(w); save(); openId=w.id; render();
+    t.value='';m.value='';b.value='';
+    var d=b.closest('details'); if(d) d.open=false;
+  };
+  render();
 })();
 </script>
 </body>
