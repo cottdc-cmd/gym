@@ -462,10 +462,10 @@
 <!-- AD HOC -->
 <div class="view-panel" id="panel-adhoc">
   <div class="ah-view">
-    <div class="ah-intro">Saved one-off workouts. Tap one to open it.</div>
+    <div class="ah-intro" id="ahIntro">Saved one-off workouts. Tap one to open it.</div>
     <div class="ah-list" id="ahList"></div>
     <details class="swaps">
-      <summary>➕ Save a new one</summary>
+      <summary>➕ Save one on this phone</summary>
       <div class="swap-body ah-form">
         <input id="ahTitle" placeholder="Name · e.g. Glutes + Core">
         <input id="ahMeta" placeholder="Length / vibe · e.g. ~40 min, low energy">
@@ -953,16 +953,11 @@ paintRest();
 /* ============ AD HOC workouts ============ */
 (function(){
   var KEY='debra:adhoc:v1';
-  var SEED={id:'seed-shoulders-arms',title:'Shoulders + Arms',meta:'~50 min · luteal-friendly',sections:[
-    {h:'Warm-up',items:['Band pull-aparts 2x15','Arm circles','Light lateral raises 1x15']},
-    {h:'Superset A',sub:'4 rounds',items:['Seated DB shoulder press 8-10','Face pulls 12-15']},
-    {h:'Superset B',sub:'3 rounds',items:['Lateral raises 12-15','Rear delt fly 12-15']},
-    {h:'Superset C',sub:'3 rounds',items:['Incline DB curl 10-12','Rope pushdown 10-12']},
-    {h:'Finisher',sub:'2 rounds',items:['Hammer curl 12','Overhead triceps extension 12']}],
-    notes:['Stop 1-2 reps shy of failure','Rest 90-120 sec','Short on time? 3 rounds on A and skip the finisher']};
   var list=null;
   try{list=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){list=null;}
-  if(!Array.isArray(list)) list=[SEED];
+  if(!Array.isArray(list)) list=[];
+  var NKEY='debra:adhoc-notion:v1',notionList=[],notionNote='';
+  try{notionList=JSON.parse(localStorage.getItem(NKEY)||'[]')||[];}catch(e){notionList=[];}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(list));}catch(e){}}
   save();
   var openId=null,editId=null;
@@ -974,8 +969,12 @@ paintRest();
   function el(tag,cls,txt){var x=document.createElement(tag);if(cls)x.className=cls;if(txt!=null)x.textContent=txt;return x;}
   function render(){
     var wrap=document.getElementById('ahList'); wrap.innerHTML='';
-    if(!list.length){wrap.appendChild(el('div','empty-state','Nothing saved yet. Add one below.'));return;}
-    list.forEach(function(w){
+    var intro=document.getElementById('ahIntro');
+    intro.textContent=notionNote||(notionList.length?'From Notion → Fitness hub → Ad hoc Workouts. Tap one to open it.':'Tap one to open it.');
+    var seen={};notionList.forEach(function(w){seen[w.title.toLowerCase()]=1;});
+    var all=notionList.concat(list.filter(function(w){return !seen[w.title.toLowerCase()];}));
+    if(!all.length){wrap.appendChild(el('div','empty-state','Nothing saved yet. Add one to Ad hoc Workouts in Notion.'));return;}
+    all.forEach(function(w){
       var card=el('div','day-card');
       var head=el('div','day-header phase');
       head.appendChild(el('span','day-name',w.title));
@@ -995,8 +994,15 @@ paintRest();
       });
       if(w.notes&&w.notes.length) body.appendChild(el('div','day-tip',w.notes.join(' · ')));
       var go=el('button','log-btn','Start this workout');go.style.cssText='width:100%;margin-top:14px';
-      go.onclick=function(){if(window.llStartAdhoc){window.llStartAdhoc(w);var t=document.querySelector('.main-tab[data-view="workouts"]');setMainView('workouts',t);window.scrollTo(0,0);}};
+      go.onclick=function(){if(window.llStartAdhoc){window.llStartAdhoc(w.updated?Object.assign({},w,{id:w.id+'@'+w.updated}):w);var t=document.querySelector('.main-tab[data-view="workouts"]');setMainView('workouts',t);window.scrollTo(0,0);}};
       body.appendChild(go);
+      if(w.source==='notion'){
+        var lk=el('a','ah-del','Edit in Notion');lk.href=w.url;lk.target='_blank';lk.rel='noopener';lk.style.display='inline-block';
+        body.appendChild(lk);
+        head.addEventListener('click',function(){openId=isOpen?null:w.id;render();});
+        card.appendChild(head); card.appendChild(body); wrap.appendChild(card);
+        return;
+      }
       var edit=el('button','ah-del','Edit');edit.style.marginRight='16px';
       edit.onclick=function(){editId=w.id;var f=document.getElementById('ahTitle');f.value=w.title;document.getElementById('ahMeta').value=w.meta||'';document.getElementById('ahBody').value=toText(w);document.getElementById('ahSave').textContent='Save Changes';var d=f.closest('details');if(d){d.open=true;d.scrollIntoView({behavior:'smooth'});}};
       body.appendChild(edit);
@@ -1035,6 +1041,13 @@ paintRest();
     var d=b.closest('details'); if(d) d.open=false;
   };
   render();
+  fetch('/.netlify/functions/adhoc').then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});})
+    .then(function(res){
+      if(res.ok&&res.d&&Array.isArray(res.d.workouts)){notionList=res.d.workouts;notionNote='';try{localStorage.setItem(NKEY,JSON.stringify(notionList));}catch(e){}}
+      else notionNote=((res.d&&res.d.error)||"Couldn't load workouts from Notion.")+(notionList.length?' Showing the saved copy.':'');
+      render();
+    })
+    .catch(function(){if(notionList.length){notionNote='Offline. Showing the saved copy from Notion.';render();}});
 })();
 (function(){var v=null;try{v=localStorage.getItem('debra:tab:v1');}catch(e){}var t=v&&document.querySelector('.main-tab[data-view="'+v+'"]');if(t)setMainView(v,t);})();
 </script>
